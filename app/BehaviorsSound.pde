@@ -86,15 +86,37 @@ class CollisionSound extends Behavior {
   
   /*  Ring */
   public void ring(Particle p){
+    
+    // act only if the particle is not blocked by a recent collision
     if (!this.blocked) {
-    this.isPlaying = true;
-    this.blocked = true;
-    this.amp = maxVolume - constrain(currentVolume, 0, maxVolume);
-    currentVolume += this.amp;
-    this.frequency = 200;
-    this.duration = 50;
-    this.pan.x = map(p.pos.x, padding.x, c.w - padding.x, -1, 1);
-    this.pan.y = map(p.pos.y, padding.y, c.h - padding.y, -1, 1);
+      
+      // perform initial setup
+      this.isPlaying = true;
+      this.blocked = true;
+      
+      // generate parameters for the sound
+      this.amp = maxVolume - constrain(currentVolume, 0, maxVolume);
+      this.frequency = 200;
+      this.duration = 50;
+      this.pan.x = map(p.pos.x, padding.x, c.w - padding.x, -1, 1);
+      this.pan.y = map(p.pos.y, padding.y, c.h - padding.y, -1, 1);
+    
+      // send the amplitode to global volume buffer
+      currentVolume += this.amp;
+      
+      // send the message
+      OscMessage msg = new OscMessage("/sine");
+      msg.add( this.frequency ); // frequency
+      msg.add( 0.01 ); // attack
+      msg.add( frameRate / this.duration ); // release
+      msg.add( this.amp ); // amplituda
+      msg.add( this.pan.x ); // pan X
+      msg.add( this.pan.y ); // pan Y
+      
+      println(msg);
+      
+      oscP5.send( msg, superCollider );
+    
     }
   }
   

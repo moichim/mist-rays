@@ -102,12 +102,9 @@ class RecieveCollisions extends Behavior {
       // ring the collision
       if (rings) {
         
-        println("Hraji");
-        
         CollisionSound snd = (CollisionSound) p.getBehavior("CollisionSound");
           
         if ( !snd.blocked ) {
-          println("cink");
           snd.ring( p );        
         }
       }
@@ -235,7 +232,7 @@ class Imprisonment extends Behavior {
     // change behaviors of the self
     p.removeBehavior("Imprisonment");
     p.addBehavior( new InvokeCollisions( p ) );
-    p.addBehavior( new FadeWhenOutOfCanvas( p ) );
+    // p.addBehavior( new FadeWhenOutOfCanvas( p ) );
     
     
     // prepare the particle for comparaison with others

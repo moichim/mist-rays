@@ -75,6 +75,7 @@ class Prisonner extends Particle {
     this.addBehavior( new AdjustRadius( this, circularGridRayRadius, int(1) ) );
     this.addBehavior( new Imprisonment( this, this.box, position ) );
     this.addBehavior( new RecieveCollisions( this ) );
+    this.addBehavior( new FadeWhenOutOfCanvas( this ) );
     this.addBehavior( new CollisionSound( this ) );
     this.addBehavior( new DisplayDefault( this ) );
     
