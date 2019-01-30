@@ -1,6 +1,10 @@
 # Mist Rays interactive installation
 Projection in a dark, misty room. Visuals and sounds react on visitor's behavior.
 
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=W1uXE5F_LvI
+" target="_blank"><img src="http://img.youtube.com/vi/W1uXE5F_LvI/1.jpg" 
+alt="IMAGE ALT TEXT HERE" width="300" height="auto" border="10" /></a>
+
 - **Visuals** [Processing 3.4](https://processing.org/) (oscP5 & [openkinect](https://github.com/shiffman/OpenKinect-for-Processing) libraries)
 - **Sound** [SuperCollider](https://supercollider.github.io/)
 - **Control** OSC (via [this app](https://osc.ammd.net/)) & Kinect (Windows drivers installed using [Zadig]())
