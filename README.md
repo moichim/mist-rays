@@ -5,6 +5,8 @@ Projection in a dark, misty room. Visuals and sounds react on visitor's behavior
 " target="_blank"><img src="http://img.youtube.com/vi/W1uXE5F_LvI/1.jpg" 
 alt="IMAGE ALT TEXT HERE" width="300" height="auto" border="10" /></a> ![alt text](https://github.com/moichim/mist-rays/raw/master/documentation/2019_01_08_running_moving_station.jpg)
 
+Installation view 7.1.2019, Moving Station, Pilsen
+
 - **Visuals** [Processing 3.4](https://processing.org/) (oscP5 & [openkinect](https://github.com/shiffman/OpenKinect-for-Processing) libraries)
 - **Sound** [SuperCollider](https://supercollider.github.io/)
 - **Control** OSC (via [this app](https://osc.ammd.net/)) & Kinect (Windows drivers installed using [Zadig]())
@@ -22,4 +24,5 @@ alt="IMAGE ALT TEXT HERE" width="300" height="auto" border="10" /></a> ![alt tex
 - _A computer._
 - _A sound system._ Stereo is enough, quadro is not necessary, yet possible.
 
-![alt text](https://github.com/moichim/mist-rays/raw/master/documentation/2019_01_07_installation_At_moving_station.jpg)
+![alt text](https://github.com/moichim/mist-rays/raw/master/documentation/2019_01_07_installation_at_moving_station.jpg)
+Installation view 7.1.2019, Moving Station, Pilsen
