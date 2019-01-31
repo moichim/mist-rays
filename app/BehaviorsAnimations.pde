@@ -1,45 +1,50 @@
 class AnimateSize extends Behavior {
   float min, max, step;
-  AnimateSize( Particle p ){
-    super(p);
+  AnimateSize( int id ){
+    super(id);
     this.min = 7;
     this.max = 40;
     this.step = 0.5;
   }
   
   @Override
-  public void update( Particle p ) {
-    if (p.radius < this.min || p.radius > this.max) {
+  public void update( ) {
+    if (this.parentParticle.radius < this.min || this.parentParticle.radius > this.max) {
       this.step = -this.step;
     }
-    p.radius += this.step;
+    this.parentParticle.radius += this.step;
   }
 }
 
 class FadeOut extends Behavior{
   float step;
+  float duration;
   
-  FadeOut(Particle p){
-    super(p);
+  FadeOut(int id){
+    super(id);
     // this.duration = 9999;
     this.step = 1;
   }
   
-  FadeOut( Particle p, float s ){
-    super(p);
+  FadeOut( int id, float s ){
+    super(id);
     this.step = s;
   }
   
-  FadeOut( Particle p, int d ){
-    super(p);
-    this.step = p.radius / d;
+  FadeOut( int id, int d ){
+    super(id);
+    this.duration = d;
+  }
+  @Override
+  public void initialSetup() {
+      this.step = this.parentParticle.radius / this.duration;
   }
   
   @Override
-  public void update( Particle p ){
-    p.radius -= this.step;
-    if (p.radius < 0) {
-      p.live = false;
+  public void update(){
+    this.parentParticle.radius -= this.step;
+    if (this.parentParticle.radius < 0) {
+      this.parentParticle.live = false;
       this.active = false;
     }
   }
@@ -47,65 +52,78 @@ class FadeOut extends Behavior{
 
 class AdjustRadius extends Behavior {
   float step, targetRadius;
+  float duration;
   
-  AdjustRadius(Particle p) {
-    super(p);
+  AdjustRadius(int id) {
+    super(id);
     this.step = 1;
     this.targetRadius = 10;
   }
   
-  AdjustRadius(Particle p, float m, float s){
-    super(p);
+  AdjustRadius(int id, float m, float s){
+    super(id);
     this.targetRadius = m;
     this.step = s;
   }
   
-  AdjustRadius(Particle p, float m, int dur){
-    super(p);
+  AdjustRadius(int id, float m, int dur){
+    super(id);
     this.targetRadius = m;
-    this.step = p.radius / float(dur);
+    this.duration = float(dur);
+  }
+  @Override
+  public void initialSetup() {
+    this.step = this.parentParticle.radius / this.duration;
   }
   
   @Override
-  public void update( Particle p ) {
-    if (p.radius < this.targetRadius) {
-      p.radius += this.step;
-    } else if (p.radius > this.targetRadius) {
-      p.radius -= this.step;
-    } else if (p.radius == this.targetRadius) {
-      this.active = false;
+  public void update( ) {
+    if (this.fullyLoaded) {
+      if (this.parentParticle.radius < this.targetRadius) {
+        this.parentParticle.radius += this.step;
+      } else if (this.parentParticle.radius > this.targetRadius) {
+        this.parentParticle.radius -= this.step;
+      } else if (this.parentParticle.radius == this.targetRadius) {
+        this.active = false;
+      }
     }
   }
 }
 
 class AdjustVelocity extends Behavior {
   float step, targetVelocity;
+  float duration;
   
-  AdjustVelocity(Particle p) {
-    super(p);
+  AdjustVelocity(int id) {
+    super(id);
     this.step = 0.1;
     this.targetVelocity = 1;
   }
   
-  AdjustVelocity(Particle p, float m, float s){
-    super(p);
+  AdjustVelocity(int id, float m, float s){
+    super(id);
     this.targetVelocity = m;
     this.step = s;
   }
   
-  AdjustVelocity(Particle p, float m, int dur){
-    super(p);
+  AdjustVelocity(int id, float m, int dur){
+    super(id);
     this.targetVelocity = m;
-    this.step = p.radius / float(dur);
+    this.duration = float(dur);
   }
   
   @Override
-  public void update( Particle p ) {
-    if (p.vel < this.targetVelocity) {
-      p.vel += this.step;
-    } else if (p.vel > this.targetVelocity) {
-      p.vel -= this.step;
-    } else if (p.vel == this.targetVelocity) {
+  public void initialSetup(){
+    this.step = this.parentParticle.radius / this.duration;
+  }
+  
+  @Override
+  public void update() {
+    if (this.parentParticle.vel < this.targetVelocity) {
+      this.parentParticle.vel += this.step;
+    } else if (this.parentParticle.vel > this.targetVelocity) {
+      this.parentParticle.vel -= this.step;
+    } else if (this.parentParticle.vel == this.targetVelocity) {
       this.active = false;
     }
   }

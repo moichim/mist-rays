@@ -44,7 +44,7 @@ class Particle {
         Behavior b = this.behaviors.get(i);
         if (b.active) {
           // Perform the state's updates
-          b.update( this );
+          b.technicalUpdate( );
         } else {
           this.behaviors.remove(i);
         }
@@ -52,12 +52,12 @@ class Particle {
       }
     }
     
-    this.customUpdate( this );
+    this.customUpdate( );
     
   } // end update method
   
   // method intended for overrides by implementations
-  public void customUpdate(Particle p){
+  public void customUpdate(){
   
   }
   

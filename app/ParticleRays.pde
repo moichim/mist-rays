@@ -19,12 +19,12 @@ class Ray extends Particle {
     
     
     // add behaviors
-    this.addBehavior( new RecieveCollisions( this ) );
-    this.addBehavior( new InvokeCollisions( this ) );
-    this.addBehavior( new FadeWhenOutOfCanvas( this ) );
-    this.addBehavior( new Move( this ) );
-    this.addBehavior( new DisplayDefault( this ) );
-    this.addBehavior( new CollisionSound( this ) );
+    this.addBehavior( new RecieveCollisions( this.id ) );
+    this.addBehavior( new InvokeCollisions( this.id ) );
+    this.addBehavior( new FadeWhenOutOfCanvas( this.id ) );
+    this.addBehavior( new Move( this.id ) );
+    this.addBehavior( new DisplayDefault( this.id ) );
+    this.addBehavior( new CollisionSound( this.id ) );
    
   }
   
@@ -42,12 +42,12 @@ class Rocket extends Particle {
     this.radius = 15;
     this.col = color(255);
     
-    this.addBehavior( new FadeOut( this,  (float) 0.5 ) );
-    this.addBehavior( new AdjustVelocity( this, 3, (float) 0.2 ) );
-    this.addBehavior( new FadeWhenOutOfCanvas( this ) );
-    this.addBehavior( new RecieveCollisions( this ) );
-    this.addBehavior( new Move( this ) );
-    this.addBehavior( new DisplayDefault( this ) );
+    this.addBehavior( new FadeOut( this.id,  (float) 0.5 ) );
+    this.addBehavior( new AdjustVelocity( this.id, 3, (float) 0.2 ) );
+    this.addBehavior( new FadeWhenOutOfCanvas( this.id ) );
+    this.addBehavior( new RecieveCollisions( this.id ) );
+    this.addBehavior( new Move( this.id ) );
+    this.addBehavior( new DisplayDefault( this.id ) );
     
   }
   
@@ -72,12 +72,13 @@ class Prisonner extends Particle {
     this.grownUp = false;
     
     // behaviors
-    this.addBehavior( new AdjustRadius( this, circularGridRayRadius, int(1) ) );
-    this.addBehavior( new Imprisonment( this, this.box, position ) );
-    this.addBehavior( new RecieveCollisions( this ) );
-    this.addBehavior( new FadeWhenOutOfCanvas( this ) );
-    this.addBehavior( new CollisionSound( this ) );
-    this.addBehavior( new DisplayDefault( this ) );
+    this.addBehavior( new AdjustRadius( this.id, circularGridRayRadius, int(1) ) );
+    this.addBehavior( new Imprisonment( this.id, this.box, position ) );
+    this.addBehavior( new RecieveCollisions( this.id ) );
+    this.addBehavior( new FadeWhenOutOfCanvas( this.id ) );
+    this.addBehavior( new CollisionSound( this.id ) );
+    this.addBehavior( new BellSound( this.id ) );
+    this.addBehavior( new DisplayDefault( this.id ) );
     
   }
   
@@ -87,18 +88,18 @@ class Prisonner extends Particle {
     if ( this.hasBehavior("Imprisonment") ) {
       Behavior b = this.getBehavior("Imprisonment");
       Imprisonment i = (Imprisonment) b;
-      i.setFree( this );
+      i.setFree();
     }
     
   }
   
   @Override
-  public void customUpdate(Particle p){
+  public void customUpdate(){
     if ( !this.grownUp ) {
-      if ( p.radius >= circularGridRayRadius && p.hasBehavior("AdjustRadius")) {
-        this.addBehavior( new Move( this ) );
+      if ( this.radius >= circularGridRayRadius && this.hasBehavior("AdjustRadius")) {
+        this.addBehavior( new Move( this.id ) );
         this.removeBehavior( "AdjustRadius" );
-        p.radius = circularGridRayRadius;
+        this.radius = circularGridRayRadius;
         this.grownUp = true;
       }
     }

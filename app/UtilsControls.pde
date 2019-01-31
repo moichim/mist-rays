@@ -112,6 +112,13 @@ class CircularControls extends ControlGroup {
     if (m.addrPattern().equals("/gridBoxRadius")) {
       circularGridRayRadius = m.get(0).floatValue();
     }
+    
+    
+    
+    // size of the box
+    if (m.addrPattern().equals("/collisionBlockTime")) {
+      collisionBlockAmount = m.get(0).floatValue();
+    }
   
   }
   

@@ -8,9 +8,9 @@ class Collider extends Particle {
     this.col = color(0,0,255);
     
     // add behaviors
-    this.addBehavior( new KinectCollider( this ) );
-    this.addBehavior( new InvokeCollisions( this ) );
-    this.addBehavior( new DisplayDebug( this ) );
+    this.addBehavior( new KinectCollider( this.id ) );
+    this.addBehavior( new InvokeCollisions( this.id ) );
+    this.addBehavior( new DisplayDebug( this.id ) );
   }
   
 }

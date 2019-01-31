@@ -31,20 +31,24 @@ float circularGridRayRadius = 40;
 
 // settings for circular sound
 float bellAmplitude = 1;
+float bellFrequency = 80;
+float bellRelease = 2;
+float bellAmp = 0.8;
 
 // settings for collision sound
 float currentVolume = 0;
-float maxVolume = 0.9;
+float maxVolume = 0.8;
 float availableVolume = maxVolume;
 float collisionMinFreq = 200;
 float collisionMaxFreq = 500;
 float collisionMinRel = 2;
 float collisionMaxRel = 4;
+float collisionBlockAmount = 2; // aspect of the collision sound block in the range of 1 to N. the higher is, the bigger the block is.  
 
 
 void setup(){
-  size(1920,1080);
-  // fullScreen();
+  // size(1920,1080);
+  fullScreen();
   
   // initialize global variables
   app = this;
@@ -66,7 +70,7 @@ void draw(){
   
   availableVolume = maxVolume;
   
-  background(0);
+  background(c.bg);
   s.update();
   
   

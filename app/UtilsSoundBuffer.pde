@@ -1,15 +1,12 @@
 class SoundBuffer {
   ArrayList<CollisionSound> playingSounds;
-  float currentVolume;
   
   SoundBuffer(){
     this.playingSounds = new ArrayList<CollisionSound>();
-    this.currentVolume = 0;
   }
   
   void update(){
-    
-    float currentVolume = 0;
+   
   
   }
   

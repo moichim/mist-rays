@@ -41,6 +41,20 @@ class Group {
   
   }
   
+  public Particle getFirstWithBehavior(String behavior) {
+    Particle p = null;
+    boolean set = false;
+    
+    for ( Particle particle : s.particles ){
+      if ( !set && particle.hasBehavior(behavior) ) {
+        p = particle;
+        break;
+      }
+    }
+    
+    return p;
+  }
+  
   public void rotateDirection( float angle ){
     
     if (this.hasParticles()) {
