@@ -7,6 +7,8 @@ import oscP5.*;
 import netP5.*;
 
 
+int rayIdCounter = 0;
+
 // globals
 System s; // recent group of particles
 Canvas c; // main frame 
@@ -34,6 +36,10 @@ float bellAmplitude = 1;
 float currentVolume = 0;
 float maxVolume = 0.9;
 float availableVolume = maxVolume;
+float collisionMinFreq = 200;
+float collisionMaxFreq = 500;
+float collisionMinRel = 2;
+float collisionMaxRel = 4;
 
 
 void setup(){

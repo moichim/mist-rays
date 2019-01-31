@@ -96,8 +96,9 @@ class CollisionSound extends Behavior {
       
       // generate parameters for the sound
       this.amp = maxVolume - constrain(currentVolume, 0, maxVolume);
-      this.frequency = 200;
-      this.duration = 50;
+      this.frequency = random(collisionMinFreq, collisionMaxFreq);
+      float release = random( collisionMinRel, collisionMaxRel );
+      this.duration = int( release * frameRate );
       this.pan.x = map(p.pos.x, padding.x, c.w - padding.x, -1, 1);
       this.pan.y = map(p.pos.y, padding.y, c.h - padding.y, -1, 1);
     
@@ -108,7 +109,7 @@ class CollisionSound extends Behavior {
       OscMessage msg = new OscMessage("/sine");
       msg.add( this.frequency ); // frequency
       msg.add( 0.01 ); // attack
-      msg.add( frameRate / this.duration ); // release
+      msg.add( release ); // release
       msg.add( this.amp ); // amplituda
       msg.add( this.pan.x ); // pan X
       msg.add( this.pan.y ); // pan Y

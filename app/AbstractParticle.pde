@@ -8,6 +8,7 @@ class Particle {
   // behaviors 
   ArrayList<Behavior> behaviors;
   boolean live;
+  int id;
   
   // appearance and movement
   PVector pos, dir;
@@ -17,6 +18,11 @@ class Particle {
   Particle(){
     this.behaviors = new ArrayList<Behavior>();
     this.live = true;
+    this.id = rayIdCounter;
+    rayIdCounter++;
+    if ( rayIdCounter >= 999999 ) {
+      rayIdCounter = 0;
+    }
     
     // initialize the movement 
     this.pos = new PVector(0,0);

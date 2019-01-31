@@ -40,6 +40,21 @@ class System {
     // this method serves for adding custom actions
   }
   
+  /* get a particle by ID */
+  public Particle getParticle( int i_ ){
+    Particle p = null;
+    if ( s.particles.size() > 0 ) {
+      for ( int i=0; i < s.particles.size(); i++ ) {
+        Particle particle = s.particles.get(i);
+        if ( particle.id == i_ ) {
+          p = s.particles.get(i);
+        }
+      }
+    }
+    
+    return p;
+  }
+  
 }
 
 class SimpleSystem extends System {

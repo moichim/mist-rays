@@ -53,7 +53,25 @@ class GlobalControls extends ControlGroup {
   }
   
   @Override
-  public void listenOSC( System sys, OscMessage m ) { }
+  public void listenOSC( System sys, OscMessage m ) {
+  
+    println(m);
+    
+    // the scale of the canvas
+    if (m.addrPattern().equals("/paddingX")) {
+      paddingMin.x = m.get(0).floatValue();
+      c.calculateDimensions();
+    }
+    
+    // the scale of the canvas
+    if (m.addrPattern().equals("/paddingY")) {
+      paddingMin.y = m.get(0).floatValue();
+      c.calculateDimensions();
+    }
+    
+    
+    
+  }
   
   @Override
   public void listenKeyBoard( System sys ){ 
@@ -83,7 +101,19 @@ class CircularControls extends ControlGroup {
   }
   
   @Override
-  public void listenOSC( System sys, OscMessage m ) { }
+  public void listenOSC( System sys, OscMessage m ) {
+  
+    // size of the box
+    if (m.addrPattern().equals("/gridBoxSize")) {
+      circularGridBoxSize = m.get(0).floatValue();
+    }
+    
+    // size of the box
+    if (m.addrPattern().equals("/gridBoxRadius")) {
+      circularGridRayRadius = m.get(0).floatValue();
+    }
+  
+  }
   
   @Override
   public void listenKeyBoard( System sys ){
