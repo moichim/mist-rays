@@ -75,15 +75,17 @@ class GlobalControls extends ControlGroup {
     }
     
     // the speed of particles
-    if (m.addrPattern().equals("/modus")) {
+    if (m.addrPattern().equals("/mode")) {
+      
       float type = m.get(0).floatValue();
-      if ( type == 1.0 ) {
+      println(type);
+      if ( int(type) == 1 ) {
         s = new CircularSystem();
       }
-      if ( type == 2.0 ) {
+      if ( int(type) == 2 ) {
         s = new SimpleSystem();
       }
-      if ( type == 3.0 ) {
+      if ( int(type) == 3 ) {
         s = new KinectSystem();
       }
     }

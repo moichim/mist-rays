@@ -26,7 +26,7 @@ PVector padding; // stores margin around the canvas
 PVector paddingMin = new PVector(40,50); // initial value that serves for calculation of padding
 
 // global settings
-float speedAspect = 1;
+float speedAspect = 0.7;
 
 // Settings of circular movement
 float circularGridBoxSize = 165;
@@ -52,8 +52,8 @@ float collisionBlockAmount = 1.25; // aspect of the collision sound block in the
 
 
 void setup(){
-  // size(1920,1080);
-  fullScreen();
+  size(1920,1080);
+  // fullScreen();
   
   // initialize global variables
   app = this;

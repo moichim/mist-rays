@@ -87,39 +87,46 @@ class DisplayBlur extends Behavior {
   
   @Override
   public void initialSetup(){
-    this.amount = this.parentParticle.radius/6;
+    if (this.fullyLoaded) {
+      this.amount = this.parentParticle.radius/6;
+    }
   }
   
   @Override
   public void update( ){
-    
-    // deactivate when finished
-    if (this.amount <=1 ) {
-      this.active = false;
-      this.parentParticle.removeBehavior("DisplayBlur");
-      this.parentParticle.addBehavior(new DisplayDefault(this.parentParticle.id));
-    }
-    
-    // appropriate step from amount
-    this.amountStep = map( this.amount,0,30,0.1,0.5 );
-    
-    // update when not finished
-    this.rotation += this.rotationStep;
-    this.amount -= this.amountStep;
-    
-    pushMatrix();
-    translate(this.parentParticle.pos.x,this.parentParticle.pos.y);
-    ellipseMode(CENTER);
-    noStroke();
-    blendMode(ADD);
-    
-    for (int i=0;i<3;i++) {
+    if (this.fullyLoaded) {
       
-     this.renderChannel(i);
+      // deactivate when finished
+      if (this.amount <=1 ) {
+        this.active = false;
+        this.parentParticle.removeBehavior("DisplayBlur");
+        this.parentParticle.addBehavior(new DisplayDefault(this.parentParticle.id));
+      }
+      
+      // appropriate step from amount
+      this.amountStep = map( this.amount,0,30,0.1,0.5 );
+      
+      // update when not finished
+      this.rotation += this.rotationStep;
+      this.amount -= this.amountStep;
+      
+      pushMatrix();
+      translate(this.parentParticle.pos.x,this.parentParticle.pos.y);
+      ellipseMode(CENTER);
+      noStroke();
+      blendMode(ADD);
+      
+      for (int i=0;i<3;i++) {
+        
+       this.renderChannel(i);
+      
+      }
+      blendMode(NORMAL);
+      popMatrix();
     
     }
-    blendMode(NORMAL);
-    popMatrix();
+    
+    
 
   }
   

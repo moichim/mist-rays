@@ -9,10 +9,12 @@ class AnimateSize extends Behavior {
   
   @Override
   public void update( ) {
-    if (this.parentParticle.radius < this.min || this.parentParticle.radius > this.max) {
-      this.step = -this.step;
+    if ( this.fullyLoaded ) {
+      if (this.parentParticle.radius < this.min || this.parentParticle.radius > this.max) {
+        this.step = -this.step;
+      }
+      this.parentParticle.radius += this.step;
     }
-    this.parentParticle.radius += this.step;
   }
 }
 
@@ -42,10 +44,12 @@ class FadeOut extends Behavior{
   
   @Override
   public void update(){
-    this.parentParticle.radius -= this.step;
-    if (this.parentParticle.radius < 0) {
-      this.parentParticle.live = false;
-      this.active = false;
+    if (this.fullyLoaded) {
+      this.parentParticle.radius -= this.step;
+      if (this.parentParticle.radius < 0) {
+        this.parentParticle.live = false;
+        this.active = false;
+      }
     }
   }
 }
