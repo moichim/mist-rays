@@ -16,7 +16,7 @@ Installation view 7.1.2019, Moving Station, Pilsen
 2. First, run the Processing sketch from the `app` folder. From the Processing console, note the UDP adress the sketch is listening on.
 3. Then, run Open Stage Control and before startint the app, fill in the Processing's UDP address. Once the OSC is running, load the layout from `osc/controls.json`. 
 4. Finally, run SuperCollider, boot the server and load files from `sound` folder. Evaluate the code in the following order: boot > synths > global variables > UDP listener. No need to specify IP addresses - Processing and SuperCollider sketches are already configured.
-### Hardvare
+### Hardware
 - Preferrably _a DLP projector_. The projection is mostly B/W and LCD projectors fail screening black color - which is not black at all.
 - _A hazer_ for mist.
 - _A dark, quiet room with monochrome floor_ and at least 3-4 meters of height. The projection goes from the roof to the floor. Any tiles or colored structure on the floor will impact really bad on the projection.

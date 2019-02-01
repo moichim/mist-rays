@@ -18,7 +18,7 @@ class BellSound extends Behavior {
       // assemble the message
       OscMessage msg = new OscMessage("/sine");
       msg.add( this.frequency ); // frequency
-      msg.add( 0.01 ); // attack
+      msg.add( bellAtk ); // attack
       msg.add( bellRelease ); // release
       msg.add( bellAmp ); // amplituda
       msg.add( 0 ); // pan X
@@ -131,7 +131,7 @@ class CollisionSound extends Behavior {
         // send the message
         OscMessage msg = new OscMessage("/sine");
         msg.add( this.frequency ); // frequency
-        msg.add( 0.01 ); // attack
+        msg.add( collisionAtk ); // attack
         msg.add( release ); // release
         msg.add( this.amp ); // amplituda
         msg.add( this.pan.x ); // pan X

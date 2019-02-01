@@ -8,7 +8,7 @@ class Move extends Behavior {
   @Override
   public void update( ){
     if ( this.fullyLoaded ){
-      PVector step = this.parentParticle.dir.copy().mult(this.parentParticle.vel);
+      PVector step = this.parentParticle.dir.copy().mult( this.parentParticle.vel * speedAspect);
       this.parentParticle.pos = this.parentParticle.pos.add(step);
     }
   }

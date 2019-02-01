@@ -69,6 +69,26 @@ class GlobalControls extends ControlGroup {
       c.calculateDimensions();
     }
     
+    // the speed of particles
+    if (m.addrPattern().equals("/speedAspect")) {
+      speedAspect = m.get(0).floatValue();
+    }
+    
+    // the speed of particles
+    if (m.addrPattern().equals("/modus")) {
+      float type = m.get(0).floatValue();
+      if ( type == 1.0 ) {
+        s = new CircularSystem();
+      }
+      if ( type == 2.0 ) {
+        s = new SimpleSystem();
+      }
+      if ( type == 3.0 ) {
+        s = new KinectSystem();
+      }
+    }
+    
+    
     
     
   }

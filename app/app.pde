@@ -6,7 +6,7 @@ import org.openkinect.processing.*;
 import oscP5.*;
 import netP5.*;
 
-
+// conter of ray IDS
 int rayIdCounter = 0;
 
 // globals
@@ -19,11 +19,14 @@ OscP5 oscP5;
 NetAddress superCollider;
 
 // visual output for debugging
-boolean debug = true;
+boolean debug = false;
 
 // Settings of canvas
 PVector padding; // stores margin around the canvas
 PVector paddingMin = new PVector(40,50); // initial value that serves for calculation of padding
+
+// global settings
+float speedAspect = 1;
 
 // Settings of circular movement
 float circularGridBoxSize = 165;
@@ -31,7 +34,8 @@ float circularGridRayRadius = 40;
 
 // settings for circular sound
 float bellAmplitude = 1;
-float bellFrequency = 80;
+float bellFrequency = 52;
+float bellAtk = 0.01;
 float bellRelease = 2;
 float bellAmp = 0.8;
 
@@ -39,11 +43,12 @@ float bellAmp = 0.8;
 float currentVolume = 0;
 float maxVolume = 0.8;
 float availableVolume = maxVolume;
-float collisionMinFreq = 200;
-float collisionMaxFreq = 500;
-float collisionMinRel = 2;
-float collisionMaxRel = 4;
-float collisionBlockAmount = 2; // aspect of the collision sound block in the range of 1 to N. the higher is, the bigger the block is.  
+float collisionMinFreq = 100;
+float collisionMaxFreq = 300;
+float collisionAtk = 0.05;
+float collisionMinRel = 1.58;
+float collisionMaxRel = 4.22;
+float collisionBlockAmount = 1.25; // aspect of the collision sound block in the range of 1 to N. the higher is, the bigger the block is.  
 
 
 void setup(){
