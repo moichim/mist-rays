@@ -24,7 +24,6 @@ class BellSound extends Behavior {
       msg.add( 0 ); // pan X
       msg.add( 0 ); // pan Y
           
-      println(msg);
       
       // send the message
       oscP5.send( msg, superCollider );
@@ -136,8 +135,6 @@ class CollisionSound extends Behavior {
         msg.add( this.amp ); // amplituda
         msg.add( this.pan.x ); // pan X
         msg.add( this.pan.y ); // pan Y
-        
-        println(msg);
         
         oscP5.send( msg, superCollider );
       

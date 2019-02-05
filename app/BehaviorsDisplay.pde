@@ -26,7 +26,6 @@ class DisplayDebug extends Behavior {
   
   @Override
   public void update( ){
-    println(this.fullyLoaded);
     if (debug && this.fullyLoaded) {
       pushMatrix();
       translate( this.parentParticle.pos.x,this.parentParticle.pos.y );

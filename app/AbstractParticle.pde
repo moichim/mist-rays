@@ -78,9 +78,7 @@ class Particle {
     if ( !this.hasBehavior( b.name() ) ) {
       this.behaviors.add(b);
       b.removeConflictingBehaviors( this );
-    } else {
-      println("Blocked duplicite behavior: " + b.name());
-    }
+    } 
   }
   
   // Remove behavior

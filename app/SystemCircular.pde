@@ -96,8 +96,6 @@ class CircularSystem extends System {
                    }
                  }
                  aspect = float(imprisonnedCount) / float(prisonnerCount);
-                 println(aspect);
-                 // amp = aspect;
                  
                  c.bg = color(255);
                  OscMessage msg = new OscMessage("/sine");
@@ -108,7 +106,6 @@ class CircularSystem extends System {
                  msg.add( 0 ); // pan X
                  msg.add( 0 ); // pan Y
                     
-                 println(msg);
                 
                  // send the message
                  oscP5.send( msg, superCollider );

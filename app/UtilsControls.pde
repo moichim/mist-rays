@@ -225,6 +225,31 @@ class KinectControls extends ControlGroup {
       k.minDepth = int ( m.get(0).floatValue() );
       k.maxDepth = int( m.get(1).floatValue() );
     }
+    
+    // the kinect image position devilation
+    if (m.addrPattern().equals("/kinectDeviation")) {
+      
+      k.deviation.x = m.get(0).floatValue();  
+      k.deviation.y = m.get(1).floatValue();
+      k.updateDimensions();
+    
+    }
+    
+    // the kinect image crop
+    if ( m.addrPattern().equals("/kinectCrop") ) {
+      // println(incoming.get(0).floatValue());
+      
+      float tlX = m.get(0).floatValue();
+      float tlY = m.get(1).floatValue();
+      float brX = m.get(2).floatValue();
+      float brY = m.get(3).floatValue();
+      
+      // nastavit ořezové body
+      k.cropTopLeft = new PVector(tlX,tlY);
+      k.cropBottomRight = new PVector(brX,brY);
+      // aktualizovat rozměr
+      k.updateDimensions();
+    }
   
   }
   

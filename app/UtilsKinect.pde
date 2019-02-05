@@ -5,13 +5,14 @@ class DepthControl {
   int[] map; // sem se dají body podle rozlišení. Body jsou zde vždy
   int minDepth; // minimální treshold
   int maxDepth; // maximální treshold
+  float depthStep; // pravděpodobně krok při manuálním nastavování
   int resolution; // hustota bodů
   float scale; // velikost
   float scaleStep;
   ArrayList<PVector> matrix; // pole vektorů podle bodů a měřítka - tento element je 
   PVector offset;
-  float depthStep;
-  float skipTop, skipBottom,skipLeft,skipRight; // kolik bude přeskočeno ve fázi updateMatrix
+  
+  float skipTop, skipBottom,skipLeft,skipRight; // kolik řádků bude přeskočeno ve fázi updateMatrix
   PVector cropTopLeft, cropBottomRight; // míra oříznutí zle
   float w,h; // vypočítané rozměry šířky a výšky
   float radius;
@@ -27,11 +28,11 @@ class DepthControl {
     
     this.updatetTopLeftOffset();
     
-    this.minDepth = 0;//320;
-    this.maxDepth = 2000;//950;
+    this.minDepth = 755;//320;
+    this.maxDepth = 920;//950;
     
     this.resolution = 10;
-    this.scale = 2.44;
+    this.scale = 1;//2.44;
     this.scaleStep = 0.05;
     this.depthStep = 50;
     
@@ -88,7 +89,7 @@ class DepthControl {
     
     pushMatrix();
     
-    translate(this.offset.x,this.offset.y);
+    // translate(this.offset.x,this.offset.y);
     
     // this.drawImage();
     // image(this.img,0,0);
@@ -112,6 +113,44 @@ class DepthControl {
     text("Velikost " + String.valueOf( this.scale ), 10,height-10);
     noFill();
     popMatrix();
+    
+    // render the control frame
+    
+    float tLx = this.cropTopLeft.x + this.deviation.x;
+    float tLy = this.cropTopLeft.y +  this.deviation.y;
+    float bRx = this.cropBottomRight.x + this.deviation.x - tLx;
+    float bRy = this.cropBottomRight.y + this.deviation.y -tLy;
+    
+    
+    stroke(255);
+    rect(tLx, tLy, bRx, bRy);
+    noStroke();
+    
+    
+    // render top left crop
+    pushMatrix();
+    
+    translate(tLx, tLy);
+    
+    
+    
+    fill(255);
+    ellipse(0,0,30,30);
+    text( String.valueOf(this.cropTopLeft),60,0 );
+    noFill();
+    popMatrix();
+    
+    // render top left crop
+    pushMatrix();
+    
+    translate(bRx, bRy);
+    
+    fill(255);
+    ellipse(0,0,30,30);
+    text( String.valueOf(this.cropBottomRight),40,0 );
+    noFill();
+    popMatrix();
+    
     
   }
   

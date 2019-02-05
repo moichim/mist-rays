@@ -1,5 +1,4 @@
 /** Walk the walk */
-
 class Move extends Behavior {
   Move( int id ){
     super(id);

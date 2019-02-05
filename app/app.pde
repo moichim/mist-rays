@@ -50,6 +50,7 @@ float collisionMinRel = 1.58;
 float collisionMaxRel = 4.22;
 float collisionBlockAmount = 1.25; // aspect of the collision sound block in the range of 1 to N. the higher is, the bigger the block is.  
 
+KinectSignal kn;
 
 void setup(){
   size(1920,1080);
@@ -58,17 +59,20 @@ void setup(){
   // initialize global variables
   app = this;
   c = new Canvas();
-  k = new DepthControl();
+  //k = new DepthControl();
   b = new SoundBuffer();
   oscP5 = new OscP5(this,5555);
   superCollider = new NetAddress("127.0.0.1",12000);
   
+  kn = new KinectSignal();
+  
   // the system itself
-  s = new CircularSystem();
+  s = new System();
 
 }
 
 void draw(){
+  
   
   // regular updates
   currentVolume = 0;
@@ -76,6 +80,15 @@ void draw(){
   availableVolume = maxVolume;
   
   background(c.bg);
+  
+  if (frameCount % 5 == 0) {
+    kn.update();
+  }
+  
+  
+  kn.render();
+  
+  
   s.update();
   
   
