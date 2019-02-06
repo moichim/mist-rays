@@ -206,13 +206,13 @@ class KinectControls extends ControlGroup {
     // the scale of the kinnect
     if (m.addrPattern().equals("/kinectScale")) {
       k.scale = m.get(0).floatValue();
-      k.updateDimensions();
+      //k.updateDimensions();
     }
     
     // the resolution of the kinnect
     if (m.addrPattern().equals("/kinectResolution")) {
       k.resolution = int( m.get(0).floatValue() );
-      k.updateDimensions();
+      //k.updateDimensions();
     }
     
     // the resolution of the kinnect
@@ -231,7 +231,7 @@ class KinectControls extends ControlGroup {
       
       k.deviation.x = m.get(0).floatValue();  
       k.deviation.y = m.get(1).floatValue();
-      k.updateDimensions();
+      //k.updateDimensions();
     
     }
     
@@ -245,19 +245,25 @@ class KinectControls extends ControlGroup {
       float brY = m.get(3).floatValue();
       
       // nastavit ořezové body
-      k.cropTopLeft = new PVector(tlX,tlY);
-      k.cropBottomRight = new PVector(brX,brY);
+      k.cropTL = new PVector(tlX,tlY);
+      k.cropBR = new PVector(brX,brY);
       // aktualizovat rozměr
-      k.updateDimensions();
+      //k.updateDimensions();
     }
   
   }
   
   @Override
   public void listenKeyBoard( System sys ){ 
+    
+    if (key==CODED) {
+      
+      if (keyCode == UP) { k.moveDeviceUp(); }
+      if (keyCode == DOWN) { k.moveDeviceDown(); }
+    
+    }
   
-    if (keyCode == UP) { k.moveDeviceUp(); }
-    if (keyCode == DOWN) { k.moveDeviceDown(); }
+    
   
   }
   

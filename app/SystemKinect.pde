@@ -10,7 +10,7 @@ class KinectSystem extends System {
   @Override
  public void customSystemUpdate(){
    
-   //k.render();
+   k.render();
  }
 
 

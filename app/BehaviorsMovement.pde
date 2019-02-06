@@ -19,17 +19,24 @@ class RecieveCollisions extends Behavior {
   
   int sinceLastCollision;
   boolean collidedRecently;
+  int sinceLastKinect;
   
   RecieveCollisions( int id ){
     super(id);
     this.collidedRecently = false;
     this.sinceLastCollision = 0;
+    this.sinceLastKinect = 0;
     
   }
   
   @Override
   public void update(){
     if ( this.fullyLoaded ){
+      
+      // zkontrolovat hodnotu posledního kinectu
+      if ( this.sinceLastKinect >0 ) {
+        this.sinceLastKinect--;
+      }
       
       // count time since last collision
       if ( this.collidedRecently ) {
@@ -61,11 +68,29 @@ class RecieveCollisions extends Behavior {
               Prisonner pris = (Prisonner) r;
               pris.release();
             }
+            /* set self free if possible */
+            if ( this.parentParticle.hasBehavior("Imprisonment") ) {
+              Prisonner pris = (Prisonner) this.parentParticle;
+              pris.release();
+            }
             
             /* Enable post-collision actions */
             if ( ! this.collidedRecently ) {
               collides = true;
             }
+            
+            /* Special code for kinect controls */
+            /* 1. Pokud je druhý kinectControl, přidej hodnotu kinectu */
+            if (r.hasBehavior("KinectColider")) {
+              this.sinceLastKinect += 10;
+            }
+            
+            /* 2. Pokud je druhý kinect a hodnota kinectu je větší, než povolený limit, exploduj */
+            if ( r.hasBehavior("KinectCollider") && this.sinceLastKinect >= 20 ) {
+              this.parentParticle.addBehavior( new DisplayExplode( this.parentParticle.id ) );
+              collides = false;
+            }
+            
             
             if (this.parentParticle.hasBehavior("CollisionSound") && r.hasBehavior("CollisionSound") ) {
               CollisionSound pS = (CollisionSound) this.parentParticle.getBehavior("CollisionSound");
@@ -92,13 +117,10 @@ class RecieveCollisions extends Behavior {
           
           Behavior b = this.parentParticle.getBehavior("DisplayBlur");
           DisplayBlur db = (DisplayBlur) b;
-          if ( db.amount < this.parentParticle.radius/2 ) {
-            
-            //db.amount += 10;
-          }
           
         } else {
-          this.parentParticle.addBehavior( new DisplayBlur( this.parentParticle.id ) );
+          // this.parentParticle.addBehavior( new DisplayBlur( this.parentParticle.id ) );
+          // this.parentParticle.addBehavior( new DisplayExplode( this.parentParticle.id ) );
         }
         
         // ring the collision

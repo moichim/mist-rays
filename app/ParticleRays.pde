@@ -23,7 +23,7 @@ class Ray extends Particle {
     this.addBehavior( new InvokeCollisions( this.id ) );
     this.addBehavior( new FadeWhenOutOfCanvas( this.id ) );
     this.addBehavior( new Move( this.id ) );
-    this.addBehavior( new DisplayDefault( this.id ) );
+    this.addBehavior( new DisplayExplode( this.id ) );
     this.addBehavior( new CollisionSound( this.id ) );
    
   }
@@ -45,7 +45,7 @@ class Rocket extends Particle {
     this.addBehavior( new FadeOut( this.id,  (float) 0.5 ) );
     this.addBehavior( new AdjustVelocity( this.id, 3, (float) 0.2 ) );
     this.addBehavior( new FadeWhenOutOfCanvas( this.id ) );
-    this.addBehavior( new RecieveCollisions( this.id ) );
+    // this.addBehavior( new RecieveCollisions( this.id ) );
     this.addBehavior( new Move( this.id ) );
     this.addBehavior( new DisplayDefault( this.id ) );
     

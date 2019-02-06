@@ -11,6 +11,7 @@ class CircularSystem extends System {
     
     // add the system controls
     this.controls.add( new CircularControls( this ) );
+    this.controls.add(new KinectControls( this ) );
     
     // initialize the controls
     this.tempo = 1;

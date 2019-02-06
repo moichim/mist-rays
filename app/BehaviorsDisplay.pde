@@ -33,6 +33,7 @@ class DisplayDebug extends Behavior {
       noStroke();
       fill(this.parentParticle.col);
       ellipse(0,0,this.parentParticle.radius,this.parentParticle.radius);
+      noFill();
       popMatrix();
     }
   }
@@ -54,7 +55,14 @@ class DisplayExplode extends Behavior {
     for (int i=0;i<this.numParticles;i++) {
       Rocket r = new Rocket(this.parentParticle.pos, offset + float(i)*angleStep);
       s.particles.add(r);
+      // this.rockets.add(r);
     }
+    
+    if ( this.fullyLoaded ) {
+      this.parentParticle.col = color(255,255,0);
+    
+    }
+    
   }
   
   @Override
@@ -66,6 +74,14 @@ class DisplayExplode extends Behavior {
     fill(this.parentParticle.col);
     ellipse(0,0,this.parentParticle.radius,this.parentParticle.radius);
     popMatrix();
+    if (this.fullyLoaded) {
+      if ( this.rockets.size()>0 ) {
+        println("Raketaaa!");
+        for (Rocket r : this.rockets) {
+          r.update();
+        }
+      }
+    }
   }
 }
 

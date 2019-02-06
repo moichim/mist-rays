@@ -68,9 +68,9 @@ class CollisionSound extends Behavior {
       
       // increment life
       this.life++;
-      float colAspect = map( this.life,0,this.duration,0,255 );
+      //float colAspect = map( this.life,0,this.duration,0,255 );
       
-      this.parentParticle.col = color(255,colAspect,255);
+      //this.parentParticle.col = color(255,colAspect,255);
       
       // update the current amplitude
       this.updateAmplitude();

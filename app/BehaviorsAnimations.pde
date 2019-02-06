@@ -24,22 +24,26 @@ class FadeOut extends Behavior{
   
   FadeOut(int id){
     super(id);
-    // this.duration = 9999;
+    this.duration = 9999;
     this.step = 1;
   }
   
   FadeOut( int id, float s ){
     super(id);
     this.step = s;
+    this.duration = 100;
   }
   
   FadeOut( int id, int d ){
     super(id);
     this.duration = d;
+    this.step = 1;
   }
   @Override
   public void initialSetup() {
+    if (this.fullyLoaded) {
       this.step = this.parentParticle.radius / this.duration;
+    }
   }
   
   @Override
