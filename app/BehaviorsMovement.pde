@@ -29,118 +29,103 @@ class RecieveCollisions extends Behavior {
     
   }
   
+  private void bounce( Particle p ) {
+  
+    /* V každém případě rozostři */
+    this.parentParticle.addBehavior( new DisplayBlur( this.parentParticle.id ) );
+    
+    /* V každém případě odraž */
+    this.parentParticle.dir = this.bouncedDirection( this.parentParticle.pos, p.pos );
+    
+    /* Pokud má některé ze zvukových chování a zároveň protivník ani on sám není blokován, zahraj */
+    if ( this.parentParticle.hasBehavior("CollisionSound") ) {
+      
+      Behavior b = this.parentParticle.getBehavior("CollisionSound");
+      CollisionSound cs = (CollisionSound) b;
+            if ( !cs.blocked ) {
+              cs.ring();
+     }
+      
+      
+    }
+
+    
+  }
+  
   @Override
   public void update(){
-    if ( this.fullyLoaded ){
-      
-      // zkontrolovat hodnotu posledního kinectu
-      if ( this.sinceLastKinect >0 ) {
-        this.sinceLastKinect--;
-      }
-      
-      // count time since last collision
-      if ( this.collidedRecently ) {
-        this.sinceLastCollision++;
-        if (this.sinceLastCollision > 5) { this.collidedRecently = false; this.sinceLastCollision = 0;  }
-        
-      }
-      
-      boolean collides = false; // trigger for events past collisions
-      boolean rings = false; // indicate whether to ring or not
-      /* Detect and execute collisions */
-      for ( Particle r : s.particles ) {  
-        
-        if (r.hasBehavior("InvokeCollisions")) {
-        
-          float distance = PVector.dist(this.parentParticle.pos,r.pos);
-          if ( distance <= this.parentParticle.radius/2 + r.radius/2 && distance > 0) {
-            
-            /* apply the colision to self */
-            this.parentParticle.dir = this.bouncedDirection( this.parentParticle.pos, r.pos );
-            
-            /* for sure, applay the collision to the other when appropriate */
-            if ( r.hasBehavior("RecieveCollisions") ) {
-              r.dir = this.bouncedDirection( r.pos, this.parentParticle.pos );
-              r.addBehavior( new DisplayBlur( r.id ) );
-            }
-            /* set the other free if possible */
-            if ( r.hasBehavior("Imprisonment") ) {
-              Prisonner pris = (Prisonner) r;
-              pris.release();
-            }
-            /* set self free if possible */
-            if ( this.parentParticle.hasBehavior("Imprisonment") ) {
-              Prisonner pris = (Prisonner) this.parentParticle;
-              pris.release();
-            }
-            
-            /* Enable post-collision actions */
-            if ( ! this.collidedRecently ) {
-              collides = true;
-            }
-            
-            /* Special code for kinect controls */
-            /* 1. Pokud je druhý kinectControl, přidej hodnotu kinectu */
-            if (r.hasBehavior("KinectColider")) {
-              this.sinceLastKinect += 10;
-            }
-            
-            /* 2. Pokud je druhý kinect a hodnota kinectu je větší, než povolený limit, exploduj */
-            if ( r.hasBehavior("KinectCollider") && this.sinceLastKinect >= 20 ) {
-              this.parentParticle.addBehavior( new DisplayExplode( this.parentParticle.id ) );
-              collides = false;
-            }
-            
-            
-            if (this.parentParticle.hasBehavior("CollisionSound") && r.hasBehavior("CollisionSound") ) {
-              CollisionSound pS = (CollisionSound) this.parentParticle.getBehavior("CollisionSound");
-              CollisionSound rS = (CollisionSound) r.getBehavior("CollisionSound");
-              if ( pS.blocked || rS.blocked ) {
-                rings = false;
-              } else {
-                rings = true;
-              }
-            }
-            
-            
-          }
-          
-        }
-        
-      }
-      
-      /* Fire actions done upon collision */
-      if ( collides ) {
-        
-        // temporarily blur the ray
-        if ( this.parentParticle.hasBehavior("DisplayBlur") ) {
-          
-          Behavior b = this.parentParticle.getBehavior("DisplayBlur");
-          DisplayBlur db = (DisplayBlur) b;
-          
-        } else {
-          // this.parentParticle.addBehavior( new DisplayBlur( this.parentParticle.id ) );
-          // this.parentParticle.addBehavior( new DisplayExplode( this.parentParticle.id ) );
-        }
-        
-        // ring the collision
-        if (rings) {
-          
-          CollisionSound snd = (CollisionSound) this.parentParticle.getBehavior("CollisionSound");
-            
-          if ( !snd.blocked ) {
-            snd.ring( );        
-          }
-        }
-        
-        
-      }
     
+    /* Na začátku vždy sniž kinectBlock */
+    if ( this.sinceLastKinect > 0) {
+      this.sinceLastKinect--;
     }
     
     
+    /* Nový kód */
+    if ( this.fullyLoaded ){
+      
+      for (Particle p : s.particles ) {
+        
+        /* Kontrola zda protějšek invokuje kolize */
+        if ( p.hasBehavior("InvokeCollisions") ) {
+          
+          /* Kontrola vzdálenosti */
+          float distance = PVector.dist(this.parentParticle.pos,p.pos);
+          if ( distance <= ( this.parentParticle.radius/2 + p.radius/2 ) + collisionPrecision) {
+            ´-
+            
+            /* Protějšek je kinect */
+            if ( p.hasBehavior("KinectColider") ) {
+              
+              // inkrementuj počítadlo kinectu
+              this.sinceLastKinect += 10;
+              //////////////////////////////////////////////////////////////////////////// ODRAŽ
+              this.bounce( p );
+              
+              /* Pokud protivník je kinect, zkontroluj blokaci */
+              if ( this.sinceLastKinect >= 20 ) {
+                
+                ////////////////////////////////////////////////////////////////////////// EXPLODUJ
+                this.parentParticle.addBehavior( new DisplayExplode( this.parentParticle.id ) );
+              
+              } // konec smrti následkem kinectu
+              
+            } // konec akcí pro kinect
+            
+            /* Protějšek není kinect*/
+            else {
+              
+              //////////////////////////////////////////////////////////////////////////// ODRAZ
+              this.bounce( p );
+              
+              
+            } // konec akcí pro vše ostatní krom kinectu
+            
+            
+            
+            
+            /* Protějšek je prisoner */
+            if ( p.hasBehavior("Imprisonment") ) {
+              
+              //////////////////////////////////////////////////////////////////////////// UVOLNI PROTIVNIKA
+              Prisonner pris = (Prisonner) p;
+              pris.release();
+              println("Tento lumpík je volný");
+                
+            } // konec akcí pro prisonera
+            
+          } // konec kontroly vzdálenosti this a protivníka
+        
+        } // konec kontroly zda protivník invokuje kolize
+        
+        
+        
+      
+      } // konec iterace prvků
+      
+    }
   
-  }
+  } // konec updatu
   
   // thic method calculates the new direction upon collision based on the opposite direction
   PVector bouncedDirection( PVector selfPos, PVector oppositePos ){

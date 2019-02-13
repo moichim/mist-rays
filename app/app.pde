@@ -39,6 +39,7 @@ float bellRelease = 2;
 float bellAmp = 0.8;
 
 // settings for collision sound
+float collisionPrecision = 1;
 float currentVolume = 0;
 float maxVolume = 0.8;
 float availableVolume = maxVolume;

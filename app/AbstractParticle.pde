@@ -73,6 +73,33 @@ class Particle {
     return verdict;
   }
   
+  boolean hasAnyOfBehaviors( String[] b ){
+    
+    boolean controller = false;
+    
+    if (this.behaviors.size()>0 && b.length > 0 ) {
+      
+      for (Behavior behavior: this.behaviors ) {
+        
+        for ( int i = 0; i < b.length;i++ ) {
+          
+          if ( b[i].equals( behavior.getClass().getSimpleName() ) ) {
+            
+            controller = true;
+            
+          }
+          
+        }
+        
+      }
+      
+    }
+    
+    return controller;
+    
+  
+  }
+  
   // Add a behavior to the particle checking for duplicities
   public void addBehavior(Behavior b){
     if ( !this.hasBehavior( b.name() ) ) {

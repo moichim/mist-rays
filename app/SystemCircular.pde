@@ -112,29 +112,6 @@ class CircularSystem extends System {
                  oscP5.send( msg, superCollider );
                }
              }
-             /*
-             if ( imp.destiny != null && imp.destiny.hasArrived( prison.pos, 5) ) {
-               c.bg = color(255);
-               // snd.ring(); 
-                println("Cink");
-               
-               // assemble the message
-               OscMessage msg = new OscMessage("/sine");
-               msg.add( bellFrequency ); // frequency
-               msg.add( 0.01 ); // attack
-               msg.add( bellRelease ); // release
-               msg.add( bellAmp ); // amplituda
-               msg.add( 0 ); // pan X
-               msg.add( 0 ); // pan Y
-                  
-               println(msg);
-              
-               // send the message
-               oscP5.send( msg, superCollider );
-             } else {
-               //c.bg = color(0);
-             }
-             */
            
            }
            

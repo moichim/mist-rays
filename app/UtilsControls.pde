@@ -273,7 +273,9 @@ class KinectControls extends ControlGroup {
   @Override
   public void controlUpdate( System sys ) {
     
-      k.render();
+     if (debug) {
+       k.render();
+     }
     
     
     if (frameCount % 4 == 0) {

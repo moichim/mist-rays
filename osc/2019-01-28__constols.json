@@ -458,7 +458,10 @@
             "min": -500,
             "max": 500
           },
-          "rangeY": "{\n  \"min\": 500,\n  \"max\":- 500\n}",
+          "rangeY": {
+            "min": 500,
+            "max": -500
+          },
           "logScaleX": false,
           "logScaleY": false,
           "input": true,
