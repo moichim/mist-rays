@@ -9,6 +9,7 @@ class Particle {
   ArrayList<Behavior> behaviors;
   boolean live;
   int id;
+  boolean invokes;
   
   // appearance and movement
   PVector pos, dir;
@@ -19,6 +20,7 @@ class Particle {
     this.behaviors = new ArrayList<Behavior>();
     this.live = true;
     this.id = rayIdCounter;
+    this.invokes = false;
     rayIdCounter++;
     if ( rayIdCounter >= 999999 ) {
       rayIdCounter = 0;
@@ -53,6 +55,10 @@ class Particle {
     }
     
     this.customUpdate( );
+    
+    // PVector step = this.dir.copy().mult( this.vel * speedAspect);
+    // this.pos = this.pos.add(step);
+
     
   } // end update method
   

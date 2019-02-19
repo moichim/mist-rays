@@ -42,10 +42,12 @@ class RecieveCollisions extends Behavior {
       
       Behavior b = this.parentParticle.getBehavior("CollisionSound");
       CollisionSound cs = (CollisionSound) b;
-            if ( !cs.blocked ) {
-              cs.ring();
-     }
+      if ( !cs.blocked ) {
+        cs.ring();
+      }
       
+      /* Zvuk bude */
+      this.parentParticle.col = color(random(150,255),random(150,255),random(0,255));
       
     }
 
@@ -55,10 +57,9 @@ class RecieveCollisions extends Behavior {
   @Override
   public void update(){
     
-    /* Na začátku vždy sniž kinectBlock */
-    if ( this.sinceLastKinect > 0) {
-      this.sinceLastKinect--;
-    }
+    /* Na začátku vždy snižuj bloky */
+    if ( this.sinceLastKinect > 0) { this.sinceLastKinect--; }
+    if ( this.sinceLastCollision >= 0) { this.sinceLastCollision++; }
     
     
     /* Nový kód */
@@ -67,23 +68,35 @@ class RecieveCollisions extends Behavior {
       for (Particle p : s.particles ) {
         
         /* Kontrola zda protějšek invokuje kolize */
-        if ( p.hasBehavior("InvokeCollisions") ) {
+        if ( p.invokes ) {
           
           /* Kontrola vzdálenosti */
-          float distance = PVector.dist(this.parentParticle.pos,p.pos);
-          if ( distance <= ( this.parentParticle.radius/2 + p.radius/2 ) + collisionPrecision) {
-            ´-
+          float distance = PVector.dist(this.parentParticle.pos, p.pos);
+          if ( distance <= ( this.parentParticle.radius/2 + p.radius/2 ) + collisionPrecision && p != this.parentParticle && this.sinceLastCollision > 3) {
+            
+            // println(frameCount + " Distance: " + distance + " Součet průměrů " + this.parentParticle.radius/2 + p.radius/2 );
+            this.sinceLastCollision = 0;
+            
             
             /* Protějšek je kinect */
-            if ( p.hasBehavior("KinectColider") ) {
+            if ( p.getClass().getSimpleName().equals("Collider") ) { // p.hasBehavior("KinectColider") 
               
               // inkrementuj počítadlo kinectu
               this.sinceLastKinect += 10;
               //////////////////////////////////////////////////////////////////////////// ODRAŽ
               this.bounce( p );
               
+              // pokud je item zároveň prisonner, uvolni ho
+              if (this.parentParticle.hasBehavior("Imprisonment")) {
+                
+                Prisonner pris = (Prisonner) this.parentParticle;
+                pris.release();
+                
+              
+              }
+              
               /* Pokud protivník je kinect, zkontroluj blokaci */
-              if ( this.sinceLastKinect >= 20 ) {
+              if ( this.sinceLastKinect >= 30 ) {
                 
                 ////////////////////////////////////////////////////////////////////////// EXPLODUJ
                 this.parentParticle.addBehavior( new DisplayExplode( this.parentParticle.id ) );
@@ -110,7 +123,7 @@ class RecieveCollisions extends Behavior {
               //////////////////////////////////////////////////////////////////////////// UVOLNI PROTIVNIKA
               Prisonner pris = (Prisonner) p;
               pris.release();
-              println("Tento lumpík je volný");
+              // println("Tento lumpík je volný");
                 
             } // konec akcí pro prisonera
             
@@ -144,6 +157,10 @@ class InvokeCollisions extends Behavior {
   InvokeCollisions( int id ) {
     super(id);
   }
+  @Override
+  public void initialSetup(){
+    this.parentParticle.invokes = true;
+  }
   
 }
 
@@ -164,6 +181,17 @@ class CollideWithBorders extends Behavior {
     
   }
 }
+
+
+/* Check and resolve collisions with app borders */
+class KinectCollider extends Behavior {
+  
+  KinectCollider( int id ) {
+    super(id);
+  }
+}
+
+
 
 /* Check and resolve collisions with app borders */
 class FadeWhenOutOfCanvas extends Behavior {
@@ -214,6 +242,7 @@ class Imprisonment extends Behavior {
     PVector boxEnd = new PVector(this.box.x + circularGridBoxSize,this.box.y + circularGridBoxSize);
     this.destiny = new Destiny( this.box, boxEnd, this.position );
     this.destiny.nextTarget();
+    this.parentParticle.col = color(100);
     
     // last, adjust the particle position by the movement pattern
     this.parentParticle.pos = this.destiny.getPointCoordinates( position ).copy();
@@ -254,6 +283,8 @@ class Imprisonment extends Behavior {
   
   // release the particle from imprisonment
   public void setFree(){
+    
+    this.parentParticle.col = color(255);
     
     // change behaviors of the self
     this.parentParticle.removeBehavior("Imprisonment");
@@ -298,13 +329,5 @@ class Imprisonment extends Behavior {
       
     } // end of the cycle
     
-  }
-}
-
-/* Check and resolve collisions with app borders */
-class KinectCollider extends Behavior {
-  
-  KinectCollider( int id ) {
-    super(id);
   }
 }

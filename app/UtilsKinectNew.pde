@@ -20,16 +20,16 @@ class KinectSignal {
     this.angle = kinect.getTilt();
     
     // nastavení hloubky seznoru
-    this.minDepth = 400;//1000.0;
-    this.maxDepth = 900;//1300.0;
+    this.minDepth = kinectDepthMin;//1000.0;
+    this.maxDepth = kinectDepthMax;//1300.0;
     
     this.radius = 10;
     
     // nastavení zpracování dat
-    this.resolution = 10;
-    this.scale = 2;
-    this.cropTL = new PVector(0,0);
-    this.cropBR = new PVector( this.kinect.width, this.kinect.height );
+    this.resolution = kinectResolution;
+    this.scale = kinectScale;
+    this.cropTL = new PVector(kinectCropTL.x,kinectCropTL.y);
+    this.cropBR = new PVector( kinectCropBR.x, kinectCropBR.y );
     this.deviation = new PVector(0,0);
     
     // inicializace matrixu

@@ -69,6 +69,12 @@ class GlobalControls extends ControlGroup {
       c.calculateDimensions();
     }
     
+    // the scale of the canvas
+    if (m.addrPattern().equals("/speed")) {
+      speedAspect = m.get(0).floatValue();
+      // c.calculateDimensions();
+    }
+    
     // the speed of particles
     if (m.addrPattern().equals("/speedAspect")) {
       speedAspect = m.get(0).floatValue();
@@ -131,7 +137,7 @@ class CircularControls extends ControlGroup {
     }
     
     // size of the box
-    if (m.addrPattern().equals("/gridBoxRadius")) {
+    if (m.addrPattern().equals("/gridRayRadius")) {
       circularGridRayRadius = m.get(0).floatValue();
     }
     
@@ -229,6 +235,9 @@ class KinectControls extends ControlGroup {
     // the kinect image position devilation
     if (m.addrPattern().equals("/kinectDeviation")) {
       
+      println(m.get(0).floatValue());
+      println(m.get(1).floatValue());
+      
       k.deviation.x = m.get(0).floatValue();  
       k.deviation.y = m.get(1).floatValue();
       //k.updateDimensions();
@@ -237,7 +246,8 @@ class KinectControls extends ControlGroup {
     
     // the kinect image crop
     if ( m.addrPattern().equals("/kinectCrop") ) {
-      // println(incoming.get(0).floatValue());
+      println(m.get(2).floatValue());
+      println(m.get(3).floatValue());
       
       float tlX = m.get(0).floatValue();
       float tlY = m.get(1).floatValue();

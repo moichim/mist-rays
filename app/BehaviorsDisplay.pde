@@ -42,43 +42,53 @@ class DisplayDebug extends Behavior {
 class DisplayExplode extends Behavior {
   ArrayList<Rocket> rockets;
   int numParticles;
+  int life;
   DisplayExplode( int id ) {
     super(id);
     this.conflictingBehaviors.add("DisplayDefault");
     this.rockets = new ArrayList<Rocket>();
     this.numParticles = int( random( 10,30 ) );
+    this.life = 30;
   }
   @Override
   public void initialSetup() {
-    float angleStep = 2*3.14/numParticles;
-    float offset = random(4);
-    for (int i=0;i<this.numParticles;i++) {
-      Rocket r = new Rocket(this.parentParticle.pos, offset + float(i)*angleStep);
-      s.particles.add(r);
-      // this.rockets.add(r);
-    }
     
     if ( this.fullyLoaded ) {
-      this.parentParticle.col = color(255,255,0);
-    
+      
+      this.parentParticle.addBehavior(new FadeOut( this.parentParticle.id, this.life ));
+      this.parentParticle.col = color(255,0,255);
+      
+      float angleStep = 2*3.14/numParticles;
+      float offset = random(4);
+      for (int i=0;i<this.numParticles;i++) {
+        Rocket r = new Rocket(this.parentParticle.pos, offset + float(i)*angleStep, this.life);
+        s.particles.add(r);
+        // this.rockets.add(r);
+      }
     }
     
   }
   
   @Override
   public void update(){
+    
+    this.life--;
+      if (this.life <= 0) {
+        println("die");  
+        this.parentParticle.live = false;
+      }
     pushMatrix();
     translate( this.parentParticle.pos.x,this.parentParticle.pos.y );
     ellipseMode(CENTER);
     noStroke();
     fill(this.parentParticle.col);
     ellipse(0,0,this.parentParticle.radius,this.parentParticle.radius);
-    popMatrix();
+    popMatrix(); 
     if (this.fullyLoaded) {
       if ( this.rockets.size()>0 ) {
         println("Raketaaa!");
         for (Rocket r : this.rockets) {
-          r.update();
+          //r.update();
         }
       }
     }

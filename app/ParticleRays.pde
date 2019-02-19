@@ -32,18 +32,18 @@ class Ray extends Particle {
 
 /* Rocket launched upon explosion */
 class Rocket extends Particle {
-  Rocket(PVector startPos, float angle){
+  Rocket(PVector startPos, float angle, int duration){
     
     super();
     this.pos = new PVector(startPos.x,startPos.y);
     this.dir = PVector.fromAngle(angle);
-    this.vel = 1;
+    this.vel = 5;
     
     this.radius = 15;
     this.col = color(255);
     
-    this.addBehavior( new FadeOut( this.id,  (float) 0.5 ) );
-    this.addBehavior( new AdjustVelocity( this.id, 3, (float) 0.2 ) );
+    this.addBehavior( new FadeOut( this.id,  (int) duration ) );
+    //this.addBehavior( new AdjustVelocity( this.id, 3, (float) 0.2 ) );
     this.addBehavior( new FadeWhenOutOfCanvas( this.id ) );
     // this.addBehavior( new RecieveCollisions( this.id ) );
     this.addBehavior( new Move( this.id ) );
@@ -110,11 +110,9 @@ class Prisonner extends Particle {
   public void markAsPass( int dir ){
   
     if (this.hasBehavior("Imprisonment")) {
-    
       Behavior b = this.getBehavior( "Imprisonment" );
       Imprisonment i = (Imprisonment) b;
       i.destiny.predestination.get( dir ).pass = true;
-    
     }
     
   }
