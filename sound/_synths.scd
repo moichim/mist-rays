@@ -52,6 +52,33 @@ SynthDef(\jump,{
 	Out.ar(0,sig);
 }).add;
 
+
+// La La
+SynthDef(\la,{
+	arg freq = 440, dur = 2, amp = 0.2, dist = 1, out = 0;
+	var sig, env, f;
+
+	~f.play;
+	f.openRead(Platform);
+	Out.ar(out, sig);
+}).add;
+
+)
+
+~f = SoundFile.openRead(thisProcess.nowExecutingPath.dirname +/+ "samples\\string_cut.wav");
+
+File.getcwd
+
+var samplePath = thisProcess.nowExecutingPath.dirname +/+ "samples\\string_cut.wav";
+
+thisProcess.nowExecutingPath.dirname +/+ "samples\\string_cut.wav"
+
+(
+f = SoundFile.new;
+f.openRead(Platform.resourceDir +/+ "sounds/a11wlk01.wav");
+//f.inspect;
+f.cue;
+f.close;
 )
 
 x = Synth.new(\bpfsaw, [\dur,10]);

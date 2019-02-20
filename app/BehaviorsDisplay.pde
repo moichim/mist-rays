@@ -56,6 +56,8 @@ class DisplayExplode extends Behavior {
     if ( this.fullyLoaded ) {
       
       this.parentParticle.addBehavior(new FadeOut( this.parentParticle.id, this.life ));
+      this.parentParticle.removeBehavior("InvokeCollisions");
+      this.parentParticle.removeBehavior("RecieveCollisions");
       this.parentParticle.col = color(255,0,255);
       
       float angleStep = 2*3.14/numParticles;
@@ -74,7 +76,6 @@ class DisplayExplode extends Behavior {
     
     this.life--;
       if (this.life <= 0) {
-        println("die");  
         this.parentParticle.live = false;
       }
     pushMatrix();

@@ -42,9 +42,10 @@ class RecieveCollisions extends Behavior {
       
       Behavior b = this.parentParticle.getBehavior("CollisionSound");
       CollisionSound cs = (CollisionSound) b;
-      if ( !cs.blocked ) {
+      // if ( !cs.blocked ) {
         cs.ring();
-      }
+        println("hraju");
+      // }
       
       /* Zvuk bude */
       this.parentParticle.col = color(random(150,255),random(150,255),random(0,255));

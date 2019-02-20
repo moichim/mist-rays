@@ -45,7 +45,7 @@ s.freeAll;
 )
 
 // Test
-x = Synth.new(\sine,[\freq,600,\rel,10]);
+x = Synth.new(\sine,[\freq,600,\rel,1]);
 x.set(\t_gate,4);
 ~swarmOn.value;
 ~swarmOff.value;

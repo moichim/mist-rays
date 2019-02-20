@@ -117,7 +117,7 @@ class CollisionSound extends Behavior {
         this.blocked = true;
         
         // generate parameters for the sound
-        this.amp = maxVolume - constrain(currentVolume, 0, maxVolume);
+        this.amp = b.available;// ) * volumeAspect;//constrain(currentVolume, 0, maxVolume);
         this.frequency = random(collisionMinFreq, collisionMaxFreq);
         float release = random( collisionMinRel, collisionMaxRel );
         this.duration = int( release * frameRate );
@@ -125,22 +125,49 @@ class CollisionSound extends Behavior {
         this.pan.y = map(this.parentParticle.pos.y, padding.y, c.h - padding.y, -1, 1);
       
         // send the amplitode to global volume buffer
-        currentVolume += this.amp;
+        // currentVolume += this.amp;
         
-        // send the message
-        OscMessage msg = new OscMessage("/sine");
-        msg.add( this.frequency ); // frequency
-        msg.add( collisionAtk ); // attack
-        msg.add( release ); // release
-        msg.add( this.amp ); // amplituda
-        msg.add( this.pan.x ); // pan X
-        msg.add( this.pan.y ); // pan Y
+        // oscP5.send( msg, superCollider );
         
-        oscP5.send( msg, superCollider );
+        b.concurrentSounds.add( new SCM("/sine",this.frequency, collisionAtk, release, this.amp, this.pan) );
+        
+        
       
       }
       
     }
+  }
+  
+}
+
+class SCM {
+  String name;
+  float freq, atk, rel, amp, ampOriginal, dur, durOriginal;
+  PVector pan;
+  
+  
+  SCM(String name, float f, float a, float r, float amplitude, PVector p){
+    this.name = name;
+    this.freq = f;
+    this.atk = a;
+    this.rel = r;
+    this.amp = amplitude;
+    this.ampOriginal = amplitude;
+    this.pan = new PVector(p.x, p.y);
+    this.dur = int(this.rel * frameRate);
+    this.durOriginal = this.dur; 
+  }
+  
+  public void send() {
+    OscMessage msg = new OscMessage("/sine");
+    msg.add( this.freq ); // frequency
+    msg.add( this.atk ); // attack
+    msg.add( this.rel ); // release
+    msg.add( this.amp ); // amplituda
+    msg.add( this.pan.x ); // pan X
+    msg.add( this.pan.y ); // pan Y
+        
+    oscP5.send( msg, superCollider );
   }
   
 }

@@ -49,6 +49,7 @@ float collisionAtk = 0.05;
 float collisionMinRel = 1.58;
 float collisionMaxRel = 4.22;
 float collisionBlockAmount = 1.25; // aspect of the collision sound block in the range of 1 to N. the higher is, the bigger the block is.  
+float volumeAspect = 1;
 
 // nastavení kinectu
 float kinectDepthMin = 413;
@@ -88,18 +89,24 @@ void draw(){
   
   background(c.bg);
   
+  b.update();
+  
   if (frameCount % 5 == 0) {
     k.update();
   }
   
   s.update();
   
+  b.resolve();
+  b.render();
+  
   
   if (debug) {
     c.render();
+    
   }
   
-  b.render();
+  
   
   text("FR: " + String.valueOf(frameRate),10,20);
   
