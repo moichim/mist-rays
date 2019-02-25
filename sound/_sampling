@@ -1,0 +1,4 @@
+(
+SnythDef.new(\string, {} ).add;
+
+)

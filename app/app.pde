@@ -36,7 +36,7 @@ float bellAmplitude = 1;
 float bellFrequency = 52;
 float bellAtk = 0.01;
 float bellRelease = 2;
-float bellAmp = 0.8;
+float bellAmp = 1;
 
 // settings for collision sound
 float collisionPrecision = 1;
@@ -63,8 +63,8 @@ PVector kinectDeviation = new PVector(15,73);
 KinectSignal k;
 
 void setup(){
-  size(1920,1080);
-  // fullScreen();
+  // size(1920,1080);
+  fullScreen();
   // size(800,800);
   
   // initialize global variables
