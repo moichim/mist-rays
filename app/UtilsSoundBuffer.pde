@@ -14,8 +14,8 @@ class SoundBuffer {
   }
   
   void update(){
-    
-    this.concurrentSounds = new ArrayList<SCM>();
+
+    // 
     this.currentPlayingAmp = 0;
     this.available = 1;
     
@@ -28,31 +28,65 @@ class SoundBuffer {
           m.amp = map( m.dur, 0, m.durOriginal, 0, m.ampOriginal );
           this.currentPlayingAmp += m.amp;
           this.available -= m.amp;
-          // println(m.amp);
+          
+          if (debug) {
+            pushMatrix();
+            translate(m.middle.x, m.middle.y);
+            color tmpC = color(0,255,255);
+            fill(tmpC);
+            ellipseMode(CENTER);
+            ellipse(0,0,5,5);
+            noFill();
+            stroke(tmpC);
+            ellipse(0,0,80,80);
+            noStroke();
+            popMatrix();
+          }
+          
         } else {
           this.playing.remove(i);
         }
-        
-        // this.available = constrain(this.available,0,1);
       }
     }
     
-    println(1-this.currentPlayingAmp);
-  
   }
   
   void resolve() {
-  
-    if (this.concurrentSounds.size() > 0) {
-      for ( SCM m : this.concurrentSounds ){
-        m.amp /= float( this.concurrentSounds.size() );
-        m.ampOriginal = m.amp;
-        m.send();
-        println("" + m.amp + " Celkový počet" + this.concurrentSounds.size() );
-        this.playing.add(m);
+    println("V tomto kole je nutné přidat " + this.concurrentSounds.size() + ". Aktuálně hraje: " + this.playing.size());
+    if (int(this.concurrentSounds.size()) >= 0) {
+      println(frameCount + " Přidávám " + this.concurrentSounds.size() + " zvuků.............................................................");
+      for ( int i=0; i< constrain(this.concurrentSounds.size(),0,10);i++ ){
+        
+        SCM m = this.concurrentSounds.get(i);
+        
+        boolean pl = true;
+        for (SCM op : this.concurrentSounds) {
+          float d = PVector.dist(op.posTmp, m.posTmp);
+          if ( d <= (circularGridRayRadius + 3) * 2 && m != op ) {
+            // pl = false;
+          }
+        }
+        
+        if (pl) {
+        
+          m.amp /= float( this.concurrentSounds.size() );
+          m.ampOriginal = m.amp;
+          m.send();
+          println("" + m.amp + " Celkový počet zvuků v tomto framu: " + this.concurrentSounds.size() );
+          println("");
+          println(frameCount + "____________________________________");
+          println("freq:" + m.freq );
+          println("atk:" + m.atk );
+          println("rel:" + m.rel );
+          println("amp:" + m.amp );
+          println("pan:" + m.pan );
+          this.playing.add(m);
+          println( m );
+        }
+        
       }
     }
-  
+    this.concurrentSounds = new ArrayList<SCM>();
   }
   
   void render() {

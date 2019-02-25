@@ -9,7 +9,7 @@ class Particle {
   ArrayList<Behavior> behaviors;
   boolean live;
   int id;
-  boolean invokes;
+  boolean invokes, free;
   
   // appearance and movement
   PVector pos, dir;
@@ -21,6 +21,7 @@ class Particle {
     this.live = true;
     this.id = rayIdCounter;
     this.invokes = false;
+    this.free = true;
     rayIdCounter++;
     if ( rayIdCounter >= 999999 ) {
       rayIdCounter = 0;

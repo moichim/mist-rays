@@ -23,7 +23,7 @@ class Ray extends Particle {
     this.addBehavior( new InvokeCollisions( this.id ) );
     this.addBehavior( new FadeWhenOutOfCanvas( this.id ) );
     this.addBehavior( new Move( this.id ) );
-    this.addBehavior( new DisplayExplode( this.id ) );
+    this.addBehavior( new DisplayDefault( this.id ) );
     this.addBehavior( new CollisionSound( this.id ) );
    
   }
@@ -69,16 +69,18 @@ class Prisonner extends Particle {
     this.radius = 1; // circularGridRayRadius;
     this.box = box_;
     
+    this.free = false;
+    
     this.grownUp = false;
     
     // behaviors
+    this.addBehavior( new RecieveCollisions( this.id ) );
     this.addBehavior( new AdjustRadius( this.id, circularGridRayRadius, int(1) ) );
     this.addBehavior( new Imprisonment( this.id, this.box, position ) );
-    this.addBehavior( new RecieveCollisions( this.id ) );
     this.addBehavior( new FadeWhenOutOfCanvas( this.id ) );
-    this.addBehavior( new CollisionSound( this.id ) );
     this.addBehavior( new BellSound( this.id ) );
     this.addBehavior( new DisplayDefault( this.id ) );
+    this.addBehavior( new CollisionSound( this.id ) );
     
   }
   
@@ -89,6 +91,7 @@ class Prisonner extends Particle {
       Behavior b = this.getBehavior("Imprisonment");
       Imprisonment i = (Imprisonment) b;
       i.setFree();
+      this.free = true;
     }
     
   }

@@ -1,4 +1,4 @@
-# "Rays"
+# "Souzvon"
 Projection in a dark, misty room. Visuals and sounds react on visitor's behavior.
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=W1uXE5F_LvI" target="_blank"><img src="http://img.youtube.com/vi/W1uXE5F_LvI/1.jpg" 

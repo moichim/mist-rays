@@ -38,14 +38,15 @@ class RecieveCollisions extends Behavior {
     this.parentParticle.dir = this.bouncedDirection( this.parentParticle.pos, p.pos );
     
     /* Pokud má některé ze zvukových chování a zároveň protivník ani on sám není blokován, zahraj */
-    if ( this.parentParticle.hasBehavior("CollisionSound") ) {
+    if ( this.parentParticle.hasBehavior("CollisionSound")  ) {
       
       Behavior b = this.parentParticle.getBehavior("CollisionSound");
       CollisionSound cs = (CollisionSound) b;
-      // if ( !cs.blocked ) {
-        cs.ring();
-        println("hraju");
-      // }
+      if (!cs.blocked) {
+        cs.ring( p );
+
+      }
+      
       
       /* Zvuk bude */
       this.parentParticle.col = color(random(150,255),random(150,255),random(0,255));
@@ -115,16 +116,12 @@ class RecieveCollisions extends Behavior {
               
             } // konec akcí pro vše ostatní krom kinectu
             
-            
-            
-            
             /* Protějšek je prisoner */
             if ( p.hasBehavior("Imprisonment") ) {
               
               //////////////////////////////////////////////////////////////////////////// UVOLNI PROTIVNIKA
               Prisonner pris = (Prisonner) p;
               pris.release();
-              // println("Tento lumpík je volný");
                 
             } // konec akcí pro prisonera
             
@@ -132,8 +129,19 @@ class RecieveCollisions extends Behavior {
         
         } // konec kontroly zda protivník invokuje kolize
         
-        
-        
+        // nyní je nutné zkontrolovat, jestli protějšek není prisonner
+        if ( !p.invokes && !p.free && this.parentParticle.free ) {
+          
+          float distance = PVector.dist(this.parentParticle.pos, p.pos);
+
+          if ( distance <= ( this.parentParticle.radius/2 + p.radius/2 ) + collisionPrecision && p != this.parentParticle && this.sinceLastCollision > 3) {
+            this.bounce( p );
+            Prisonner pris = (Prisonner) p;
+            pris.release();
+            
+          }
+          
+        }
       
       } // konec iterace prvků
       

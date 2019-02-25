@@ -48,7 +48,7 @@ float collisionMaxFreq = 300;
 float collisionAtk = 0.05;
 float collisionMinRel = 1.58;
 float collisionMaxRel = 4.22;
-float collisionBlockAmount = 1.25; // aspect of the collision sound block in the range of 1 to N. the higher is, the bigger the block is.  
+float collisionBlockAmount = 0.5; // aspect of the collision sound block in the range of 1 to N. the higher is, the bigger the block is.  
 float volumeAspect = 1;
 
 // nastavení kinectu
@@ -65,6 +65,7 @@ KinectSignal k;
 void setup(){
   size(1920,1080);
   // fullScreen();
+  // size(800,800);
   
   // initialize global variables
   app = this;
@@ -107,8 +108,9 @@ void draw(){
   }
   
   
-  
+  fill(255);
   text("FR: " + String.valueOf(frameRate),10,20);
+  noFill();
   
 }
 // Run the appripriate controls on mousepressed
