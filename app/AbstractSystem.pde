@@ -56,16 +56,3 @@ class System {
   }
   
 }
-
-class SimpleSystem extends System {
-  SimpleSystem(){
-    super();
-    for (int i = 0; i < 100; i++) {
-      Ray r = new Ray();
-      this.particles.add(r);
-    }
-    //this.controls.add( new KinectControls( this ) );
-  }
-  
-  
-}
