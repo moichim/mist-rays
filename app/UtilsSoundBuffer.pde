@@ -52,9 +52,9 @@ class SoundBuffer {
   }
   
   void resolve() {
-    println("V tomto kole je nutné přidat " + this.concurrentSounds.size() + ". Aktuálně hraje: " + this.playing.size());
+    // println("V tomto kole je nutné přidat " + this.concurrentSounds.size() + ". Aktuálně hraje: " + this.playing.size());
     if (int(this.concurrentSounds.size()) >= 0) {
-      println(frameCount + " Přidávám " + this.concurrentSounds.size() + " zvuků.............................................................");
+      // println(frameCount + " Přidávám " + this.concurrentSounds.size() + " zvuků.............................................................");
       for ( int i=0; i< constrain(this.concurrentSounds.size(),0,10);i++ ){
         
         SCM m = this.concurrentSounds.get(i);

@@ -2,15 +2,20 @@ class System {
   ArrayList<Particle> particles;
   ArrayList<ControlGroup> controls;
   boolean plays;
+  SoundScape soundscape;
   
   System() {
     this.particles = new ArrayList<Particle>();
     this.controls = new ArrayList<ControlGroup>();
     this.controls.add( new GlobalControls( this ) );
     this.plays = true;
+    this.soundscape = new SoundScape();
   }
   
   public void update(){
+    
+    // zaktualizuj soundscape podle stavu z předchozího kola
+    this.soundscape.update();
     
     
     // updates done by controls
@@ -33,6 +38,10 @@ class System {
     
     // execute actions added by the system
     this.customSystemUpdate( );
+    
+    // úplně zcela nakonec vyřeš nastřádané zvuky
+    this.soundscape.resolveTheQueue();
+    
     
   }
   

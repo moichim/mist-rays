@@ -153,22 +153,7 @@ class CircularControls extends ControlGroup {
   @Override
   public void listenKeyBoard( System sys ){
     
-    if (key=='c') {
-      if ( s.particles.size()>0 ) {
-        for ( int i = 0; i < sys.particles.size(); i++ ) {
-          s.particles.get(i).radius++;
-        }
-      }
-    }
     
-    if (key=='v') {
-      Group moving = new Group("Moving");
-      moving.setColor(color(150));
-    }
-    
-    if (key=='a') {
-    
-    }
     
   }
   

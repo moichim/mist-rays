@@ -56,6 +56,10 @@ class CircularSystem extends System {
     this.boxCountX = floor( c.w / circularGridBoxSize );
     this.boxCountY = floor( c.h / circularGridBoxSize );
     
+    
+    // inicializace sound systému
+    this.soundscape = new SineScape();
+    
     boolean left = true;
     
     for ( int x=0; x < this.boxCountX; x++ ) {

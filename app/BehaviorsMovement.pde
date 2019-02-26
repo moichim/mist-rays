@@ -43,7 +43,10 @@ class RecieveCollisions extends Behavior {
       Behavior b = this.parentParticle.getBehavior("CollisionSound");
       CollisionSound cs = (CollisionSound) b;
       if (!cs.blocked) {
-        cs.ring( p );
+        // cs.ring( p );
+        
+        Sound snd = s.soundscape.get_next_sound( this.parentParticle.pos );
+        snd.play();
 
       }
       
