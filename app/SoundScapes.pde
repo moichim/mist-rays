@@ -2,7 +2,7 @@ class SineScape extends SoundScape {
 
   SineScape(){
     super();
-    this.composition = new SineComposition();
+    this.composition = new StarsComposition();
     
     
     

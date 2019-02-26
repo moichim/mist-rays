@@ -13,6 +13,10 @@
 ~war_drum = Buffer.readChannel(s, "/Users/jan.jachim/Documents/Processing/souzvon/sound/samples/war_drum.aiff", channels:[0]);
 )
 
+~star1.bufnum;
+~star2.bufnum;
+~star3.bufnum;
+
 
 (
 SynthDef.new(\sample, {

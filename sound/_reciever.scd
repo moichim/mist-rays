@@ -22,7 +22,7 @@ OSCFunc.trace(false);
 // FCE ZPRACUJÍCI PŘÍCHOZÍ ZPRÁVY
 f = {
 	|msg, time, addr|
-	if (msg[0] != '/status.reply') {
+	if (msg[0] != '/status.reply' && msg[0] != '/n_go' && msg[0] != '/localhostInLevels'&& msg[0] != '/localhostOutLevels' ) {
 		"time: % sender: %\nmessage: %\n".postf(time,addr,msg);
 
 		// Příchozí zvuk zvonu
@@ -33,6 +33,12 @@ f = {
 		// Příchozí zvuk cinkotu
 		if (msg[0]=='/sine') {
 			d = Synth.new(\sine, [\freq, msg[1], \atk, msg[2], \rel, msg[3], \amp, msg[4],\pan, msg[5]]);
+		};
+
+		// Příchozí zvuk samplovaný
+		if (msg[0]=='/sample') {
+			d = Synth.new(\sample, [\buf, msg[1], \amp, msg[2], \ratio, msg[3], \pan, msg[4]]);
+			"////////".post;
 		};
 
 		// Vypánání a zapínání bzukotu

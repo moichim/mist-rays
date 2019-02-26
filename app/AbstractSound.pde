@@ -92,30 +92,36 @@ class Sequence {
 
 /* */
 class Condition{
-  Sound soundToPlay;
-  Sequence sequenceToStart;
+  boolean loop;
+  boolean active;
+  int count;
   
   Condition(){
+    
+    this.count = 0;
+    this.loop = false;
+    this.active = true;
   
   }
-  
+  // funkce ověřující platnost podmínky. Přepsat v konkrétní podmínce
   boolean isTrue(){
     return false;
   }
   
-  // definuje pravidlo pro podmínku
+  // definuje akce provedené při spuštění
   void trigger(){
-    if (this.soundToPlay != null){
-      this.soundToPlay.play();
-    } else if ( this.sequenceToStart != null ) {
-      this.sequenceToStart.start();
-    }
+    // spusť ručně definovanou funkci
+    this.callback();
+    // inkrementuj počet
+    this.count++;
   }
   
-  Sound next_sound(){
-    Sound snd = null;
-    return snd;
+  // Funkce vykonaná při triggeru 
+  public void callback(){
+    // implementovat v konkrétní podmínce
   }
+  
+  
   
 }
 
@@ -139,13 +145,19 @@ class Composition {
     this.randomAmount = 50;
   }
   
-  // zkontroluje splnění podmínek
+  // zkontroluje splnění podmínek, vykoná je a odstraní neaktivní
   void resolveConditions(){
     
-    if (this.conditions.size()<0) {
-      for (Condition cond : this.conditions){
-        if (cond.isTrue()) {
-          cond.trigger();
+    if (this.conditions.size()>0) {
+      for (int i=0; i<this.conditions.size();i++){
+        Condition cond = this.conditions.get(i);
+        if (cond.active){
+          if (cond.isTrue()) {
+            cond.trigger();
+            println("-------");
+          }
+        } else {
+          this.conditions.remove(i);
         }
       }
     }
@@ -161,6 +173,15 @@ class Composition {
       switch (className) {
         case "Sine":
           snd = new Sine(pos_);
+          break;
+        case "Star1":
+          snd = new Star1(pos_);
+          break;
+        case "Star2":
+          snd = new Star2(pos_);
+          break;
+        case "Star3":
+          snd = new Star3(pos_);
           break;
       }
     } else {
@@ -185,6 +206,8 @@ class SoundScape {
     this.queue = new ArrayList<Sound>();
     this.availableVolume = 1;
     this.currentVolume = 0;
+    
+    this.composition = new Composition();
   
   }
   
@@ -200,6 +223,9 @@ class SoundScape {
   
   // Zkontroluje podmínky a kdyžtak je spustí
   void update(){
+    
+    this.composition.resolveConditions();
+    
     
     // resetuj aktuální volume
     this.currentVolume = 0;
@@ -219,6 +245,7 @@ class SoundScape {
           s.soundscape.playing.remove(i);
         }
       }
+      
     }
     
     // po skončení iterace projet hrající prvkyzaktualizovat dostupné volume
@@ -242,12 +269,13 @@ class SoundScape {
         snd.amp /= this.queue.size();
         snd.initialVolume = snd.amp;
         snd.currentVolume = snd.amp;
+        snd.send();
         for (Sound sndOp : this.queue){
           if (sndOp != snd && sndOp.collidedWith != snd) {
             float distance = PVector.dist(snd.position,sndOp.position);
             if (distance <= 2*circularGridRayRadius + collisionPrecision) {
               snd.collidedWith = sndOp;
-              snd.send();
+              //snd.send();
               println(frameCount + ": " + this + " nová amplituda " + snd.amp);
             }
           }
@@ -300,7 +328,7 @@ class SoundScape {
     noFill();
     popMatrix();
     
-    println(this.playing.size());
+    // println(this.playing.size());
     
     
     // následně vykreslí bšechny hrající zvuky
@@ -312,7 +340,6 @@ class SoundScape {
         pushMatrix();
         
         float leftOffset = 3 * gutter + i * gutter;
-        println(leftOffset);
         translate(leftOffset,0);
         
         float sndH = map(snd.currentVolume,0,1,5,hMax);

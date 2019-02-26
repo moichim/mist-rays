@@ -44,14 +44,14 @@ class RecieveCollisions extends Behavior {
       Behavior bOp = p.getBehavior("CollisionSound");
       CollisionSound cs = (CollisionSound) b;
       CollisionSound csOp = (CollisionSound) bOp;
-      if (!csOp.blocked ) {
+      // if (!csOp.blocked ) {
         // cs.ring( p );
         
         Sound snd = s.soundscape.get_next_sound( this.parentParticle.pos );
         snd.play();
-        cs.blocked = true;
+        // cs.blocked = true;
 
-      }
+      //}
       
       
       /* Zvuk bude */

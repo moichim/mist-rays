@@ -25,11 +25,11 @@ PVector padding; // stores margin around the canvas
 PVector paddingMin = new PVector(40,50); // initial value that serves for calculation of padding
 
 // global settings
-float speedAspect = 0.5;
+float speedAspect = 0.3;
 
 // Settings of circular movement
-float circularGridBoxSize = 165;
-float circularGridRayRadius = 40;
+float circularGridBoxSize = 70; // 165;
+float circularGridRayRadius = 20; // 40;
 
 // settings for circular sound
 float bellAmplitude = 1;
@@ -52,10 +52,10 @@ float collisionBlockAmount = 0.5; // aspect of the collision sound block in the 
 float volumeAspect = 1;
 
 // nastavení kinectu
-float kinectDepthMin = 413;
-float kinectDepthMax = 465; 
-float kinectResolution = 9;
-float kinectScale = 2.85;
+float kinectDepthMin = 578;//413;
+float kinectDepthMax = 909;//465; 
+float kinectResolution = 7.3;//9;
+float kinectScale = 2.19;//2.85;
 PVector kinectCropTL = new PVector(0,70);
 PVector kinectCropBR = new PVector(640,420);
 PVector kinectDeviation = new PVector(15,73);

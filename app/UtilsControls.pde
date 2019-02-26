@@ -81,6 +81,16 @@ class GlobalControls extends ControlGroup {
     }
     
     // the speed of particles
+    if (m.addrPattern().equals("/debug")) {
+      if (m.get(0).floatValue() == 1) {
+        debug = true;
+      } else {
+        debug = false;
+      }
+      
+    }
+    
+    // the speed of particles
     if (m.addrPattern().equals("/mode")) {
       
       float type = m.get(0).floatValue();
