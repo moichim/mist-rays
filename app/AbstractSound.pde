@@ -6,6 +6,7 @@ class Sound {
   int life, liveTo;
   float currentVolume, initialVolume;
   float amp;
+  Sound collidedWith;
 
   Sound(PVector pos_){
     
@@ -21,16 +22,20 @@ class Sound {
     this.pan = new PVector(0,0);
     this.pan.x = map( this.position.x,0,width,-1,1 );
     this.pan.y = map( this.position.y,0,height,-1,1 );
+    
+    this.collidedWith = null;
 
   }
   
   // spustí daný zvuk
   void play(){
     // přidat tento zvuk do fronty
-    s.soundscape.queue.add(this);
+    
     if (this.blocksVolume){
       s.soundscape.playing.add(this);
     }
+    
+    s.soundscape.queue.add(this);
   }
   
   // odeslání zprávy
@@ -178,8 +183,8 @@ class SoundScape {
     
     this.playing = new ArrayList<Sound>();
     this.queue = new ArrayList<Sound>();
-    this.availableVolume = 0.75;
-    this.currentVolume = 0.25;
+    this.availableVolume = 1;
+    this.currentVolume = 0;
   
   }
   
@@ -233,12 +238,27 @@ class SoundScape {
       for (Sound snd : this.queue){
         
         // pokud je fronta větší než 2, uprav proporcionálně volume
-        if ( this.queue.size() > 2 ){
-          snd.amp /= this.queue.size();
+        //if ( this.queue.size() > 1 ){
+        snd.amp /= this.queue.size();
+        snd.initialVolume = snd.amp;
+        snd.currentVolume = snd.amp;
+        for (Sound sndOp : this.queue){
+          if (sndOp != snd && sndOp.collidedWith != snd) {
+            float distance = PVector.dist(snd.position,sndOp.position);
+            if (distance <= 2*circularGridRayRadius + collisionPrecision) {
+              snd.collidedWith = sndOp;
+              snd.send();
+              println(frameCount + ": " + this + " nová amplituda " + snd.amp);
+            }
+          }
         }
         
+        
+        
+        // }
+        
         // na každý pád pošli zvuk
-        snd.send();
+        
       }
       
       // na konec odesílačky resetuj frontu
@@ -304,7 +324,10 @@ class SoundScape {
       }
     }
     
-    
+    // úplně nakonec vykreslit volumenózní čáru
+    stroke(255);
+    line(0,hMax,(2+this.playing.size())*gutter,hMax);
+    noStroke();
     popMatrix();
   }
 }
