@@ -3,6 +3,7 @@ class System {
   ArrayList<ControlGroup> controls;
   boolean plays;
   SoundScape soundscape;
+  int numInitialParticles;
   
   System() {
     this.particles = new ArrayList<Particle>();
@@ -10,6 +11,7 @@ class System {
     this.controls.add( new GlobalControls( this ) );
     this.plays = true;
     this.soundscape = new SoundScape();
+    this.numInitialParticles = 0;
   }
   
   public void update(){

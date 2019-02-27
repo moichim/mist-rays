@@ -2,6 +2,7 @@
 s.boot;
 s.reboot;
 s.quit;
+s.pause;
 
 s.plotTree; // zobrazí nody a skupiny
 s.meter; // Zobrazí metr

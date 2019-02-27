@@ -1,3 +1,145 @@
+// třída pro výběr náhodného zvuku podle různorodých kritérií
+class SoundRouter {
+  SoundRouterOption[] available;
+  
+  SoundRouter(){
+    
+    // zde se musí definovat počet dostupných zvuků
+    this.available = new SoundRouterOption[6];
+    
+    // Nyní následují syntetické zvuky
+    this.available[0] = new SoundRouterOption("Sine", new String[] {"sine", "default"} );
+    this.available[1] = new SoundRouterOption( "Bell", new String[] {"sine", "default" } );
+    
+    // cinkací samply
+    this.available[2] = new SoundRouterOption( "Star1", new String[] {"stars" } );
+    this.available[3] = new SoundRouterOption( "Star2", new String[] {"stars" } );
+    this.available[4] = new SoundRouterOption( "Star3", new String[] {"stars" } );
+    
+    // vokály
+    this.available[5] = new SoundRouterOption( "Magic1", new String[] {"vocals","ending"} );
+    // this.available[5] = new SoundRouterOption( "Magic2", new String[] {"vocals","ending"} );
+    
+  }
+  
+  Sound byName( String name_, PVector pos_ ){
+    Sound output = null;
+    
+    // pokud není žádný dostupný, nedělej nic
+    if (this.available.length==0 ) {
+      return null;
+    }
+    
+    // pokud je jen jeden dostupný, vrať robnou jej
+    else if (this.available.length == 1) {
+      String n = this.available[0].name;
+      output = this.createInstanceByName(n,pos_);
+    }
+    
+    // pokud je vícero dostupných, vrať jeden náhodný
+    else {
+      for (int i = 0; i < this.available.length;i++){
+         SoundRouterOption sndOpt = this.available[i];
+         if (sndOpt.name.equals(name_)){
+           
+           output = this.createInstanceByName(sndOpt.name,pos_);
+           
+         }
+      }
+    }
+    return output;
+  }
+  
+  Sound byTag(String tag_,PVector pos_){
+    Sound output = null;
+    
+    // vyfiltrovat options
+    ArrayList<SoundRouterOption> options = this.getOptionsByTag(tag_);
+    
+    if ( options.size()>0 ) {
+      int randomIndex = int(random( options.size()) );
+      output = this.byName( options.get(randomIndex).name , pos_);
+    }
+    
+    
+    return output;
+  }
+  
+  // vyffiltruje volby pouze podle tagů
+  ArrayList<SoundRouterOption> getOptionsByTag(String tag_){
+    
+    ArrayList<SoundRouterOption> options = new ArrayList<SoundRouterOption>();
+    
+    for (int i=0;i<this.available.length;i++){
+      SoundRouterOption opt = this.available[i];
+      if (opt.tags.length>0) {
+        for (int y=0; y<opt.tags.length; y++ ) {
+          String tag = opt.tags[y];
+          if (tag.equals(tag_)){
+            options.add(opt);
+          }
+        }
+      }
+    }
+
+    return options;
+  
+  }
+  
+  String[] soundNamesByTag(String tag_){
+    ArrayList<SoundRouterOption> opts = this.getOptionsByTag(tag_);
+    String output[] = new String[ opts.size() ];
+    
+    for (int i=0;i<opts.size();i++ ) {
+      output[i] = opts.get(i).name;
+    }
+    
+    return output;
+  }
+  
+  // Vytvoří instanci zvuku podle zadaného jména
+  // Zde je ten hlavní router
+  Sound createInstanceByName(String name_, PVector pos_) {
+    Sound output = null;
+    switch (name_){
+       case "Sine":
+         output = new Sine(pos_);
+         break;
+       case "Bell":
+         output = new Bell(pos_);
+         break;
+       case "Star1":
+         output = new Star1(pos_);
+         break;
+       case "Star2":
+         output = new Star2(pos_);
+         break;
+       case "Star3":
+         output = new Star3(pos_);
+         break;
+       case "Magic1":
+         output = new Magic1(pos_);
+         break;
+    }
+    
+    return output;
+  }
+
+}
+
+// třída pro zvuk do zásobníku zvuků
+class SoundRouterOption {
+  String name;
+  String[] tags;
+  
+  SoundRouterOption( String name_, String[] tags_ ){
+    this.name = name_;
+    this.tags = tags_;
+  }
+  
+}
+
+
 class Sound {
   String synth;
   PVector pan;
@@ -20,22 +162,32 @@ class Sound {
     // namapování pozice
     this.position = pos_;
     this.pan = new PVector(0,0);
-    this.pan.x = map( this.position.x,0,width,-1,1 );
-    this.pan.y = map( this.position.y,0,height,-1,1 );
+    this.panFromPos();
     
     this.collidedWith = null;
 
   }
   
+  void panFromPos(){
+    this.pan.x = map( this.position.x,0,width,-1,1 );
+    this.pan.y = map( this.position.y,0,height,-1,1 );
+  }
+  
   // spustí daný zvuk
   void play(){
-    // přidat tento zvuk do fronty
     
     if (this.blocksVolume){
+      // přidat tento zvuk k hrajícím
       s.soundscape.playing.add(this);
+      // přidat tento zvuk do fronty
+      s.soundscape.queue.add(this);
+    } else {
+      this.send();
+      println("Hej!!");
     }
     
-    s.soundscape.queue.add(this);
+    
+    
   }
   
   // odeslání zprávy
@@ -128,20 +280,19 @@ class Condition{
 /* Pokročilá logika sklatby je volána soundscapem */
 class Composition {
   ArrayList<Condition> conditions;
-  
   Sequence sequence;
-  String baseLineSound; // linka která pohraje na začátku
+  String[] baseLineSounds; // linka která pohraje na začátku
   boolean acceptsRandom; // pracuej kompozice s náhodnými zvuky?
   int randomAmount; // poměr mezi náhodným zvukem a lineárním zvukem
-  ArrayList<String> availableRandomSounds; // z jakých zvuků je možné náhodně stavit
+  String[] availableRandomSounds; // z jakých zvuků je možné náhodně stavit
   
   
   Composition(){
     this.conditions = new ArrayList<Condition>();
     
-    this.baseLineSound = "Bell";
+    this.baseLineSounds = new String[0];
     this.acceptsRandom = true;
-    this.availableRandomSounds = new ArrayList<String>();
+    this.availableRandomSounds = new String[0];
     this.randomAmount = 50;
   }
   
@@ -168,25 +319,25 @@ class Composition {
   Sound next_sound(PVector pos_){
     Sound snd = null;
     if (this.acceptsRandom && int(random(100)) <= this.randomAmount ) {
-      int rx = int( random(0, this.availableRandomSounds.size()) );
-      String className = this.availableRandomSounds.get(rx);
-      switch (className) {
-        case "Sine":
-          snd = new Sine(pos_);
-          break;
-        case "Star1":
-          snd = new Star1(pos_);
-          break;
-        case "Star2":
-          snd = new Star2(pos_);
-          break;
-        case "Star3":
-          snd = new Star3(pos_);
-          break;
-      }
+      int rx = int( random(0, this.availableRandomSounds.length) );
+      String className = this.availableRandomSounds[rx];
+      snd = router.byName(className,pos_);
     } else {
       
     }
+    return snd;
+  }
+  
+  // vrať další zvuk
+  Sound base_line_sound(){
+    
+    int rx = int( random(0, this.baseLineSounds.length) );
+    String className = this.baseLineSounds[rx];
+    println(className);
+    Sound snd = router.byName(className,s.soundscape.baseLineCenter);
+    println(snd);
+    snd.amp = s.soundscape.baseLineAmplitude;
+    
     return snd;
   }
   
@@ -199,6 +350,8 @@ class SoundScape {
   ArrayList<Sound> queue;
   float availableVolume;
   float currentVolume;
+  PVector baseLineCenter, baseLineCenterOpposite; //střed base lajny
+  float baseLineAmplitude; // aktuální amplituda base liny
 
   SoundScape(){
     
@@ -208,6 +361,11 @@ class SoundScape {
     this.currentVolume = 0;
     
     this.composition = new Composition();
+    
+    bellAmpCurrent = bellAmplitude;
+    this.baseLineCenter = new PVector(0,0);
+    this.baseLineCenterOpposite = new PVector(0,0);
+    this.baseLineAmplitude = 1;
   
   }
   
@@ -251,8 +409,26 @@ class SoundScape {
     // po skončení iterace projet hrající prvkyzaktualizovat dostupné volume
     this.availableVolume = 1 - this.currentVolume;
     
-    // kompozice projece své podmínky
-    // this.composition.resolveConditions();
+    // zaktualizuj baseline vlastnosti
+    if (frameCount % 5 == 0) {
+      
+      int prisCount = 0;
+      PVector prisCenter = new PVector(0,0);
+      for (Particle p : s.particles ) {
+        if (p.hasBehavior("Imprisonment")) {
+          prisCount++;
+          prisCenter.x += p.pos.x;
+          prisCenter.y += p.pos.y;
+        }
+      }
+      
+      this.baseLineAmplitude = map(prisCount,0,s.numInitialParticles,0, bellAmplitude );
+      prisCenter.x /= prisCount;
+      prisCenter.y /= prisCount;
+      this.baseLineCenter = prisCenter;
+      this.baseLineCenterOpposite = this.baseLineCenter.copy().sub( new PVector(width,height) ).mult(-1);
+      
+    }
     
     
     if (debug) {

@@ -16,6 +16,7 @@ SoundBuffer b; // soundBuffer managed only by circular system
 PApplet app; // link to this app
 OscP5 oscP5;
 NetAddress superCollider;
+SoundRouter router; // rozbočovač zvuků
 
 // visual output for debugging
 boolean debug = false;
@@ -25,18 +26,18 @@ PVector padding; // stores margin around the canvas
 PVector paddingMin = new PVector(40,50); // initial value that serves for calculation of padding
 
 // global settings
-float speedAspect = 0.3;
+float speedAspect = 0.5;
 
 // Settings of circular movement
-float circularGridBoxSize = 70; // 165;
-float circularGridRayRadius = 20; // 40;
+float circularGridBoxSize = 150;//70; // 165;
+float circularGridRayRadius = 40;// 20; // 40;
 
 // settings for circular sound
 float bellAmplitude = 1;
 float bellFrequency = 52;
 float bellAtk = 0.01;
 float bellRelease = 2;
-float bellAmp = 1;
+float bellAmpCurrent = bellAmplitude;
 
 // settings for collision sound
 float collisionPrecision = 1;
@@ -63,6 +64,7 @@ PVector kinectDeviation = new PVector(15,73);
 KinectSignal k;
 
 void setup(){
+  
   // size(1920,1080);
   fullScreen();
   // size(800,800);
@@ -74,6 +76,7 @@ void setup(){
   oscP5 = new OscP5(this,5555);
   superCollider = new NetAddress("127.0.0.1",12000);
   k = new KinectSignal();
+  router = new SoundRouter();
   
   // the system itself
   s = new KinectSystem();
@@ -81,8 +84,7 @@ void setup(){
 }
 
 void draw(){
-  
-  
+
   // regular updates
   currentVolume = 0;
   

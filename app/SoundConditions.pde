@@ -10,25 +10,17 @@ class MagicalEnding extends Condition {
     boolean v = false;
     
     int prisCount = 0;
-    int freeCount = 0;
     
     for ( Particle p : s.particles ){
       
-      if ( p.free && p.getClass().getSimpleName().equals("Prisonner") ) {
-        freeCount++;
-      }
-      
-      if ( p.getClass().getSimpleName().equals("Prisonner") ) {
+      if ( p.hasBehavior("Imprisonment") ) {
         prisCount++;
       }
     
     }
-    
-    if ( int( freeCount ) > 3 ){
+    if ( prisCount <= s.numInitialParticles/2 ){
       v = true;
     }
-    println("FreeCount "+ freeCount);
-    println("PrisonerCount "+ prisCount);
     return v;
   }
   
@@ -39,7 +31,5 @@ class MagicalEnding extends Condition {
     mag.play();
     
     this.active = false;
-    
-    println("//////");
   }
 }

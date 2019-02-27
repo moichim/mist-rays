@@ -85,6 +85,9 @@ class CircularSystem extends System {
         item.vel = tempo;
         this.particles.add(item);
         
+        /* Zvýšit počítadlo prvotního počtu */
+        this.numInitialParticles++;
+        
       }
     }
     
@@ -106,7 +109,6 @@ class CircularSystem extends System {
      for ( Particle p : s.particles ){
        if (p.hasBehavior("BellSound")) {
          prison = p;
-         // break;
        }
      }
      
@@ -122,34 +124,10 @@ class CircularSystem extends System {
              
                if ( PVector.dist(prison.pos, imp.destiny.predestination.get( imp.destiny.current ).pos ) < 1 && !imp.destiny.bounced ) {
                  
-                 // assembly the amplitude of the ring
-                 // float amp = bellAmp;
-                 float aspect = 1;
-                 int prisonnerCount = 0;
-                 int imprisonnedCount = 0;
-                 for (Particle p: s.particles) {
-                   
-                   if ( p.getClass().getSimpleName().equals("Prisonner") ) {
-                     prisonnerCount++;
-                     if (p.hasBehavior("Imprisonment")) {
-                       imprisonnedCount++;
-                     }
-                   }
-                 }
-                 aspect = float(imprisonnedCount) / float(prisonnerCount);
-                 
-                 c.bg = color(255);
-                 OscMessage msg = new OscMessage("/sine");
-                 msg.add( bellFrequency ); // frequency
-                 msg.add( 0.01 ); // attack
-                 msg.add( bellRelease ); // release
-                 msg.add( bellAmp * aspect ); // amplituda
-                 msg.add( 0 ); // pan X
-                 msg.add( 0 ); // pan Y
-                    
-                
-                 // send the message
-                 oscP5.send( msg, superCollider );
+                 Sound bell = s.soundscape.composition.base_line_sound();
+                 bell.play();
+                 // println(frameCount + " Jedeš ty potvůrko?");
+                 println(bell);
                }
              }
            

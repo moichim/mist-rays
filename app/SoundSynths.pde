@@ -17,9 +17,40 @@ class Sine extends Sound {
     this.initialVolume = this.amp;
   }
   
-  // parametrický konstruktor
-  Sine(PVector pos_, boolean b){
+  @Override
+  void send(){
+    OscMessage msg = new OscMessage(this.synth);
+    msg.add( this.freq ); // frequency
+    msg.add( this.atk ); // attack
+    msg.add( this.rel ); // release
+    msg.add( this.amp ); // amplituda
+    msg.add( this.pan.x ); // pan X
+    msg.add( this.pan.y ); // pan Y
+    
+    oscP5.send( msg, superCollider );
+  }
+  
+
+}
+
+class Bell extends Sound {
+  float freq,atk,rel;
+  // Náhodný konstruktor
+  Bell(PVector pos_){
     super(pos_);
+    
+    // parametry zvuku
+    this.synth = "/sine";
+    this.amp = s.soundscape.baseLineAmplitude;
+    this.freq = bellFrequency;
+    this.atk = bellAtk;
+    this.rel = bellRelease;
+    
+    // parametry bloku
+    this.liveTo = int( this.rel * frameRate);
+    this.currentVolume = this.amp;
+    this.initialVolume = this.amp;
+    this.blocksVolume = false;
   }
   
   @Override
@@ -142,6 +173,8 @@ class Magic1 extends Sample {
     
     this.amp = 0.5;
     this.blocksVolume = false;
+    this.position = s.soundscape.baseLineCenterOpposite;
+    this.panFromPos();
     
     // nastavit délku
     float dur = 10;

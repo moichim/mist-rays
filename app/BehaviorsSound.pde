@@ -20,7 +20,7 @@ class BellSound extends Behavior {
       msg.add( this.frequency ); // frequency
       msg.add( bellAtk ); // attack
       msg.add( bellRelease ); // release
-      msg.add( bellAmp ); // amplituda
+      msg.add( s.soundscape.baseLineAmplitude ); // amplituda
       msg.add( 0 ); // pan X
       msg.add( 0 ); // pan Y
 
