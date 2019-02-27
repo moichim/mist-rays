@@ -14,7 +14,7 @@ class SoundRouter {
     // cinkací samply
     this.available[2] = new SoundRouterOption( "Star1", new String[] {"stars" } );
     this.available[3] = new SoundRouterOption( "Star2", new String[] {"stars" } );
-    this.available[4] = new SoundRouterOption( "Star3", new String[] {"stars" } );
+    this.available[4] = new SoundRouterOption( "Star3", new String[] {"stars", "superstars" } );
     
     // vokály
     this.available[5] = new SoundRouterOption( "Magic1", new String[] {"vocals","ending"} );

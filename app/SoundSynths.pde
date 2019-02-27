@@ -80,18 +80,22 @@ class Sample extends Sound {
     this.amp = s.soundscape.availableVolume();
     this.ratio = 1;
     this.buf = 1;
+    this.liveTo = 1; //toto musí být přepsáno vkonkrétních parametrech a vynásobeno frameRate!!!
     
     this.currentVolume = this.amp;
     this.initialVolume = this.amp;
     
     // konkrétní samply budoou hookovat své parametry skrze následující metodui
     this.parameters();
+    
+    // nakonec zaktualizovat čas podle ratia
+    this.liveTo *= this.ratio;
   }
   
   // metora pro nastavení konkrétního trvání konkrétního zvuku
   void parameters(){
     // implementovat
-    // this.liveTo = int( this.rel * frameRate);
+    // this.liveTo = int( X * this.ratio * frameRate);
     // this.currentVolume = this.amp;
     // this.initialVolume = this.amp;
   }
@@ -104,7 +108,6 @@ class Sample extends Sound {
     msg.add( this.ratio ); // rychlost přehrávání
     msg.add( this.pan.x ); // pan X
     msg.add( this.pan.y ); // pan Y
-    
     oscP5.send( msg, superCollider );
   }
 }
@@ -118,8 +121,10 @@ class Star1 extends Sample {
   void parameters(){
     
     // nastavit délku
-    float dur = 4;
+    float dur = 2;
     this.liveTo = int( dur * frameRate);
+    
+    this.ratio = random( 0.5,1.5 );
     
     // nastavit bufnum
     this.buf = 1;
@@ -136,8 +141,10 @@ class Star2 extends Sample {
   void parameters(){
     
     // nastavit délku
-    float dur = 4;
+    float dur = 2;
     this.liveTo = int( dur * frameRate);
+    
+    this.ratio = random( 0.5,1.5 );
     
     // nastavit bufnum
     this.buf = 2;
@@ -154,8 +161,9 @@ class Star3 extends Sample {
   void parameters(){
     
     // nastavit délku
-    float dur = 10;
+    float dur = 2;
     this.liveTo = int( dur * frameRate);
+    this.ratio = random( 0.5,1.5 );
     
     // nastavit bufnum
     this.buf = 3;

@@ -96,7 +96,6 @@ class CircularSystem extends System {
  @Override
  public void customSystemUpdate(){
    
-   b.update();
    
    if ( this.particles.size() <= 0 ) {
      s = new CircularSystem();

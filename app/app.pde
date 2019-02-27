@@ -12,7 +12,6 @@ int rayIdCounter = 0;
 // globals
 System s; // recent group of particles
 Canvas c; // main frame 
-SoundBuffer b; // soundBuffer managed only by circular system
 PApplet app; // link to this app
 OscP5 oscP5;
 NetAddress superCollider;
@@ -72,7 +71,6 @@ void setup(){
   // initialize global variables
   app = this;
   c = new Canvas();
-  b = new SoundBuffer();
   oscP5 = new OscP5(this,5555);
   superCollider = new NetAddress("127.0.0.1",12000);
   k = new KinectSignal();
@@ -92,16 +90,13 @@ void draw(){
   
   background(c.bg);
   
-  b.update();
   
   if (frameCount % 5 == 0) {
     k.update();
   }
   
   s.update();
-  
-  b.resolve();
-  // b.render();
+
   
   
   if (debug) {

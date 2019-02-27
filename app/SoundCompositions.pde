@@ -11,9 +11,6 @@ class SineComposition extends Composition {
     this.randomAmount = 100; 
     this.availableRandomSounds = new String[1];
     this.availableRandomSounds[0] = "Sine";
-    
-    
-    
   }
   
 }
