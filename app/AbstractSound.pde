@@ -1,3 +1,46 @@
+class SoundQueryItem {
+  Sound sound;
+  int time;
+  SoundQueryItem( Sound snd_, int time_){
+    this.sound = snd_;
+    this.time = new Integer(frameCount) + time_;
+  }
+}
+
+class SoundQuery {
+  ArrayList<SoundQueryItem> query;
+  int rate;
+  SoundQuery(){
+    query = new ArrayList<SoundQueryItem>();
+    this.rate = 4;
+  }
+  
+  // přidá zvuk do query
+  void enqueue(Sound snd, int time){
+    this.query.add(new SoundQueryItem(snd, time));
+  }
+  
+  // parsuje query
+  void update(){
+    // if ( frameCount % this.rate == 0 ) {
+      if (this.query.size() > 0) {
+        
+        for ( int i=0; i < this.query.size(); i++ ) {
+          SoundQueryItem sndq = this.query.get(i);
+          if ( frameCount >= sndq.time ){
+            sndq.sound.play();
+            this.query.remove(i);
+          }
+        }
+        
+      }
+    // }
+  }
+  
+}
+
+
+
 // třída pro výběr náhodného zvuku podle různorodých kritérií
 class SoundRouter {
   SoundRouterOption[] available;
@@ -120,6 +163,9 @@ class SoundRouter {
        case "Magic1":
          output = new Magic1(pos_);
          break;
+       case "Magic2":
+         output = new Magic2(pos_);
+         break;
     }
     
     return output;
@@ -144,11 +190,12 @@ class Sound {
   String synth;
   PVector pan;
   PVector position;
-  boolean blocksVolume, playing;
+  boolean blocksVolume, blocksTime, playing;
   int life, liveTo;
   float currentVolume, initialVolume;
   float amp;
   Sound collidedWith;
+  float ratio;
 
   Sound(PVector pos_){
     
@@ -156,7 +203,7 @@ class Sound {
     this.liveTo = 0;
     this.playing = true;
     this.blocksVolume = true;
-    this.currentVolume = 0;
+    this.blocksTime = false;
     this.amp = 0;
     
     // namapování pozice
@@ -165,7 +212,20 @@ class Sound {
     this.panFromPos();
     
     this.collidedWith = null;
+    
+    this.parameters();
+    
+    this.initialVolume = this.amp;
+    this.currentVolume = this.amp;
 
+  }
+  
+  // metora pro nastavení konkrétního trvání konkrétního zvuku
+  void parameters(){
+    // implementovat
+    // this.liveTo = int( X * this.ratio * frameRate);
+    // this.currentVolume = this.amp;
+    // this.initialVolume = this.amp;
   }
   
   void panFromPos(){
@@ -176,14 +236,13 @@ class Sound {
   // spustí daný zvuk
   void play(){
     
-    if (this.blocksVolume){
+    if (this.blocksVolume || this.blocksTime ){
       // přidat tento zvuk k hrajícím
       s.soundscape.playing.add(this);
       // přidat tento zvuk do fronty
       s.soundscape.queue.add(this);
     } else {
       this.send();
-      println("Hej!!");
     }
     
     
@@ -198,18 +257,35 @@ class Sound {
   void update(){
     
     // zkontroluje svůj život
-    if (this.blocksVolume){
+    if (this.blocksVolume || this.blocksTime){
       this.life++;
       if (this.life>=this.liveTo){
         this.blocksVolume = false;
+        this.blocksTime = false;
       }
     }
     
     // zaktualizuje své aktuální volume
-    if (this.blocksVolume){
+    if (this.blocksVolume || this.blocksTime){
       this.currentVolume = map(this.life,this.liveTo,0,0,this.initialVolume);
     }
   
+  }
+  
+  // funkce pro systémové nastavení amplitudy
+  void setAmplitude( float amp_ ){
+    this.amp = amp_;
+    this.initialVolume = amp_;
+  }
+  
+  // metoda pro systémové nastavení ratia
+  void setRate( float rate_ ){
+    this.ratio = rate_;
+  }
+  
+  void setBlockingDuration( float dur_ ){
+    float dur = dur_ / this.ratio / this.ratio;
+    this.liveTo = int( dur * frameRate);
   }
   
 }
@@ -286,6 +362,26 @@ class Composition {
   int randomAmount; // poměr mezi náhodným zvukem a lineárním zvukem
   String[] availableRandomSounds; // z jakých zvuků je možné náhodně stavit
   
+  // přepis glopbálních parametrů
+  
+  // výchozí zvuk
+  float bellAmplitude;
+  float bellFrequency;
+  float bellAtk;
+  float bellRelease;
+  float bellAmpCurrent;
+  
+  // kolizní zvuk
+  float collisionPrecision = 1;
+  float maxVolume = 0.8;
+  float collisionMinFreq = 100;
+  float collisionMaxFreq = 300;
+  float collisionAtk = 0.05;
+  float collisionMinRel = 1.58;
+  float collisionMaxRel = 4.22;
+  float collisionBlockAmount = 0.5; // aspect of the collision sound block in the range of 1 to N. the higher is, the bigger the block is.  
+  float volumeAspect = 1;
+  
   
   Composition(){
     this.conditions = new ArrayList<Condition>();
@@ -294,6 +390,28 @@ class Composition {
     this.acceptsRandom = true;
     this.availableRandomSounds = new String[0];
     this.randomAmount = 50;
+    
+    
+    // inicializace globálních parametrů
+    
+    // nastavení výchozího zvuku
+    this.bellAmplitude = bellAmplitude_;
+    this.bellFrequency = bellFrequency_;
+    this.bellAtk = bellAtk_;
+    this.bellRelease = bellRelease_;
+    this.bellAmpCurrent = this.bellAmplitude;
+    
+    // nastavení kolizního zvuku
+    this.collisionPrecision = collisionPrecision_;
+    this.maxVolume = maxVolume_;
+    this.collisionMinFreq = collisionMinFreq_;
+    this.collisionMaxFreq = collisionMaxFreq_;
+    this.collisionAtk = collisionAtk_;
+    this.collisionMinRel = collisionMinRel_;
+    this.collisionMaxRel = collisionMaxRel_;
+    this.collisionBlockAmount = collisionBlockAmount_; // aspect of the collision sound block in the range of 1 to N. the higher is, the bigger the block is.  
+    this.volumeAspect = volumeAspect_;
+    
   }
   
   // zkontroluje splnění podmínek, vykoná je a odstraní neaktivní
@@ -305,7 +423,6 @@ class Composition {
         if (cond.active){
           if (cond.isTrue()) {
             cond.trigger();
-            println("-------");
           }
         } else {
           this.conditions.remove(i);
@@ -348,24 +465,30 @@ class SoundScape {
   Composition composition; // aktuálně pracující kompozice
   ArrayList<Sound> playing;
   ArrayList<Sound> queue;
+  SoundQuery playlist;
   float availableVolume;
   float currentVolume;
   PVector baseLineCenter, baseLineCenterOpposite; //střed base lajny
   float baseLineAmplitude; // aktuální amplituda base liny
+  float bellAmpCurrent;
+  
 
   SoundScape(){
     
     this.playing = new ArrayList<Sound>();
     this.queue = new ArrayList<Sound>();
+    this.playlist = new SoundQuery();
     this.availableVolume = 1;
     this.currentVolume = 0;
     
     this.composition = new Composition();
     
-    bellAmpCurrent = bellAmplitude;
+    this.bellAmpCurrent = bellAmplitude_;
     this.baseLineCenter = new PVector(0,0);
     this.baseLineCenterOpposite = new PVector(0,0);
     this.baseLineAmplitude = 1;
+    
+    
   
   }
   
@@ -382,7 +505,13 @@ class SoundScape {
   // Zkontroluje podmínky a kdyžtak je spustí
   void update(){
     
+    // zkontroluje podmínky
     this.composition.resolveConditions();
+    
+    // zkontroluje playlist
+    if (frameCount % this.playlist.rate == 0) {
+      this.playlist.update();
+    }
     
     
     // resetuj aktuální volume
@@ -397,7 +526,7 @@ class SoundScape {
         this.currentVolume += snd.currentVolume;
         
         // zaktualizuj hrající zvuky a vyřaď odumřelé bloky
-        if (snd.blocksVolume) {
+        if (snd.blocksVolume || snd.blocksTime) {
           snd.update();  
         } else {
           s.soundscape.playing.remove(i);
@@ -422,7 +551,7 @@ class SoundScape {
         }
       }
       
-      this.baseLineAmplitude = map(prisCount,0,s.numInitialParticles,0, bellAmplitude );
+      this.baseLineAmplitude = map(prisCount,0,s.numInitialParticles,0, s.soundscape.composition.bellAmplitude );
       prisCenter.x /= prisCount;
       prisCenter.y /= prisCount;
       this.baseLineCenter = prisCenter;
@@ -449,10 +578,9 @@ class SoundScape {
         for (Sound sndOp : this.queue){
           if (sndOp != snd && sndOp.collidedWith != snd) {
             float distance = PVector.dist(snd.position,sndOp.position);
-            if (distance <= 2*circularGridRayRadius + collisionPrecision) {
+            if (distance <= 2*circularGridRayRadius + s.soundscape.composition.collisionPrecision) {
               snd.collidedWith = sndOp;
               //snd.send();
-              println(frameCount + ": " + this + " nová amplituda " + snd.amp);
             }
           }
         }
@@ -478,6 +606,7 @@ class SoundScape {
     color availableCol = color(0,255,0);
     color blockedCol = color(255,0,0);
     color sndCol = color(0,0,255);
+    
     
     noStroke();
     
@@ -512,6 +641,8 @@ class SoundScape {
       for ( int i = 0; i< this.playing.size();i++ ) {
         
         Sound snd = this.playing.get(i);
+        
+        if (snd.blocksTime) { sndCol = color(255,255,0); } else { sndCol = color(0,0,255); }
         
         pushMatrix();
         

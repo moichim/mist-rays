@@ -11,6 +11,10 @@ class SineComposition extends Composition {
     this.randomAmount = 100; 
     this.availableRandomSounds = new String[1];
     this.availableRandomSounds[0] = "Sine";
+    
+    // parametry zvuku
+    this.collisionMinFreq = 100;
+    this.collisionMaxFreq = 300;
   }
   
 }
@@ -29,6 +33,8 @@ class StarsComposition extends Composition {
     this.availableRandomSounds = router.soundNamesByTag("stars");
     
     this.conditions.add( new MagicalEnding() );
+    
+    this.conditions.add( new MagicalEnding_slow() );
     
     
   }

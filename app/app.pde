@@ -32,24 +32,22 @@ float circularGridBoxSize = 150;//70; // 165;
 float circularGridRayRadius = 40;// 20; // 40;
 
 // settings for circular sound
-float bellAmplitude = 1;
-float bellFrequency = 52;
-float bellAtk = 0.01;
-float bellRelease = 2;
-float bellAmpCurrent = bellAmplitude;
+float bellAmplitude_ = 1;
+float bellFrequency_ = 52;
+float bellAtk_ = 0.01;
+float bellRelease_ = 2;
+float bellAmpCurrent_ = bellAmplitude_;
 
 // settings for collision sound
-float collisionPrecision = 1;
-float currentVolume = 0;
-float maxVolume = 0.8;
-float availableVolume = maxVolume;
-float collisionMinFreq = 100;
-float collisionMaxFreq = 300;
-float collisionAtk = 0.05;
-float collisionMinRel = 1.58;
-float collisionMaxRel = 4.22;
-float collisionBlockAmount = 0.5; // aspect of the collision sound block in the range of 1 to N. the higher is, the bigger the block is.  
-float volumeAspect = 1;
+float collisionPrecision_ = 1;
+float maxVolume_ = 0.8;
+float collisionMinFreq_ = 100;
+float collisionMaxFreq_ = 300;
+float collisionAtk_ = 0.05;
+float collisionMinRel_ = 1.58;
+float collisionMaxRel_ = 4.22;
+float collisionBlockAmount_ = 0.5; // aspect of the collision sound block in the range of 1 to N. the higher is, the bigger the block is.  
+float volumeAspect_ = 1;
 
 // nastavení kinectu
 float kinectDepthMin = 578;//413;
@@ -84,9 +82,9 @@ void setup(){
 void draw(){
 
   // regular updates
-  currentVolume = 0;
+  //currentVolume = 0;
   
-  availableVolume = maxVolume;
+  //availableVolume = maxVolume;
   
   background(c.bg);
   

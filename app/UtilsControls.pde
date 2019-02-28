@@ -155,7 +155,7 @@ class CircularControls extends ControlGroup {
     
     // size of the box
     if (m.addrPattern().equals("/collisionBlockTime")) {
-      collisionBlockAmount = m.get(0).floatValue();
+      s.soundscape.composition.collisionBlockAmount = m.get(0).floatValue();
     }
   
   }

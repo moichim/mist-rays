@@ -97,7 +97,7 @@ class CircularSystem extends System {
  public void customSystemUpdate(){
    
    
-   if ( this.particles.size() <= 0 ) {
+   if ( this.particles.size() <= 0 && this.soundscape.playing.size() <= 0 ) {
      s = new CircularSystem();
    }
    
@@ -125,8 +125,6 @@ class CircularSystem extends System {
                  
                  Sound bell = s.soundscape.composition.base_line_sound();
                  bell.play();
-                 // println(frameCount + " Jedeš ty potvůrko?");
-                 println(bell);
                }
              }
            

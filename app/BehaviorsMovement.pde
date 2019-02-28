@@ -49,6 +49,16 @@ class RecieveCollisions extends Behavior {
         
         Sound snd = s.soundscape.get_next_sound( this.parentParticle.pos );
         snd.play();
+        if (debug) {
+          pushMatrix();
+          PVector opposite = oppositePosition(p.pos);
+          translate(opposite.x,opposite.y);
+          fill(255,0,255);
+          rect(-10,-10,10,10);
+          noFill();
+          popMatrix();
+        }
+        
         // cs.blocked = true;
 
       //}
@@ -80,7 +90,7 @@ class RecieveCollisions extends Behavior {
           
           /* Kontrola vzdálenosti */
           float distance = PVector.dist(this.parentParticle.pos, p.pos);
-          if ( distance <= ( this.parentParticle.radius/2 + p.radius/2 ) + collisionPrecision && p != this.parentParticle && this.sinceLastCollision > 3) {
+          if ( distance <= ( this.parentParticle.radius/2 + p.radius/2 ) + s.soundscape.composition.collisionPrecision && p != this.parentParticle && this.sinceLastCollision > 3) {
             
             // println(frameCount + " Distance: " + distance + " Součet průměrů " + this.parentParticle.radius/2 + p.radius/2 );
             this.sinceLastCollision = 0;
@@ -140,7 +150,7 @@ class RecieveCollisions extends Behavior {
           
           float distance = PVector.dist(this.parentParticle.pos, p.pos);
 
-          if ( distance <= ( this.parentParticle.radius/2 + p.radius/2 ) + collisionPrecision && p != this.parentParticle && this.sinceLastCollision > 3) {
+          if ( distance <= ( this.parentParticle.radius/2 + p.radius/2 ) + s.soundscape.composition.collisionPrecision && p != this.parentParticle && this.sinceLastCollision > 3) {
             this.bounce( p );
             Prisonner pris = (Prisonner) p;
             pris.release();
