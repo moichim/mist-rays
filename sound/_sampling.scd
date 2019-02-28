@@ -35,11 +35,12 @@ x = Synth.new(\sample,[\buf, ~star3.bufnum, \rate, 0.4, \pan,-1]);
 y = Synth.new(\sample,[\buf, ~star3.bufnum, \rate, 0.7, \pan, 1]);
 z = Synth.new(\sample,[\buf, ~string.bufnum, \rate, 01]);
 
-m = Synth.new(\sample,[\buf,~magic_1.bufnum, \amp,0.5]);
+m = Synth.new(\sample,[\buf,~magic_1.bufnum, \amp,1]);
 n = Synth.new(\sample,[\buf,~magic_2.bufnum, \amp,0.5]);
 
 t = Synth.new(\sample,[\buf,~war_drum.bufnum, \rate,1.5]);
 u = Synth.new(\sample,[\buf,~war_drum.bufnum, \rate,1]);
+
 (
 p = Pdef.new(\stars,
 	Pbind(

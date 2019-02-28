@@ -60,7 +60,7 @@ class Collider extends Particle {
     this.pos = p;
     this.radius = r;
     this.vel = 0;
-    this.col = color(0,0,255);
+    this.col = color(0,255,0);
     
     // add behaviors
     this.addBehavior( new KinectCollider( this.id ) );
