@@ -65,7 +65,7 @@ class RecieveCollisions extends Behavior {
       
       
       /* Zvuk bude */
-      this.parentParticle.col = color(random(150,255),random(150,255),random(0,255));
+      //this.parentParticle.col = color(random(150,255),random(150,255),random(0,255));
       
     }
 
@@ -267,7 +267,7 @@ class Imprisonment extends Behavior {
     PVector boxEnd = new PVector(this.box.x + circularGridBoxSize,this.box.y + circularGridBoxSize);
     this.destiny = new Destiny( this.box, boxEnd, this.position );
     this.destiny.nextTarget();
-    this.parentParticle.col = color(100);
+    //this.parentParticle.col = color(100);
     
     // last, adjust the particle position by the movement pattern
     this.parentParticle.pos = this.destiny.getPointCoordinates( position ).copy();

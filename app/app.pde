@@ -28,8 +28,8 @@ PVector paddingMin = new PVector(40,50); // initial value that serves for calcul
 float speedAspect = 0.5;
 
 // Settings of circular movement
-float circularGridBoxSize = 150;//70; // 165;
-float circularGridRayRadius = 40;// 20; // 40;
+float circularGridBoxSize = 122.8;
+float circularGridRayRadius = 40;
 
 // settings for circular sound
 float bellAmplitude_ = 1;
@@ -50,13 +50,13 @@ float collisionBlockAmount_ = 0.5; // aspect of the collision sound block in the
 float volumeAspect_ = 1;
 
 // nastavení kinectu
-float kinectDepthMin = 578;//413;
-float kinectDepthMax = 909;//465; 
-float kinectResolution = 7.3;//9;
-float kinectScale = 2.19;//2.85;
+float kinectDepthMin = 868.42;
+float kinectDepthMax = 1002.82; 
+float kinectResolution = 5.36;
+float kinectScale = 5.67;
 PVector kinectCropTL = new PVector(0,70);
 PVector kinectCropBR = new PVector(640,420);
-PVector kinectDeviation = new PVector(15,73);
+PVector kinectDeviation = new PVector(-97.07,61.8);
 
 KinectSignal k;
 
@@ -102,10 +102,16 @@ void draw(){
     
   }
   
-  
-  fill(255);
-  text("FR: " + String.valueOf(frameRate),10,20);
-  noFill();
+  if (debug){
+    fill(255);
+    text("FR: " + String.valueOf(frameRate),10,20);
+    noFill();
+  }
+  if (frameCount % 60 == 0) {
+    println("kinectCropTL: [" + kinectCropTL.x + ", " + kinectCropTL.y + "]");
+    println("kinectCropBR: [" + kinectCropBR.x + ", " + kinectCropBR.y + "]");
+    println("kinectdeviation: [" + kinectDeviation.x + ", " + kinectDeviation.y + "]");
+  }
   
 }
 // Run the appripriate controls on mousepressed

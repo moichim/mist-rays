@@ -201,7 +201,7 @@ class Magic1_slow extends Sample {
     this.setAmplitude(2);
     
     // nastavit ratio
-    this.setRate(0.25);
+    this.setRate(0.9);
     
     // nastavit délku bloku
     this.setBlockingDuration(9);
