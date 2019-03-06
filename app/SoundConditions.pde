@@ -18,7 +18,7 @@ class MagicalEnding extends Condition {
       }
     
     }
-    if ( prisCount <= s.numInitialParticles/4 ){
+    if ( prisCount <= s.numInitialParticles/4 && this.isProbable()){
       v = true;
     }
     return v;
@@ -28,7 +28,7 @@ class MagicalEnding extends Condition {
   void callback(){
     PVector pos = new PVector(0,0);
     Magic1 mag = new Magic1(pos);
-    mag.pan.x = random(0.5,0);
+    mag.pan.x = random(0.5,1);
     mag.amp = 3;
     // umísti zvuk po náhodném kraji
     if (flipACoin()) {
@@ -37,9 +37,9 @@ class MagicalEnding extends Condition {
     
     mag.play();
     
-    Magic1 mag_feedback = new Magic1(pos);
-    mag_feedback.pan.x = oppositePosition(mag.pan).x;
-    mag_feedback.amp = 3;
+    Magic2 mag_feedback = new Magic2(pos);
+    mag_feedback.pan.x = mag.pan.x * -1; //oppositePosition(mag.pan).x;
+    mag_feedback.amp = 1;
     s.soundscape.playlist.enqueue(mag_feedback, 120);
     
     this.active = false;
@@ -66,7 +66,7 @@ class MagicalEnding_slow extends Condition {
       }
     
     }
-    if ( s.particles.size() <= 20 ){
+    if ( s.particles.size() <= 20 && this.isProbable() ){
       v = true;
     }
     return v;

@@ -11,11 +11,13 @@
 // bubny
 ~bass_drum = Buffer.readChannel(s, "/Users/jan.jachim/Documents/Processing/souzvon/sound/samples/bass_drum.aiff", channels:[0]);
 ~war_drum = Buffer.readChannel(s, "/Users/jan.jachim/Documents/Processing/souzvon/sound/samples/war_drum.aiff", channels:[0]);
+~symphony_drum = Buffer.readChannel(s, "/Users/jan.jachim/Documents/Processing/souzvon/sound/samples/symphony_drum.aiff", channels:[0]);
+~symphony_drum_bass = Buffer.readChannel(s, "/Users/jan.jachim/Documents/Processing/souzvon/sound/samples/symphony_drum_bass.aiff", channels:[0]);
 )
 
 ~star1.bufnum;
 ~star2.bufnum;
-~star3.bufnum;
+~symphony_drum_bass.bufnum;
 
 
 (
@@ -39,7 +41,7 @@ m = Synth.new(\sample,[\buf,~magic_1.bufnum, \amp,2]);
 n = Synth.new(\sample,[\buf,~magic_1.bufnum, \amp, 3, \rate,0.4]);
 
 t = Synth.new(\sample,[\buf,~war_drum.bufnum, \rate,1.5]);
-u = Synth.new(\sample,[\buf,~war_drum.bufnum, \rate,1]);
+u = Synth.new(\sample,[\buf,~symphony_drum_bass.bufnum, \rate,1,\amp,2]);
 
 (
 p = Pdef.new(\stars,

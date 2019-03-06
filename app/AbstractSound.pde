@@ -48,11 +48,11 @@ class SoundRouter {
   SoundRouter(){
     
     // zde se musí definovat počet dostupných zvuků
-    this.available = new SoundRouterOption[6];
+    this.available = new SoundRouterOption[8];
     
     // Nyní následují syntetické zvuky
     this.available[0] = new SoundRouterOption("Sine", new String[] {"sine", "default"} );
-    this.available[1] = new SoundRouterOption( "Bell", new String[] {"sine", "default" } );
+    this.available[1] = new SoundRouterOption( "Bell", new String[] {"sine", "default","base" } );
     
     // cinkací samply
     this.available[2] = new SoundRouterOption( "Star1", new String[] {"stars" } );
@@ -61,7 +61,9 @@ class SoundRouter {
     
     // vokály
     this.available[5] = new SoundRouterOption( "Magic1", new String[] {"vocals","ending"} );
-    // this.available[5] = new SoundRouterOption( "Magic2", new String[] {"vocals","ending"} );
+    this.available[6] = new SoundRouterOption( "Magic2", new String[] {"vocals","ending"} );
+    
+    this.available[7] = new SoundRouterOption( "Drum", new String[] {"base"} );
     
   }
   
@@ -165,6 +167,9 @@ class SoundRouter {
          break;
        case "Magic2":
          output = new Magic2(pos_);
+         break;
+       case "Drum":
+         output = new Drum(pos_);
          break;
     }
     
@@ -290,50 +295,44 @@ class Sound {
   
 }
 
-class Sequence {
-  
-  ArrayList<Sound> sounds;
-  int current;
-
-  Sequence(){
-  
-    this.current = 0;
-    this.sounds = new ArrayList<Sound>();
-    
-  }
-  
-  // Najde nový zvuk v řadě
-  public Sound next_sound(){
-  
-    Sound snd = null;
-    
-    return snd;
-  
-  }
-  
-  // spustí sekvenci
-  void start(){
-    this.next_sound().play();
-  }
-  
-}
 
 /* */
 class Condition{
   boolean loop;
   boolean active;
   int count;
+  int probability;
   
   Condition(){
     
     this.count = 0;
     this.loop = false;
     this.active = true;
+    this.probability = 100;
   
   }
+  
+  Condition( int probability_){
+    
+    this.count = 0;
+    this.loop = false;
+    this.active = true;
+    this.probability = probability_;
+  
+  }
+  
+  
   // funkce ověřující platnost podmínky. Přepsat v konkrétní podmínce
   boolean isTrue(){
     return false;
+  }
+  
+  boolean isProbable(){
+    boolean output = false;
+    if ( int(random(100)) <= this.probability ) {
+      output = true;
+    }
+    return output;
   }
   
   // definuje akce provedené při spuštění
@@ -356,7 +355,6 @@ class Condition{
 /* Pokročilá logika sklatby je volána soundscapem */
 class Composition {
   ArrayList<Condition> conditions;
-  Sequence sequence;
   String[] baseLineSounds; // linka která pohraje na začátku
   boolean acceptsRandom; // pracuej kompozice s náhodnými zvuky?
   int randomAmount; // poměr mezi náhodným zvukem a lineárním zvukem

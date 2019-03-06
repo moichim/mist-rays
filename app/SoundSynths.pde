@@ -118,6 +118,26 @@ class Star1 extends Sample {
   }
 }
 
+class Drum extends Sample {
+  Drum(PVector pos_){
+    super(pos_);
+  }
+  
+  @Override
+  void parameters(){
+    
+    // nastavit bufnum
+    this.buf = 9;
+    this.blocksVolume = false;
+    this.amp = 2;
+    
+    // nastavit trvání bloku
+    float dur = 2;
+    this.setBlockingDuration(dur);
+    
+  }
+}
+
 class Star2 extends Sample {
   Star2(PVector pos_){
     super(pos_);
