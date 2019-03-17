@@ -71,7 +71,7 @@ x = Synth.new(\playbuf,[\out,~reverbBus,\buf,144]);
 (
 d = Pdef.new(\test,Pbind.new(
 	\instrument, \playbuf,
-	\buf, 9 + Pxrand([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],inf),
+	\buf, 15 + Pxrand([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],inf),
 	\dur, Pwhite(0.1,0.5,inf),
 	\pan, Pwhite(-1,1,inf),
 	\out, ~reverbBus
