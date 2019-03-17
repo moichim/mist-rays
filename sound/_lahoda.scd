@@ -9,7 +9,7 @@ s.options.numInputBusChannels;
 
 s.freeAll;
 
-(
+
 // Inicializace pole pro buffery
 ~buffers = Array.new;
 
@@ -22,7 +22,7 @@ s.freeAll;
 ~rootFolder.entries;
 
 // iterovat složku 01_kolizni
-
+(
 ~counter=0;
 ~rootFolder.entries.do({
 	arg path;

@@ -10,6 +10,12 @@ s.queryAllNodes; // Vypíše všechny nody
 
 s.freeAll;
 
+s.options.numBuffers;
+s.options.numBuffers = 2000;
+s.options.numAudioBusChannels;
+s.options.numOutputBusChannels;
+s.options.numInputBusChannels;
+
 
 // Načtení bufferů
 (
@@ -25,7 +31,7 @@ s.freeAll;
 
 
 ~buffers = Array.new; // Inicializace pole pro buffery
-~mode = "rev"; // nastavit režim přehrávání rev / raw
+~mode = "raw"; // nastavit režim přehrávání rev / raw
 
 // Kořenová složka pro finální buffery
 ~rootFolder = PathName.new( "C:/Data/sketchbook/project_mist_rays/sound/lahoda_samples" );
@@ -35,7 +41,7 @@ s.freeAll;
 ~rootFolder.entries.do({
 	arg path;
 	~folderContent = PathName.new( path.fullPath );
-	"/////".postln;
+	path.fullPath.postln;
 	// iterovat oddíl samplů
 	~folderContent.entries.do({
 		arg pth;
@@ -60,7 +66,7 @@ y = Synth.new(\reverb,[\in,~reverbBus.index]);
 x = Synth.new(\sine,[\freq,600,\rel,1, \out,~reverbBus]);
 x = Synth.new(\sine,[\freq,600,\rel,1]);
 x.set(\t_gate,4);
-x = Synth.new(\playbuf,[\out,~reverbBus,\buf,3]);
+x = Synth.new(\playbuf,[\out,~reverbBus,\buf,144]);
 
 (
 d = Pdef.new(\test,Pbind.new(
