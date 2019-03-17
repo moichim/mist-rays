@@ -48,7 +48,7 @@ class SoundRouter {
   SoundRouter(){
     
     // zde se musí definovat počet dostupných zvuků
-    this.available = new SoundRouterOption[8];
+    this.available = new SoundRouterOption[9];
     
     // Nyní následují syntetické zvuky
     this.available[0] = new SoundRouterOption("Sine", new String[] {"sine", "default"} );
@@ -64,6 +64,7 @@ class SoundRouter {
     this.available[6] = new SoundRouterOption( "Magic2", new String[] {"vocals","ending"} );
     
     this.available[7] = new SoundRouterOption( "Drum", new String[] {"base"} );
+    this.available[8] = new SoundRouterOption( "Tin", new String[] {"lahoda"} );
     
   }
   
@@ -170,6 +171,9 @@ class SoundRouter {
          break;
        case "Drum":
          output = new Drum(pos_);
+         break;
+       case "Tin":
+         output = new Tin(pos_);
          break;
     }
     
