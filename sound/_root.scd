@@ -11,42 +11,65 @@ s.queryAllNodes; // Vypíše všechny nody
 s.freeAll;
 
 
-
-// Globální proměnné
+// Načtení bufferů
 (
 
-~swarmLeft = Synth.newPaused(\bpfsaw,[
-	\freq, 22.5,
-	\cfmin,60,
-	\cfmax,1213,
-	\rqmin,0.01,
-	\rqmax,1,
-	\amp,0.5,
-]);
-~swarmRight = Synth.newPaused(\bpfsaw,[
-	\freq, 40,
-	\cfmin,288,
-	\cfmax,686,
-	\rqmin,0.01,
-	\rqmax,0.17,
-	\amp,0.5,
-]);
+//
+// Prvnotní nastavení
+//
+~reverbBus = Bus.audio(s,2);
 
-// Kontrolní funkce
-~swarmOff = {
-	~swarmLeft.run(false);
-	~swarmRight.run(false);
-};
+//
+// Načtení Bufferů
+//
 
-~swarmOn = {
-	~swarmLeft.run();
-	~swarmRight.run()
-};
 
+~buffers = Array.new; // Inicializace pole pro buffery
+~mode = "rev"; // nastavit režim přehrávání rev / raw
+
+// Kořenová složka pro finální buffery
+~rootFolder = PathName.new( "C:/Data/sketchbook/project_mist_rays/sound/lahoda_samples" );
+
+// iterovat složku 01_kolizni
+~counter=0;
+~rootFolder.entries.do({
+	arg path;
+	~folderContent = PathName.new( path.fullPath );
+	"/////".postln;
+	// iterovat oddíl samplů
+	~folderContent.entries.do({
+		arg pth;
+		~sampleFolder = PathName.new( pth.fullPath++~mode );
+		// iterovat obsah dané složky
+		~sampleFolder.entries.do({
+			arg spl;
+			~buffers = ~buffers.add(Buffer.read(s,spl.fullPath));
+			(~counter + spl.fullPath).postln;
+			~counter = ~counter + 1;
+
+		});
+	});
+})
 )
 
+// Nastavení po definici synťáků
+y = Synth.new(\reverb,[\in,~reverbBus.index]);
+
+
 // Test
+x = Synth.new(\sine,[\freq,600,\rel,1, \out,~reverbBus]);
 x = Synth.new(\sine,[\freq,600,\rel,1]);
 x.set(\t_gate,4);
-~swarmOn.value;
-~swarmOff.value;
+x = Synth.new(\playbuf,[\out,~reverbBus,\buf,3]);
+
+(
+d = Pdef.new(\test,Pbind.new(
+	\instrument, \playbuf,
+	\buf, 9 + Pxrand([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],inf),
+	\dur, Pwhite(0.1,0.5,inf),
+	\pan, Pwhite(-1,1,inf),
+	\out, ~reverbBus
+))
+)
+d.play;
+d.stop;
