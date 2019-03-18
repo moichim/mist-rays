@@ -1,6 +1,38 @@
-class MagicalEnding_ extends Condition {
+/*
+ * Hvězdná kompozice
+ * Výchozí zvuk: Bell
+ * Cinkot: Triangl
+ * Podnínky: Magické vokály v polovině
+ */
 
-  MagicalEnding_(){
+class StarsComposition extends Composition {
+
+  StarsComposition(){
+    super();
+    
+    // definuj základní zvuk
+    this.baseLineSounds = new String[1];
+    this.baseLineSounds[0] = "Bell";
+    this.bellFrequency = 40;
+    
+    // definuj kolizní zvuky
+    this.acceptsRandom = true;
+    this.randomAmount = 100; 
+    this.availableRandomSounds = router.soundNamesByTag("stars");
+    
+    // definuj podmínky
+    this.conditions.add( new MagicalEnding() );
+    this.conditions.add( new MagicalEnding_slow() );
+
+  }
+  
+}
+
+
+// Magický zpěv se spustí v polovině
+class MagicalEnding extends Condition {
+
+  MagicalEnding(){
     super();
     this.active = true;
   }
@@ -46,9 +78,11 @@ class MagicalEnding_ extends Condition {
   }
 }
 
-class MagicalEnding_slow_ extends Condition {
 
-  MagicalEnding_slow_(){
+// magický zpěv se spustí až na konci
+class MagicalEnding_slow extends Condition {
+
+  MagicalEnding_slow(){
     super();
     this.active = true;
   }
@@ -57,15 +91,6 @@ class MagicalEnding_slow_ extends Condition {
   boolean isTrue(){
     boolean v = false;
     
-    int prisCount = 0;
-    
-    for ( Particle p : s.particles ){
-      
-      if ( p.hasBehavior("Imprisonment") ) {
-        prisCount++;
-      }
-    
-    }
     if ( s.particles.size() <= 20 && this.isProbable() ){
       v = true;
     }

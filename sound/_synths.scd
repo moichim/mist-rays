@@ -23,9 +23,9 @@ SynthDef.new(\sine, {
 // Přehrání bufferu
 SynthDef.new(
 	\playbuf, {
-		arg amp=1,pan=0,out=0,buf;
+		arg amp=1,pan=0,out=0,buf,rate=1;
 		var sig;
-		sig = PlayBuf.ar(1,buf,doneAction:2);
+		sig = PlayBuf.ar(1,buf, BufRateScale.kr(buf) * rate,doneAction:2);
 		sig = Pan2.ar(sig,pan);
 		sig = sig * amp;
 		Out.ar( out, sig );
@@ -34,10 +34,10 @@ SynthDef.new(
 
 // Reverb
 SynthDef.new(\reverb,{
-	arg in, out=0;
+	arg in, out=0, mix=0.5,room=0.5,damp=0.5,mul=0.5;
 	var sig;
 	sig = In.ar(in,2);
-	sig = FreeVerb.ar(sig, 0.5,0.8,0.2);
+	sig = FreeVerb.ar(sig, mix:mix,room:room,damp:damp,mul:mul);
 	Out.ar(out,sig);
 }).add;
 

@@ -23,7 +23,7 @@ s.options.numInputBusChannels;
 //
 // Prvnotní nastavení
 //
-~reverbBus = Bus.audio(s,2);
+
 
 //
 // Načtení Bufferů
@@ -34,7 +34,7 @@ s.options.numInputBusChannels;
 ~mode = "raw"; // nastavit režim přehrávání rev / raw
 
 // Kořenová složka pro finální buffery
-~rootFolder = PathName.new( "C:/Data/sketchbook/project_mist_rays/sound/lahoda_samples" );
+~rootFolder = PathName.new( "/Users/jan.jachim/Documents/Processing/souzvon/sound/lahoda_samples/" );
 
 // iterovat složku 01_kolizni
 ~counter=0;
@@ -59,14 +59,58 @@ s.options.numInputBusChannels;
 )
 
 // Nastavení po definici synťáků
-y = Synth.new(\reverb,[\in,~reverbBus.index]);
+~sounds = Group.new();
+~effects = Group.after(~sounds);
 
 
-// Test
-x = Synth.new(\sine,[\freq,600,\rel,1, \out,~reverbBus]);
+
+
+//
+// Ozvěna
+//
+
+(
+
+// Busy pro reverby
+~reverbBusNone = Bus.audio(s,2);
+~reverbBusLight = Bus.audio(s,2);
+~reverbBusMedium = Bus.audio(s,2);
+~reverbBusHeavy = Bus.audio(s,2);
+
+// Synťáky pro reverby
+i = Synth.new(\reverb,[
+	\in,~reverbBusLight.index,
+	\room, 0.8,
+	\mix, 0.7,
+	\damp, 0.9,
+	\mul, 2
+],~effects);
+j = Synth.new(\reverb,[
+	\in,~reverbBusMedium.index,
+	\room, 0.9,
+	\mix, 0.6,
+	\damp, 0.9,
+	\mul, 1.5
+],~effects);
+k = Synth.new(\reverb,[
+	\in,~reverbBusHeavy.index,
+	\room, 1,
+	\mix, 0.5,
+	\damp, 0.9,
+	\mul, 2
+],~effects);
+
+)
+
+// Nastavovací metody reverbu
+j.set(\room,0.9,\damp,0.5,\mix,0.6,\mul,1.7);
+j.free;
+~effects.freeAll;
+
+// Testy
+x = Synth.new(\sine,[\freq,600,\rel,1, \out,~reverbBusMedium],~sounds);
 x = Synth.new(\sine,[\freq,600,\rel,1]);
-x.set(\t_gate,4);
-x = Synth.new(\playbuf,[\out,~reverbBus,\buf,144]);
+x = Synth.new(\playbuf,[\out,~reverbBusLight,\buf,150,\rate,1.5],~sounds);
 
 (
 d = Pdef.new(\test,Pbind.new(
@@ -74,7 +118,8 @@ d = Pdef.new(\test,Pbind.new(
 	\buf, 15 + Pxrand([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],inf),
 	\dur, Pwhite(0.1,0.5,inf),
 	\pan, Pwhite(-1,1,inf),
-	\out, ~reverbBus
+	\out, ~reverbBusMedium,
+	\group, ~sounds
 ))
 )
 d.play;

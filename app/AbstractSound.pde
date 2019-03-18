@@ -41,158 +41,7 @@ class SoundQuery {
 
 
 
-// třída pro výběr náhodného zvuku podle různorodých kritérií
-class SoundRouter {
-  SoundRouterOption[] available;
-  
-  SoundRouter(){
-    
-    // zde se musí definovat počet dostupných zvuků
-    this.available = new SoundRouterOption[9];
-    
-    // Nyní následují syntetické zvuky
-    this.available[0] = new SoundRouterOption("Sine", new String[] {"sine", "default"} );
-    this.available[1] = new SoundRouterOption( "Bell", new String[] {"sine", "default","base" } );
-    
-    // cinkací samply
-    this.available[2] = new SoundRouterOption( "Star1", new String[] {"stars" } );
-    this.available[3] = new SoundRouterOption( "Star2", new String[] {"stars" } );
-    this.available[4] = new SoundRouterOption( "Star3", new String[] {"stars", "superstars" } );
-    
-    // vokály
-    this.available[5] = new SoundRouterOption( "Magic1", new String[] {"vocals","ending"} );
-    this.available[6] = new SoundRouterOption( "Magic2", new String[] {"vocals","ending"} );
-    
-    this.available[7] = new SoundRouterOption( "Drum", new String[] {"base"} );
-    this.available[8] = new SoundRouterOption( "Tin", new String[] {"lahoda"} );
-    
-  }
-  
-  Sound byName( String name_, PVector pos_ ){
-    Sound output = null;
-    
-    // pokud není žádný dostupný, nedělej nic
-    if (this.available.length==0 ) {
-      return null;
-    }
-    
-    // pokud je jen jeden dostupný, vrať robnou jej
-    else if (this.available.length == 1) {
-      String n = this.available[0].name;
-      output = this.createInstanceByName(n,pos_);
-    }
-    
-    // pokud je vícero dostupných, vrať jeden náhodný
-    else {
-      for (int i = 0; i < this.available.length;i++){
-         SoundRouterOption sndOpt = this.available[i];
-         if (sndOpt.name.equals(name_)){
-           
-           output = this.createInstanceByName(sndOpt.name,pos_);
-           
-         }
-      }
-    }
-    return output;
-  }
-  
-  Sound byTag(String tag_,PVector pos_){
-    Sound output = null;
-    
-    // vyfiltrovat options
-    ArrayList<SoundRouterOption> options = this.getOptionsByTag(tag_);
-    
-    if ( options.size()>0 ) {
-      int randomIndex = int(random( options.size()) );
-      output = this.byName( options.get(randomIndex).name , pos_);
-    }
-    
-    
-    return output;
-  }
-  
-  // vyffiltruje volby pouze podle tagů
-  ArrayList<SoundRouterOption> getOptionsByTag(String tag_){
-    
-    ArrayList<SoundRouterOption> options = new ArrayList<SoundRouterOption>();
-    
-    for (int i=0;i<this.available.length;i++){
-      SoundRouterOption opt = this.available[i];
-      if (opt.tags.length>0) {
-        for (int y=0; y<opt.tags.length; y++ ) {
-          String tag = opt.tags[y];
-          if (tag.equals(tag_)){
-            options.add(opt);
-          }
-        }
-      }
-    }
 
-    return options;
-  
-  }
-  
-  String[] soundNamesByTag(String tag_){
-    ArrayList<SoundRouterOption> opts = this.getOptionsByTag(tag_);
-    String output[] = new String[ opts.size() ];
-    
-    for (int i=0;i<opts.size();i++ ) {
-      output[i] = opts.get(i).name;
-    }
-    
-    return output;
-  }
-  
-  // Vytvoří instanci zvuku podle zadaného jména
-  // Zde je ten hlavní router
-  Sound createInstanceByName(String name_, PVector pos_) {
-    Sound output = null;
-    switch (name_){
-       case "Sine":
-         output = new Sine(pos_);
-         break;
-       case "Bell":
-         output = new Bell(pos_);
-         break;
-       case "Star1":
-         output = new Star1(pos_);
-         break;
-       case "Star2":
-         output = new Star2(pos_);
-         break;
-       case "Star3":
-         output = new Star3(pos_);
-         break;
-       case "Magic1":
-         output = new Magic1(pos_);
-         break;
-       case "Magic2":
-         output = new Magic2(pos_);
-         break;
-       case "Drum":
-         output = new Drum(pos_);
-         break;
-       case "Tin":
-         output = new Tin(pos_);
-         break;
-    }
-    
-    return output;
-  }
-
-}
-
-// třída pro zvuk do zásobníku zvuků
-class SoundRouterOption {
-  String name;
-  String[] tags;
-  
-  SoundRouterOption( String name_, String[] tags_ ){
-    this.name = name_;
-    this.tags = tags_;
-  }
-  
-}
 
 
 class Sound {
@@ -363,6 +212,7 @@ class Composition {
   boolean acceptsRandom; // pracuej kompozice s náhodnými zvuky?
   int randomAmount; // poměr mezi náhodným zvukem a lineárním zvukem
   String[] availableRandomSounds; // z jakých zvuků je možné náhodně stavit
+  SoundVariantContainer collisionSounds;
   
   // přepis glopbálních parametrů
   
@@ -384,9 +234,17 @@ class Composition {
   float collisionBlockAmount = 0.5; // aspect of the collision sound block in the range of 1 to N. the higher is, the bigger the block is.  
   float volumeAspect = 1;
   
+  // Limitery samplů
+  // Zvuk má až 3 skupiny limiterů, přičemž v každé kompozici je zvuk přiřazen k jednomu konkrétnímu limiteru.
+  // Limiter se týká samplů a jejich hodnot.
+  // Podmínky mohou manipulovat s hodnotami limiterů.
+  
   
   Composition(){
     this.conditions = new ArrayList<Condition>();
+    this.collisionSounds = new SoundVariantContainer();
+    
+
     
     this.baseLineSounds = new String[0];
     this.acceptsRandom = true;
@@ -435,8 +293,12 @@ class Composition {
   }
   
   // najdi další zvuk
+  // toto se musí přepsat, aby to vracelo zvuk v dané variantě
   Sound next_sound(PVector pos_){
-    Sound snd = null;
+    //Sound snd = null;
+    
+    return this.collisionSounds.produceSound(pos_);
+    /*
     if (this.acceptsRandom && int(random(100)) <= this.randomAmount ) {
       int rx = int( random(0, this.availableRandomSounds.length) );
       String className = this.availableRandomSounds[rx];
@@ -444,10 +306,11 @@ class Composition {
     } else {
       
     }
-    return snd;
+    */
+    // return snd;
   }
   
-  // vrať další zvuk
+  // vrať další zvuk základní linky
   Sound base_line_sound(){
     
     int rx = int( random(0, this.baseLineSounds.length) );
