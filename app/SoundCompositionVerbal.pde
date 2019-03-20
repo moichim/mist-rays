@@ -9,6 +9,7 @@ class VerbalComposition extends Composition {
     // Vždy je to náhodné
     this.acceptsRandom = true;
     this.randomAmount = 100; 
+    
     this.availableRandomSounds = router.soundNamesByTag("lahoda");
     
     this.collisionSounds.variants.add( new SoundVariant("Bam",50,0,3,1) );
@@ -36,17 +37,10 @@ class AcordInHalf extends Condition {
   boolean isTrue(){
     boolean v = false;
     
-    int prisCount = 0;
-    
-    for ( Particle p : s.particles ){
-      
-      if ( p.hasBehavior("Imprisonment") ) {
-        prisCount++;
+    if ( s.numFreeParticles >= s.numPrisonnersInitial/4 ){
+      if ( this.isProbable() ) {
+        v = true;
       }
-    
-    }
-    if ( prisCount <= s.numInitialParticles/4 && this.isProbable()){
-      v = true;
     }
     return v;
   }

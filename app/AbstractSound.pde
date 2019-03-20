@@ -416,7 +416,7 @@ class SoundScape {
         }
       }
       
-      this.baseLineAmplitude = map(prisCount,0,s.numInitialParticles,0, s.soundscape.composition.bellAmplitude );
+      this.baseLineAmplitude = map(prisCount,0,s.numPrisonnersInitial,0, s.soundscape.composition.bellAmplitude );
       prisCenter.x /= prisCount;
       prisCenter.y /= prisCount;
       this.baseLineCenter = prisCenter;

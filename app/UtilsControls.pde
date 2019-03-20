@@ -99,7 +99,7 @@ class GlobalControls extends ControlGroup {
         s = new CircularSystem();
       }
       if ( int(type) == 2 ) {
-        s = new SimpleSystem();
+        s = new SoundSystem();
       }
       if ( int(type) == 3 ) {
         s = new KinectSystem();
@@ -114,7 +114,7 @@ class GlobalControls extends ControlGroup {
   @Override
   public void listenKeyBoard( System sys ){ 
   
-    if (key == 'q') { s = new SimpleSystem(); }
+    if (key == 'q') { s = new SoundSystem(); }
     if (key == 'w') { s = new CircularSystem(); }
     if (key == 'e') { s = new KinectSystem(); }
     if (key == 'd') {
@@ -310,4 +310,29 @@ class KinectControls extends ControlGroup {
     
     // override this in a particular control
   }
+}
+
+
+// template for other classes
+class SoundControls extends ControlGroup {
+  SoundControls( System s ) {
+    super(s);
+  }
+  
+  @Override
+  public void listenOSC( System sys, OscMessage m ) { }
+  
+  @Override
+  public void listenKeyBoard( System sys ){
+    if (key == 'y') { Sound snd = new Guitar(new PVector(width/2,0)); snd.play(); }
+    if (key == 'x') { Sound snd = new Star(new PVector(width/2,0)); snd.play(); }
+    if (key == 'a') { Sound snd = new Acord(new PVector(width/2,0)); snd.play(); }
+    if (key == 't') { Sound snd = new Tin(new PVector(width/2,0)); snd.play(); }
+    if (key == 'b') { Sound snd = new Bim(new PVector(width/2,0)); snd.play(); }
+    if (key == 'B') { Sound snd = new Bam(new PVector(width/2,0)); snd.play(); }
+    if (key == 'c') { Sound snd = new Cin(new PVector(width/2,0)); snd.play(); }
+  }
+  
+  @Override
+  public void listenMouse( System sys ){ }
 }

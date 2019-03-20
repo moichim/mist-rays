@@ -1,16 +1,4 @@
-// prostinký systém pro debug
-class SimpleSystem extends System {
-  SimpleSystem(){
-    super();
-    for (int i = 0; i < 100; i++) {
-      Ray r = new Ray();
-      this.particles.add(r);
-    }
-    //this.controls.add( new KinectControls( this ) );
-  }
-  
-  
-}
+
 
 
 // systém pro lazení kinectu
@@ -30,6 +18,14 @@ class KinectSystem extends System {
  }
 
 
+}
+
+// systém pro lazení zvuku
+class SoundSystem extends System {
+  SoundSystem(){
+    super();
+    this.controls.add( new SoundControls( this ) );
+  }
 }
 
 
@@ -86,7 +82,7 @@ class CircularSystem extends System {
         this.particles.add(item);
         
         /* Zvýšit počítadlo prvotního počtu */
-        this.numInitialParticles++;
+        this.numPrisonnersInitial++;
         
       }
     }
@@ -131,13 +127,9 @@ class CircularSystem extends System {
            }
            
          }
-     
      } else {
        this.hasPrisons = false;
      }
    }
-   
-   
  }
-  
 }

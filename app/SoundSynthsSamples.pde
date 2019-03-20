@@ -12,22 +12,6 @@ class LahodaScale extends Sample {
     this.tone = this.chooseTone();
   }
   
-  /* S jedním parametrem zahraje konkrétní tón */
-  LahodaScale(PVector p_, int tone_){
-    super(p_);
-    this.defaultParameters(0,15);
-    this.tone = this.minTone + tone_;
-  }
-  
-  /* Se dvěma parametry zahraje zvuk z omezeného rozsahu */
-  LahodaScale(PVector p_, int minTone_, int maxTone_){
-    super(p_);
-    this.defaultParameters(0,15);
-    this.minTone = minTone_;
-    this.maxTone = maxTone_;
-    this.tone = this.chooseTone();
-  }
-  
   // tato metoda může být přepsána implementujícími třídami
   void defaultParameters(int baseBuffer_, int numTones_){
     this.synth = "/playbuf";
@@ -86,7 +70,7 @@ class Cin extends LahodaScale {
 
   Cin(PVector p_){
     super(p_);
-    this.defaultParameters(60,15);
+    this.defaultParameters(30,15);
     this.tone = this.chooseTone();
     this.buf = this.tone;
     this.setBlockingDuration(1);
@@ -97,7 +81,7 @@ class Lam extends LahodaScale {
 
   Lam(PVector p_){
     super(p_);
-    this.defaultParameters(30,15);
+    this.defaultParameters(60,15);
     this.tone = this.chooseTone();
     this.buf = this.tone;
     this.setBlockingDuration(1);

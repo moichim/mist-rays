@@ -1,6 +1,4 @@
 
-
-
 class Guitar extends LahodaScale {
   Guitar(PVector pos_){
     super(pos_);
@@ -31,7 +29,6 @@ class Star extends LahodaScale {
     this.defaultParameters(106,3);
     this.tone = this.chooseTone();
     this.buf = this.tone;
-    
   }
   
   @Override

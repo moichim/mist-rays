@@ -5,30 +5,26 @@ class SoundRouter {
   SoundRouter(){
     
     // zde se musí definovat počet dostupných zvuků
-    this.available = new SoundRouterOption[13];
+    this.available = new SoundRouterOption[11];
     
     // Nyní následují syntetické zvuky
     this.available[0] = new SoundRouterOption("Sine", new String[] {"sine", "default"} );
     this.available[1] = new SoundRouterOption( "Bell", new String[] {"sine", "default","base" } );
     
-    // vokály
-    this.available[2] = new SoundRouterOption( "Magic1", new String[] {"vocals","ending"} );
-    this.available[3] = new SoundRouterOption( "Magic2", new String[] {"vocals","ending"} );
-    
     // Nástroje
-    this.available[4] = new SoundRouterOption( "Drum", new String[] {"base"} );
-    this.available[5] = new SoundRouterOption( "Guitar", new String[] {"guitar"} );
-    this.available[6] = new SoundRouterOption( "Star", new String[] {"stars"} );
+    this.available[2] = new SoundRouterOption( "Drum", new String[] {"base"} );
+    this.available[3] = new SoundRouterOption( "Guitar", new String[] {"guitar"} );
+    this.available[4] = new SoundRouterOption( "Star", new String[] {"stars"} );
     
     // Lahodovic zvuky
-    this.available[7] = new SoundRouterOption( "Tin", new String[] {"lahoda"} );
-    this.available[8] = new SoundRouterOption( "Bim", new String[] {"lahoda"} );
-    this.available[9] = new SoundRouterOption( "Bam", new String[] {"lahoda"} );
-    this.available[10] = new SoundRouterOption( "Cin", new String[] {"lahoda"} );
-    this.available[11] = new SoundRouterOption( "Lam", new String[] {"lahoda"} );
+    this.available[5] = new SoundRouterOption( "Tin", new String[] {"lahoda"} );
+    this.available[6] = new SoundRouterOption( "Bim", new String[] {"lahoda"} );
+    this.available[7] = new SoundRouterOption( "Bam", new String[] {"lahoda"} );
+    this.available[8] = new SoundRouterOption( "Cin", new String[] {"lahoda"} );
+    this.available[9] = new SoundRouterOption( "Lam", new String[] {"lahoda"} );
     
     // Akord
-    this.available[12] = new SoundRouterOption("Acord", new String[] {"akord"});
+    this.available[10] = new SoundRouterOption("Acord", new String[] {"akord"});
     
   }
   
@@ -95,10 +91,13 @@ class SoundRouter {
   // vyffiltruje volby pouze podle tagů
   ArrayList<SoundRouterOption> getOptionsByTag(String tag_){
     
+    println(tag_);
+    
     ArrayList<SoundRouterOption> options = new ArrayList<SoundRouterOption>();
     
     for (int i=0;i<this.available.length;i++){
       SoundRouterOption opt = this.available[i];
+      println(opt);
       if (opt.tags.length>0) {
         for (int y=0; y<opt.tags.length; y++ ) {
           String tag = opt.tags[y];
@@ -134,12 +133,6 @@ class SoundRouter {
          break;
        case "Bell":
          output = new Bell(pos_);
-         break;
-       case "Magic1":
-         output = new Magic1(pos_);
-         break;
-       case "Magic2":
-         output = new Magic2(pos_);
          break;
        case "Drum":
          output = new Drum(pos_);
@@ -230,6 +223,15 @@ class SoundVariantContainer {
     return snd;
   }
   
+}
+
+// Tato věc definuje hodnoty varianty v čase, resp. v počtu dosud uvězněných vězňů
+class SoundVariantDynamics{
+  float moment; // poměr uvolněných bodů
+  int weight; // Momentální váha
+  int min;
+  int max;
+  int reverbVariant;
 }
 
 // Tato věc je udána přímo u kompozice.

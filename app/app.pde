@@ -28,8 +28,8 @@ PVector paddingMin = new PVector(40,50); // initial value that serves for calcul
 float speedAspect = 0.5;
 
 // Settings of circular movement
-float circularGridBoxSize = 122.8;
-float circularGridRayRadius = 40;
+float circularGridBoxSize = 120;// 122.8; // 122.8 je původní hodnota z DEPA
+float circularGridRayRadius = 40;// 40; // 40 je původní hodnota z DEPA
 
 // settings for circular sound
 float bellAmplitude_ = 1;
@@ -75,7 +75,7 @@ void setup(){
   router = new SoundRouter();
   
   // the system itself
-  s = new KinectSystem();
+  s = new SoundSystem();
 
 }
 

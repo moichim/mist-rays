@@ -82,7 +82,7 @@ class Prisonner extends Particle {
     super();
     
     this.vel = 1;
-    this.col = color(255);
+    this.col = color(100);
     this.radius = 1; // circularGridRayRadius;
     this.box = box_;
     
@@ -105,10 +105,15 @@ class Prisonner extends Particle {
   public void release(){
     
     if ( this.hasBehavior("Imprisonment") ) {
+      
+      // uvolní závislost
       Behavior b = this.getBehavior("Imprisonment");
       Imprisonment i = (Imprisonment) b;
       i.setFree();
       this.free = true;
+      
+      // zvyš počet volných částic
+      s.numFreeParticles++;
     }
     
   }
