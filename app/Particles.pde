@@ -10,6 +10,7 @@ class Ray extends Particle {
     this.pos = new PVector(random(width),random(height));
     this.dir = new PVector(random(-1,1),random(-1,1)).normalize();
     this.vel = random(0.5,2);
+    this.free = false;
     
     // pomucka
     
@@ -41,6 +42,7 @@ class Rocket extends Particle {
     
     this.radius = 15;
     this.col = color(255);
+    this.free = false;
     
     this.addBehavior( new FadeOut( this.id,  (int) duration ) );
     //this.addBehavior( new AdjustVelocity( this.id, 3, (float) 0.2 ) );
@@ -61,6 +63,8 @@ class Collider extends Particle {
     this.radius = r;
     this.vel = 0;
     this.col = color(0,255,0);
+    // 
+    this.free = false;
     
     // add behaviors
     this.addBehavior( new KinectCollider( this.id ) );
@@ -113,7 +117,7 @@ class Prisonner extends Particle {
       this.free = true;
       
       // zvyš počet volných částic
-      s.numFreeParticles++;
+      // s.numFreeParticles++;
     }
     
   }

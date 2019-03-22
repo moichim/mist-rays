@@ -5,7 +5,7 @@ class SoundRouter {
   SoundRouter(){
     
     // zde se musí definovat počet dostupných zvuků
-    this.available = new SoundRouterOption[11];
+    this.available = new SoundRouterOption[12];
     
     // Nyní následují syntetické zvuky
     this.available[0] = new SoundRouterOption("Sine", new String[] {"sine", "default"} );
@@ -22,9 +22,10 @@ class SoundRouter {
     this.available[7] = new SoundRouterOption( "Bam", new String[] {"lahoda"} );
     this.available[8] = new SoundRouterOption( "Cin", new String[] {"lahoda"} );
     this.available[9] = new SoundRouterOption( "Lam", new String[] {"lahoda"} );
+    this.available[10] = new SoundRouterOption( "La", new String[] {"lahoda"} );
     
     // Akord
-    this.available[10] = new SoundRouterOption("Acord", new String[] {"akord"});
+    this.available[11] = new SoundRouterOption("Acord", new String[] {"akord"});
     
   }
   
@@ -91,13 +92,10 @@ class SoundRouter {
   // vyffiltruje volby pouze podle tagů
   ArrayList<SoundRouterOption> getOptionsByTag(String tag_){
     
-    println(tag_);
-    
     ArrayList<SoundRouterOption> options = new ArrayList<SoundRouterOption>();
     
     for (int i=0;i<this.available.length;i++){
       SoundRouterOption opt = this.available[i];
-      println(opt);
       if (opt.tags.length>0) {
         for (int y=0; y<opt.tags.length; y++ ) {
           String tag = opt.tags[y];
@@ -162,7 +160,6 @@ class SoundRouter {
          output = new Acord(pos_);
          break;
     }
-    
     return output;
   }
 
@@ -190,7 +187,7 @@ class SoundVariantContainer {
   // vyber jednu variantu
   SoundVariant chooseVariant(){
     SoundVariant sndV = null;
-    if (this.variants.size()>1) {
+    if (this.variants.size()>0) {
       
       // nejprve spočítat celkovou váhu
       int weightTotal = 0;
@@ -206,32 +203,113 @@ class SoundVariantContainer {
       for ( SoundVariant sv : this.variants ) {
         containerMin = containerMax;
         containerMax += sv.weight;
-        
         if ( !match && chosen >= containerMin && chosen <= containerMax ) {
           match = true;
           sndV = sv;
         }
-        
       }
-      
     }
     return sndV;
   }
   
   Sound produceSound(PVector pos_){
-    Sound snd = this.chooseVariant().produceSound(pos_);
-    return snd;
+    
+    SoundVariant var = this.chooseVariant();
+    if ( var != null ) {
+     return var.produceSound(pos_);
+    }
+    return null;
   }
   
 }
 
-// Tato věc definuje hodnoty varianty v čase, resp. v počtu dosud uvězněných vězňů
-class SoundVariantDynamics{
-  float moment; // poměr uvolněných bodů
-  int weight; // Momentální váha
-  int min;
-  int max;
-  int reverbVariant;
+
+class State {
+  int min,max,reverbVariant, weight;
+  float moment;
+  State( float mom_, int weight_, int min_, int max_, int reverb_ ){
+    this.moment = mom_;
+    this.min = min_;
+    this.max = max_;
+    this.weight = weight_;
+    this.reverbVariant = reverb_;
+  }
+}
+
+class Trigger {
+  ArrayList<State> states;
+  
+  Trigger(){
+    this.common();
+  }
+  
+  Trigger(float mom1, int w1, int min1, int max1, int reverb1){
+    this.common();
+    State s1 = new State(mom1, w1, min1, max1, reverb1);
+    this.states.add(s1);
+  }
+  
+  Trigger(float mom1, int w1, int min1, int max1, int reverb1, float mom2, int w2, int min2, int max2, int reverb2){
+    this.common();
+    State s1 = new State(mom1, w1, min1, max1, reverb1);
+    State s2 = new State(mom2, w2, min2, max2, reverb2);
+    this.states.add(s1);
+    this.states.add(s2);
+  }
+  
+  Trigger(float mom1, int w1, int min1, int max1, int reverb1, float mom2, int w2, int min2, int max2, int reverb2, float mom3, int w3, int min3, int max3, int reverb3){
+    this.common();
+    State s1 = new State( mom1, w1, min1, max1, reverb1 );
+    State s2 = new State( mom2, w2, min2, max2, reverb2 );
+    State s3 = new State( mom3, w3, min3, max3, reverb3 );
+    this.states.add(s1);
+    this.states.add(s2);
+    this.states.add(s3);
+  }
+  
+  private void common(){
+    this.states = new ArrayList<State>();
+  }
+  
+  public boolean is(){
+    boolean o = false;
+    if( this.states.size() > 0 ){
+      o = true;
+    }
+    return o;
+  }
+}
+
+// Funkce spouštějící triggery ve zjednodušeném režimu
+ArrayList<Trigger> trigger_none() {
+  return new ArrayList<Trigger>();
+}
+
+ArrayList<Trigger> trigger_one(float mom1, int w1, int min1, int max1, int reverb1){
+  ArrayList<Trigger> states = new ArrayList<Trigger>();
+  Trigger tr = new Trigger(mom1, w1, min1, max1, reverb1);
+  states.add( tr );
+  return states;
+}
+
+ArrayList<Trigger> trigger_two(float mom1, int w1, int min1, int max1, int reverb1, float mom2, int w2, int min2, int max2, int reverb2){
+  ArrayList<Trigger> states = new ArrayList<Trigger>();
+  Trigger tr1 = new Trigger(mom1, w1, min1, max1, reverb1);
+  states.add( tr1 );
+  Trigger tr2 = new Trigger(mom2, w2, min2, max2, reverb2);
+  states.add( tr2 );
+  return states;
+}
+
+ArrayList<Trigger> trigger_three(float mom1, int w1, int min1, int max1, int reverb1, float mom2, int w2, int min2, int max2, int reverb2, float mom3, int w3, int min3, int max3, int reverb3){
+  ArrayList<Trigger> states = new ArrayList<Trigger>();
+  Trigger tr1 = new Trigger(mom1, w1, min1, max1, reverb1);
+  states.add( tr1 );
+  Trigger tr2 = new Trigger(mom2, w2, min2, max2, reverb2);
+  states.add( tr2 );
+  Trigger tr3 = new Trigger(mom3, w3, min3, max3, reverb3);
+  states.add( tr3 );
+  return states;
 }
 
 // Tato věc je udána přímo u kompozice.
@@ -242,32 +320,33 @@ class SoundVariant {
   int weight;
   int min,max;
   int reverbVariant; // varianta reverbu
+  ArrayList<Trigger> triggers;
   
   // Konstruktor používající komplexní query
-  SoundVariant(String[] t_, String[] ta_, String[] tn_, int w_, int min_, int max_, int r_){
+  SoundVariant(String[] t_, String[] ta_, String[] tn_, int w_, int min_, int max_, int r_, ArrayList<Trigger> tr_){
     this.name = null;
     this.tags = t_;
     this.tagsAnd = ta_;
     this.tagsNot = tn_;
-    this.defaultSettings(w_, min_, max_, r_);
+    this.defaultSettings(w_, min_, max_, r_, tr_);
   }
   
   // Konstruktor používající jendo jediné jméno
-  SoundVariant(String n_, int w_, int min_, int max_, int r_){
+  SoundVariant(String n_, int w_, int min_, int max_, int r_, ArrayList<Trigger> tr_){
     this.name = n_;
-    this.defaultSettings(w_, min_, max_, r_);
+    this.defaultSettings(w_, min_, max_, r_, tr_);
   }
   
-  private void defaultSettings(int w_,int min_, int max_, int r_){
+  private void defaultSettings(int w_,int min_, int max_, int r_, ArrayList<Trigger> tr_){
     this.weight = w_;
     this.min = min_;
     this.max = max_;
     this.reverbVariant = r_;
+    this.triggers = tr_;
   }
   
   // Vybere jeden zvuk z možných zvuků a vrátí jeho jméno
   String chooseSoundName(){
-    println("Vybrano");
     String output = null;
     // pokud je vyplněné jméno, vezmi jej
     if ( this.name != null ) {
@@ -284,21 +363,41 @@ class SoundVariant {
   }
   
   Sound produceSound(PVector pos_){
-    println("Dotakl jsem až sem");
     Sound snd = null;
     
     String chosen = this.chooseSoundName();
-    println("Vybrano "+chosen);
     if ( chosen != null ) {
       snd = router.createInstanceByName( chosen, pos_ );
       // pokud se jedná o podtřídu LahodaSample, uprav její tón podle limitů
+      
       if ( snd.getClass().getSuperclass().getSimpleName().equals("LahodaScale") ) {
-        //( (LahodaScale) snd).chooseTone( this.min, this.max );
+        ( (LahodaScale) snd ).tone = ( (LahodaScale) snd ).chooseTone( this.min, this.max );
       }
       
       // pokud se jedná o něco jiného, udělej něco jiného
     }
     
     return snd;
+  }
+  
+  public void update(){
+    
+    if (this.triggers.size()>0) {
+      for (Trigger t : this.triggers){
+        if (t.is()){
+          State st = t.states.get(0);
+          
+          // pokud je splněna podmínka, aplikuj stav a odstraň jej jednou pro vždy
+          if ( s.numFreeParticles > int(st.moment * s.numPrisonnersInitial) ) {
+            this.min = st.min;
+            this.max = st.max;
+            this.weight = st.weight;
+            this.reverbVariant = st.reverbVariant;
+            t.states.remove(0);
+          }
+          
+        }
+      }
+    }
   }
 }

@@ -9,7 +9,7 @@ class LahodaScale extends Sample {
   LahodaScale(PVector p_){
     super(p_);
     this.defaultParameters(90,15);
-    this.tone = this.chooseTone();
+    // this.tone = this.chooseTone();
   }
   
   // tato metoda může být přepsána implementujícími třídami
@@ -23,12 +23,26 @@ class LahodaScale extends Sample {
     // this.setRate(1);
   }
   
+  @Override
+  void send(){
+    OscMessage msg = new OscMessage(this.synth);
+    msg.add( this.tone ); // bufnum samplu
+    msg.add( this.amp ); // amplituda
+    msg.add( this.ratio ); // rychlost přehrávání
+    msg.add( this.pan.x ); // pan X
+    msg.add( this.pan.y ); // pan Y
+    //println( this.buf );
+    oscP5.send( msg, superCollider );
+  }
+  
   int chooseTone(){
     return int(random(this.minTone,this.maxTone));
   }
   
   int chooseTone(int min_,int max_){
-    return int(random(this.baseBuffer + min_,this.baseBuffer + max_));
+    int tone = (int) random( min_, max_ );
+    println( "Volím " + tone );
+    return this.baseBuffer + tone;
   }
   
 }
@@ -81,6 +95,17 @@ class Lam extends LahodaScale {
 
   Lam(PVector p_){
     super(p_);
+    this.defaultParameters(75,15);
+    this.tone = this.chooseTone();
+    this.buf = this.tone;
+    this.setBlockingDuration(1);
+  }
+}
+
+class La extends LahodaScale {
+
+  La(PVector p_){
+    super(p_);
     this.defaultParameters(60,15);
     this.tone = this.chooseTone();
     this.buf = this.tone;
@@ -96,6 +121,8 @@ class Acord extends LahodaScale {
     this.setAmplitude(0.5);
     this.tone = this.chooseTone();
     this.buf = this.tone;
+    this.blocksVolume = false;
+    this.blocksTime = false;
     this.setBlockingDuration(15);
   }
   
@@ -106,5 +133,7 @@ class Acord extends LahodaScale {
     this.tone = 110+track;//this.chooseTone();
     this.buf = this.tone;
     this.setBlockingDuration(15);
+    this.blocksVolume = false;
+    this.blocksTime = false;
   }
 }

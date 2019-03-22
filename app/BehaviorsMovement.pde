@@ -48,7 +48,10 @@ class RecieveCollisions extends Behavior {
         // cs.ring( p );
         
         Sound snd = s.soundscape.get_next_sound( this.parentParticle.pos );
-        snd.play();
+        if ( snd != null ) {
+          snd.play();
+        }
+        
         if (debug) {
           pushMatrix();
           PVector opposite = oppositePosition(p.pos);
@@ -80,6 +83,8 @@ class RecieveCollisions extends Behavior {
     if ( this.sinceLastCollision >= 0) { this.sinceLastCollision++; }
     
     
+    
+    
     /* Nový kód */
     if ( this.fullyLoaded ){
       
@@ -92,8 +97,13 @@ class RecieveCollisions extends Behavior {
           float distance = PVector.dist(this.parentParticle.pos, p.pos);
           if ( distance <= ( this.parentParticle.radius/2 + p.radius/2 ) + s.soundscape.composition.collisionPrecision && p != this.parentParticle && this.sinceLastCollision > 3) {
             
-            // println(frameCount + " Distance: " + distance + " Součet průměrů " + this.parentParticle.radius/2 + p.radius/2 );
             this.sinceLastCollision = 0;
+            
+            
+            if ( this.parentParticle.hasBehavior("Imprisonment") ) {
+              Prisonner pris = (Prisonner) this.parentParticle;
+              pris.release();
+            }
             
             
             /* Protějšek je kinect */

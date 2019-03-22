@@ -87,6 +87,8 @@ class CircularSystem extends System {
       }
     }
     
+    this.numParticles = this.numPrisonnersInitial;
+    
   }
  
  @Override

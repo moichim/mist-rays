@@ -5,6 +5,7 @@ class System {
   SoundScape soundscape;
   int numPrisonnersInitial;
   int numFreeParticles;
+  int numParticles;
   
   System() {
     this.particles = new ArrayList<Particle>();
@@ -14,6 +15,7 @@ class System {
     this.soundscape = new SoundScape();
     this.numPrisonnersInitial = 0;
     this.numFreeParticles = 0;
+    this.numParticles = 0;
   }
   
   public void update(){

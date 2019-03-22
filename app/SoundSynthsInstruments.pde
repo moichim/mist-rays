@@ -1,9 +1,8 @@
-
 class Guitar extends LahodaScale {
   Guitar(PVector pos_){
     super(pos_);
     this.defaultParameters(109,1);
-    //this.baseBuffer = 109;
+    this.baseBuffer = 109;
     this.buf = this.baseBuffer;
   }
   
@@ -23,7 +22,7 @@ class Guitar extends LahodaScale {
 
 
 class Star extends LahodaScale {
-
+  
   Star(PVector p_){
     super(p_);
     this.defaultParameters(106,3);
@@ -38,4 +37,5 @@ class Star extends LahodaScale {
     this.setBlockingDuration(dur);
     this.setRate(dur);
   }
+  
 }

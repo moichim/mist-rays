@@ -155,7 +155,6 @@ class Destiny {
   public boolean isOnPoint(PVector pos,float tolerance){
     boolean o = false;
     float distance = PVector.dist(pos, this.currentTargetCoordinates());
-    // println(distance);
     if ( distance <= tolerance) {
       o = true;
     }

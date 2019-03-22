@@ -54,8 +54,6 @@ class GlobalControls extends ControlGroup {
   
   @Override
   public void listenOSC( System sys, OscMessage m ) {
-  
-    println(m);
     
     // the scale of the canvas
     if (m.addrPattern().equals("/paddingX")) {
@@ -94,7 +92,6 @@ class GlobalControls extends ControlGroup {
     if (m.addrPattern().equals("/mode")) {
       
       float type = m.get(0).floatValue();
-      println(type);
       if ( int(type) == 1 ) {
         s = new CircularSystem();
       }
@@ -105,10 +102,6 @@ class GlobalControls extends ControlGroup {
         s = new KinectSystem();
       }
     }
-    
-    
-    
-    
   }
   
   @Override
@@ -202,8 +195,6 @@ class KinectControls extends ControlGroup {
   @Override
   public void listenOSC( System sys, OscMessage m ) {
     
-    println(m);
-    
     // the scale of the kinnect
     if (m.addrPattern().equals("/kinectScale")) {
       k.scale = m.get(0).floatValue();
@@ -230,9 +221,6 @@ class KinectControls extends ControlGroup {
     // the kinect image position devilation
     if (m.addrPattern().equals("/kinectDeviation")) {
       
-      println(m.get(0).floatValue());
-      println(m.get(1).floatValue());
-      
       k.deviation.x = m.get(0).floatValue();  
       k.deviation.y = m.get(1).floatValue();
       //k.updateDimensions();
@@ -241,8 +229,6 @@ class KinectControls extends ControlGroup {
     
     // the kinect image crop
     if ( m.addrPattern().equals("/kinectCrop") ) {
-      println(m.get(2).floatValue());
-      println(m.get(3).floatValue());
       
       float tlX = m.get(0).floatValue();
       float tlY = m.get(1).floatValue();
@@ -331,6 +317,8 @@ class SoundControls extends ControlGroup {
     if (key == 'b') { Sound snd = new Bim(new PVector(width/2,0)); snd.play(); }
     if (key == 'B') { Sound snd = new Bam(new PVector(width/2,0)); snd.play(); }
     if (key == 'c') { Sound snd = new Cin(new PVector(width/2,0)); snd.play(); }
+    if (key == 'l') { Sound snd = new La(new PVector(width/2,0)); snd.play(); }
+    if (key == 'L') { Sound snd = new Lam(new PVector(width/2,0)); snd.play(); }
   }
   
   @Override

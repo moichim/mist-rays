@@ -87,7 +87,6 @@ class DisplayExplode extends Behavior {
     popMatrix(); 
     if (this.fullyLoaded) {
       if ( this.rockets.size()>0 ) {
-        println("Raketaaa!");
         for (Rocket r : this.rockets) {
           //r.update();
         }

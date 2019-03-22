@@ -243,14 +243,11 @@ class Composition {
   Composition(){
     this.conditions = new ArrayList<Condition>();
     this.collisionSounds = new SoundVariantContainer();
-    
 
-    
     this.baseLineSounds = new String[0];
     this.acceptsRandom = true;
     this.availableRandomSounds = new String[0];
     this.randomAmount = 50;
-    
     
     // inicializace globálních parametrů
     
@@ -295,19 +292,14 @@ class Composition {
   // najdi další zvuk
   // toto se musí přepsat, aby to vracelo zvuk v dané variantě
   Sound next_sound(PVector pos_){
-    //Sound snd = null;
     
-    return this.collisionSounds.produceSound(pos_);
-    /*
-    if (this.acceptsRandom && int(random(100)) <= this.randomAmount ) {
-      int rx = int( random(0, this.availableRandomSounds.length) );
-      String className = this.availableRandomSounds[rx];
-      snd = router.byName(className,pos_);
-    } else {
-      
+    Sound snd = this.collisionSounds.produceSound(pos_);
+    if ( snd.getClass().getSuperclass().getSimpleName().equals("LahodaScale") ) {
+      println("___ Opravdu se hraje toto: " + ( (LahodaScale) snd ).ratio  );
     }
-    */
-    // return snd;
+    
+    return snd;
+
   }
   
   // vrať další zvuk základní linky
@@ -369,6 +361,17 @@ class SoundScape {
   
   // Zkontroluje podmínky a kdyžtak je spustí
   void update(){
+    
+    // projeď všechny varianty zvuků a zaktualizuj je
+    if ( frameCount % 10 == 0 ) {
+      if (this.composition.collisionSounds.variants.size() > 0) {
+      
+        for (SoundVariant sv : this.composition.collisionSounds.variants ) {
+          sv.update();
+        }
+        
+      }
+    }
     
     // zkontroluje podmínky
     this.composition.resolveConditions();
@@ -492,14 +495,13 @@ class SoundScape {
     float blockedH = map(this.currentVolume,0,1,0,hMax);
     rect(0,0,gutter,blockedH);
     
-    
     translate(gutter,-gutter*2);
     text("Aktuálně hraje: " + String.valueOf(this.playing.size()), 0, 0);
     noFill();
     popMatrix();
     
-    // println(this.playing.size());
     
+    // println(this.playing.size());
     
     // následně vykreslí bšechny hrající zvuky
     if (this.playing.size()>0) {

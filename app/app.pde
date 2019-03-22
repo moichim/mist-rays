@@ -89,8 +89,27 @@ void draw(){
   background(c.bg);
   
   
+  // pravidelný zpožděný update
   if (frameCount % 5 == 0) {
     k.update();
+    s.numFreeParticles = 1;
+    s.numParticles = 0;
+    int numPrisonners = 0;
+    if (s.particles.size() > 0) {
+      for (Particle p : s.particles) {
+        if ( p.hasBehavior("Imprisonment") ) {
+          numPrisonners++;
+        }
+        if( p.getClass().getSimpleName().equals("Prisonner")) {
+        s.numParticles++;
+        }
+      }
+    }
+    s.numFreeParticles = s.numPrisonnersInitial - numPrisonners;
+    println( s.numFreeParticles );
+    fill(255);
+    text( String.valueOf(s.numFreeParticles), width - 40, height - 60 );
+    noFill();
   }
   
   s.update();
@@ -106,11 +125,6 @@ void draw(){
     fill(255);
     text("FR: " + String.valueOf(frameRate),10,20);
     noFill();
-  }
-  if (frameCount % 60 == 0) {
-    println("kinectCropTL: [" + kinectCropTL.x + ", " + kinectCropTL.y + "]");
-    println("kinectCropBR: [" + kinectCropBR.x + ", " + kinectCropBR.y + "]");
-    println("kinectdeviation: [" + kinectDeviation.x + ", " + kinectDeviation.y + "]");
   }
   
 }
