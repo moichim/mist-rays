@@ -1,9 +1,10 @@
 class Guitar extends LahodaScale {
   Guitar(PVector pos_){
     super(pos_);
-    this.defaultParameters(109,1);
-    this.baseBuffer = 109;
-    this.buf = this.baseBuffer;
+    this.defaultParameters(110,1);
+    this.baseBuffer = 110;
+    this.tone = 110;
+    this.buf = 110;//this.baseBuffer;
   }
   
   @Override

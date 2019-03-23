@@ -21,8 +21,46 @@ s.options.numInputBusChannels;
 (
 
 //
-// Prvnotní nastavení
+// Syntetizítory
 //
+
+// Čistá sinusovka
+SynthDef.new(\sine, {
+	|freq=440,atk=0.005,rel=0.5, amp=1,pan=0, out=0|
+	var sig,env;
+	sig = SinOsc.ar(freq);
+	env = EnvGen.kr(Env.new(
+		[0,1,0],
+		[atk,rel],
+		[1,-1]
+	), doneAction:2);
+	sig = Pan2.ar(sig,pan,amp);
+	sig = sig * env;
+	Out.ar(out,sig);
+}).add;
+
+// Přehrání bufferu
+SynthDef.new(
+	\playbuf, {
+		arg amp=1,pan=0,out=0,buf,rate=1, envTime=0, envStart=0.1;
+		var sig, env;
+		sig = PlayBuf.ar(1,buf, BufRateScale.kr(buf) * rate,doneAction:2);
+		env = EnvGen.kr(Env.new([0,envTimeAtk, envTimeRel, envTimeEnd ],[envStart, 1, 1, envEnd]));
+
+		sig = Pan2.ar(sig,pan);
+		sig = sig * amp;
+		Out.ar( out, sig );
+	}
+).add;
+
+// Reverb
+SynthDef.new(\reverb,{
+	arg in, out=0, mix=0.5,room=0.5,damp=0.5,mul=0.5;
+	var sig;
+	sig = In.ar(in,2);
+	sig = FreeVerb.ar(sig, mix:mix,room:room,damp:damp,mul:mul);
+	Out.ar(out,sig);
+}).add;
 
 
 //
@@ -89,18 +127,20 @@ j = Synth.new(\reverb,[
 	\in,~reverbBusMedium.index,
 	\room, 0.9,
 	\mix, 0.6,
-	\damp, 0.9,
+	\damp, 0.3,
 	\mul, 1.5
 ],~effects);
 k = Synth.new(\reverb,[
 	\in,~reverbBusHeavy.index,
 	\room, 1,
 	\mix, 0.5,
-	\damp, 0.9,
+	\damp, 0.3,
 	\mul, 2
 ],~effects);
 
 )
+
+s.freeAll;
 
 // Nastavovací metody reverbu
 j.set(\room,0.9,\damp,0.5,\mix,0.6,\mul,1.7);
@@ -110,12 +150,12 @@ j.free;
 // Testy
 x = Synth.new(\sine,[\freq,600,\rel,1, \out,~reverbBusMedium],~sounds);
 x = Synth.new(\sine,[\freq,600,\rel,1]);
-x = Synth.new(\playbuf,[\out,~reverbBusLight,\buf,150,\rate,1.5],~sounds);
+x = Synth.new(\playbuf,[\out,~reverbBusHeavy,\buf,106,\rate,1],~sounds);
 
 (
 d = Pdef.new(\test,Pbind.new(
 	\instrument, \playbuf,
-	\buf, 15 + Pxrand([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],inf),
+	\buf, 106 + Pxrand([0,1,2],inf),
 	\dur, Pwhite(0.1,0.5,inf),
 	\pan, Pwhite(-1,1,inf),
 	\out, ~reverbBusMedium,

@@ -310,13 +310,18 @@ class SoundControls extends ControlGroup {
   
   @Override
   public void listenKeyBoard( System sys ){
-    if (key == 'y') { Sound snd = new Guitar(new PVector(width/2,0)); snd.play(); }
+    if (key == 's') { Sound snd = new Star(new PVector(width/2,0)); snd.play(); }
     if (key == 'x') { Sound snd = new Star(new PVector(width/2,0)); snd.play(); }
-    if (key == 'a') { Sound snd = new Acord(new PVector(width/2,0)); snd.play(); }
+    if (key == 'a') { Sound snd = new Acord(new PVector(width/2,0), 0); snd.play(); }
+    if (key == 'A') { Sound snd = new Acord(new PVector(width/2,0), 1); snd.play(); }
+    if (key == 'y') { Sound snd = new Acord(new PVector(width/2,0), 2); snd.play(); }
+    if (key == 'Y') { Sound snd = new Acord(new PVector(width/2,0), 3, 3, 0); snd.play(); }
+    if (key == 'g') { Sound snd = new Guitar(new PVector(width/2,0)); snd.play(); }
     if (key == 't') { Sound snd = new Tin(new PVector(width/2,0)); snd.play(); }
     if (key == 'b') { Sound snd = new Bim(new PVector(width/2,0)); snd.play(); }
     if (key == 'B') { Sound snd = new Bam(new PVector(width/2,0)); snd.play(); }
     if (key == 'c') { Sound snd = new Cin(new PVector(width/2,0)); snd.play(); }
+    if (key == 'C') { Sound snd = new CinLong(new PVector(width/2,0)); snd.play(); }
     if (key == 'l') { Sound snd = new La(new PVector(width/2,0)); snd.play(); }
     if (key == 'L') { Sound snd = new Lam(new PVector(width/2,0)); snd.play(); }
   }

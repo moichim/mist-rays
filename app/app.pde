@@ -63,8 +63,8 @@ KinectSignal k;
 void setup(){
   
   // size(1920,1080);
-  fullScreen();
-  // size(800,800);
+  // fullScreen();
+  size(800,800);
   
   // initialize global variables
   app = this;

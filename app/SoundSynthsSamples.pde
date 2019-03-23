@@ -30,7 +30,8 @@ class LahodaScale extends Sample {
     msg.add( this.amp ); // amplituda
     msg.add( this.ratio ); // rychlost přehrávání
     msg.add( this.pan.x ); // pan X
-    msg.add( this.pan.y ); // pan Y
+    msg.add( 0 ); // timeAtk
+    msg.add( 1 ); // ampAtk
     //println( this.buf );
     oscP5.send( msg, superCollider );
   }
@@ -47,16 +48,8 @@ class LahodaScale extends Sample {
   
 }
 
-class Tin extends LahodaScale {
 
-  Tin(PVector p_){
-    super(p_);
-    this.defaultParameters(90,15);
-    this.tone = this.chooseTone();
-    this.buf = this.tone;
-    this.setBlockingDuration(1);
-  }
-}
+
 
 class Bim extends LahodaScale {
 
@@ -84,18 +77,18 @@ class Cin extends LahodaScale {
 
   Cin(PVector p_){
     super(p_);
-    this.defaultParameters(30,15);
+    this.defaultParameters(45,15);
     this.tone = this.chooseTone();
     this.buf = this.tone;
     this.setBlockingDuration(1);
   }
 }
 
-class Lam extends LahodaScale {
+class CinLong extends LahodaScale {
 
-  Lam(PVector p_){
+  CinLong(PVector p_){
     super(p_);
-    this.defaultParameters(75,15);
+    this.defaultParameters(30,15);
     this.tone = this.chooseTone();
     this.buf = this.tone;
     this.setBlockingDuration(1);
@@ -113,27 +106,24 @@ class La extends LahodaScale {
   }
 }
 
-class Acord extends LahodaScale {
+class Lam extends LahodaScale {
 
-  Acord(PVector p_){
+  Lam(PVector p_){
     super(p_);
-    this.defaultParameters(110,4);
-    this.setAmplitude(0.5);
+    this.defaultParameters(75,15);
     this.tone = this.chooseTone();
     this.buf = this.tone;
-    this.blocksVolume = false;
-    this.blocksTime = false;
-    this.setBlockingDuration(15);
+    this.setBlockingDuration(1);
   }
-  
-  Acord(PVector p_, int track){
+}
+
+class Tin extends LahodaScale {
+
+  Tin(PVector p_){
     super(p_);
-    this.defaultParameters(110,4);
-    this.setAmplitude(0.5);
-    this.tone = 110+track;//this.chooseTone();
+    this.defaultParameters(90,15);
+    this.tone = this.chooseTone();
     this.buf = this.tone;
-    this.setBlockingDuration(15);
-    this.blocksVolume = false;
-    this.blocksTime = false;
+    this.setBlockingDuration(1);
   }
 }
