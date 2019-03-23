@@ -16,6 +16,7 @@ s.options.numAudioBusChannels;
 s.options.numOutputBusChannels;
 s.options.numInputBusChannels;
 
+ceil(~buffers[0].duration).asInteger;
 
 // Načtení bufferů
 (
@@ -42,12 +43,13 @@ SynthDef.new(\sine, {
 // Přehrání bufferu
 SynthDef.new(
 	\playbuf, {
-		arg amp=1,pan=0,out=0,buf,rate=1, envTime=0, envStart=0.1;
-		var sig, env;
-		sig = PlayBuf.ar(1,buf, BufRateScale.kr(buf) * rate,doneAction:2);
-		env = EnvGen.kr(Env.new([0,envTimeAtk, envTimeRel, envTimeEnd ],[envStart, 1, 1, envEnd]));
+		arg amp=1,pan=0,out=0,buf,rate=1, envTimeAtk=0, envTimeRel=1.0, envAtk=1,envStart=1.0, envMiddle=1.0, envEnd=1.0;
+		var sig, env, dur;
+		sig = PlayBuf.ar(1,buf, BufRateScale.kr(buf) * rate, doneAction:2);
+		dur = BufDur.kr(buf);
+		env = EnvGen.kr(Env.new([envAtk, envStart, envMiddle, envEnd], [envTimeAtk, envTimeRel, dur - envTimeAtk - envTimeRel]) );
 
-		sig = Pan2.ar(sig,pan);
+		sig = Pan2.ar(sig,pan) * env;
 		sig = sig * amp;
 		Out.ar( out, sig );
 	}
@@ -150,7 +152,11 @@ j.free;
 // Testy
 x = Synth.new(\sine,[\freq,600,\rel,1, \out,~reverbBusMedium],~sounds);
 x = Synth.new(\sine,[\freq,600,\rel,1]);
-x = Synth.new(\playbuf,[\out,~reverbBusHeavy,\buf,106,\rate,1],~sounds);
+
+Env.new.plot;
+
+Env.new([0, 1, 1, 0], [1, 1, 2], 'sine').plot;
+x = Synth.new(\playbuf,[\out,~reverbBusMedium,\buf,114,\rate,1, \envAtk, 0, \envEnd, 0.5, \envTimeAtk, 3,\envTimeRel, 3 ],~sounds);
 
 (
 d = Pdef.new(\test,Pbind.new(

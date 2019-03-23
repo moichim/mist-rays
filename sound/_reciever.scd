@@ -28,7 +28,7 @@ f = {
 		&& ( msg[0]  != '/localhostInLevels' )
 		&& ( msg[0] != '/localhostOutLevels' )
 	) {
-		// "time: % sender: %\nmessage: %\n".postf(time,addr,msg);
+		"time: % sender: %\nmessage: %\n".postf(time,addr,msg);
 
 		// Příchozí zvuk zvonu
 		if (msg[0]=='/bell') {
@@ -46,7 +46,7 @@ f = {
 		};
 		// Příchozí zvuk samplovaný
 		if (msg[0]=='/playbuf') {
-			d = Synth.new(\playbuf, [\buf, msg[1], \amp, msg[2], \rate, msg[3], \pan, msg[4],\out,~reverbBusMedium], \envTimeAtk, msg[5],\envAtk, msg[6]);
+			d = Synth.new(\playbuf, [\buf, msg[1], \amp, msg[2], \rate, msg[3], \pan, msg[4],\out,~reverbBusMedium]);
 		};
 
 	}
