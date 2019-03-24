@@ -42,7 +42,7 @@ class Rocket extends Particle {
     
     this.radius = 15;
     this.col = color(255);
-    this.free = false;
+    this.free = true;
     
     this.addBehavior( new FadeOut( this.id,  (int) duration ) );
     //this.addBehavior( new AdjustVelocity( this.id, 3, (float) 0.2 ) );

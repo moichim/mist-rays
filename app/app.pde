@@ -22,14 +22,14 @@ boolean debug = false;
 
 // Settings of canvas
 PVector padding; // stores margin around the canvas
-PVector paddingMin = new PVector(40,50); // initial value that serves for calculation of padding
+PVector paddingMin = new PVector(332.5,91.5); // initial value that serves for calculation of padding
 
 // global settings
 float speedAspect = 0.5;
 
 // Settings of circular movement
-float circularGridBoxSize = 120;// 122.8; // 122.8 je původní hodnota z DEPA
-float circularGridRayRadius = 40;// 40; // 40 je původní hodnota z DEPA
+float circularGridBoxSize = 113;// 113 JE ŠIROKOÚHLÝ PROJEKTOR
+float circularGridRayRadius = 20.36;// 20.36
 
 // settings for circular sound
 float bellAmplitude_ = 1;
@@ -50,13 +50,13 @@ float collisionBlockAmount_ = 0.5; // aspect of the collision sound block in the
 float volumeAspect_ = 1;
 
 // nastavení kinectu
-float kinectDepthMin = 868.42;
+float kinectDepthMin = 237.78;
 float kinectDepthMax = 1002.82; 
-float kinectResolution = 5.36;
-float kinectScale = 5.67;
+float kinectResolution = 9;
+float kinectScale = 2.53;
 PVector kinectCropTL = new PVector(0,70);
 PVector kinectCropBR = new PVector(640,420);
-PVector kinectDeviation = new PVector(-97.07,61.8);
+PVector kinectDeviation = new PVector(-169.3,230.24);
 
 KinectSignal k;
 
@@ -106,7 +106,7 @@ void draw(){
       }
     }
     s.numFreeParticles = s.numPrisonnersInitial - numPrisonners;
-    println( s.numFreeParticles );
+    // println( s.numFreeParticles );
     fill(255);
     text( String.valueOf(s.numFreeParticles), width - 40, height - 60 );
     noFill();

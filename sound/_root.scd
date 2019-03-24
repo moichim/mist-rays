@@ -148,15 +148,18 @@ s.freeAll;
 j.set(\room,0.9,\damp,0.5,\mix,0.6,\mul,1.7);
 j.free;
 ~effects.freeAll;
-
+(
 // Testy
 x = Synth.new(\sine,[\freq,600,\rel,1, \out,~reverbBusMedium],~sounds);
 x = Synth.new(\sine,[\freq,600,\rel,1]);
-
+)
 Env.new.plot;
 
 Env.new([0, 1, 1, 0], [1, 1, 2], 'sine').plot;
-x = Synth.new(\playbuf,[\out,~reverbBusMedium,\buf,114,\rate,1, \envAtk, 0, \envEnd, 0.5, \envTimeAtk, 3,\envTimeRel, 3 ],~sounds);
+
+x = Synth.new(\playbuf,[\out,~reverbBusMedium,\amp, 0.5, \buf,113,\rate,1, \envAtk, 0, \envEnd, 0.5, \envTimeAtk, 3,\envTimeRel, 3],~sounds);
+y = Synth.new(\playbuf,[\out,~reverbBusMedium,\amp, 0.5, \buf,114,\rate,1, \envAtk, 0, \envEnd, 0.5, \envTimeAtk, 3,\envTimeRel, 3],~sounds);
+
 
 (
 d = Pdef.new(\test,Pbind.new(
@@ -164,6 +167,7 @@ d = Pdef.new(\test,Pbind.new(
 	\buf, 106 + Pxrand([0,1,2],inf),
 	\dur, Pwhite(0.1,0.5,inf),
 	\pan, Pwhite(-1,1,inf),
+	\rate, Pwhite(0.5,1.5,inf),
 	\out, ~reverbBusMedium,
 	\group, ~sounds
 ))

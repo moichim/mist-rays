@@ -324,6 +324,7 @@ class SoundControls extends ControlGroup {
     if (key == 'C') { Sound snd = new CinLong(new PVector(width/2,0)); snd.play(); }
     if (key == 'l') { Sound snd = new La(new PVector(width/2,0)); snd.play(); }
     if (key == 'L') { Sound snd = new Lam(new PVector(width/2,0)); snd.play(); }
+    if (key == 'p') { Sound snd = new Polycord(new PVector(width/2,0)); snd.play(); }
   }
   
   @Override
