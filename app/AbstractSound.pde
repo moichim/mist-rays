@@ -292,26 +292,16 @@ class Composition {
   // najdi další zvuk
   // toto se musí přepsat, aby to vracelo zvuk v dané variantě
   Sound next_sound(PVector pos_){
-    
     Sound snd = this.collisionSounds.produceSound(pos_);
-    if ( snd.getClass().getSuperclass().getSimpleName().equals("LahodaScale") ) {
-      println("___ Opravdu se hraje toto: " + ( (LahodaScale) snd ).ratio  );
-    }
-    
     return snd;
-
   }
   
   // vrať další zvuk základní linky
   Sound base_line_sound(){
-    
     int rx = int( random(0, this.baseLineSounds.length) );
     String className = this.baseLineSounds[rx];
-    println(className);
     Sound snd = router.byName(className,s.soundscape.baseLineCenter);
-    println(snd);
     snd.amp = s.soundscape.baseLineAmplitude;
-    
     return snd;
   }
   
@@ -499,9 +489,6 @@ class SoundScape {
     text("Aktuálně hraje: " + String.valueOf(this.playing.size()), 0, 0);
     noFill();
     popMatrix();
-    
-    
-    // println(this.playing.size());
     
     // následně vykreslí bšechny hrající zvuky
     if (this.playing.size()>0) {

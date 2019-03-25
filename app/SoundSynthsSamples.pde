@@ -32,7 +32,6 @@ class LahodaScale extends Sample {
     msg.add( this.pan.x ); // pan X
     msg.add( 0 ); // timeAtk
     msg.add( 1 ); // ampAtk
-    //println( this.buf );
     oscP5.send( msg, superCollider );
   }
   
@@ -42,7 +41,6 @@ class LahodaScale extends Sample {
   
   int chooseTone(int min_,int max_){
     int tone = (int) random( min_, max_ );
-    println( "Volím " + tone );
     return this.baseBuffer + tone;
   }
   

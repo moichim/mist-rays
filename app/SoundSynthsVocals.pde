@@ -8,6 +8,8 @@ class Phrase extends LahodaScale {
     this.tone = bufNum;
     this.atkTime = atkTime_;
     this.atkAmp = atkAmp_;
+    this.blocksVolume = false;
+    this.blocksTime = true;
   }
   
   Phrase(PVector p_, float atkTime_, float atkAmp_ ){
@@ -16,6 +18,8 @@ class Phrase extends LahodaScale {
     this.tone = 112;
     this.atkTime = atkTime_;
     this.atkAmp = atkAmp_;
+    this.blocksVolume = false;
+    this.blocksTime = true;
   }
   
   Phrase(PVector p_, int bufNum){
@@ -24,6 +28,8 @@ class Phrase extends LahodaScale {
     this.tone = bufNum;
     this.atkTime = 0;
     this.atkAmp = 1;
+    this.blocksVolume = false;
+    this.blocksTime = true;
   }
   
   Phrase(PVector p_){
@@ -32,6 +38,8 @@ class Phrase extends LahodaScale {
     this.tone = 112;
     this.atkTime = 0;
     this.atkAmp = 1;
+    this.blocksVolume = false;
+    this.blocksTime = true;
   }
   
   @Override
@@ -43,7 +51,6 @@ class Phrase extends LahodaScale {
     msg.add( this.pan.x ); // pan X
     msg.add( this.atkTime ); // čas nástupu
     msg.add( this.atkAmp ); //ampliutuda na nástupu
-    //println( this.buf );
     oscP5.send( msg, superCollider );
   }
   
@@ -60,7 +67,6 @@ class Phrase extends LahodaScale {
   }
   
   public int select(int[] options){
-    println(options);
     int o = 0;
     int index = int(random(0,floor(options.length)));
     int selected = options[index];
@@ -143,7 +149,6 @@ class Polycord extends Phrase {
     this.bufs = bf;
     int count = (int) floor(random(0,4));
     int first = this.select(bf);
-    println(first);
     this.buf = first;
     this.tone = this.buf;
     float ampl = 0.5;
@@ -190,4 +195,165 @@ class Polycord extends Phrase {
     // this.setAmplitude(ampl);
   }
  
+}
+
+class UIcord extends Phrase {
+
+  UIcord(PVector p_){
+    super(p_);
+    int[] bf = {117,118};
+    // int count = (int) floor(random(0,2));
+    int first = this.select(bf);
+    this.buf = first;
+    this.tone = this.buf;
+    this.pan.x = random(-0.9,0.7);
+    if ( flipACoin() ){
+      this.pan.x = this.pan.x * (-1);
+    }
+    this.setBlockingDuration(3);
+    
+    // volba průběhu
+    int count = (int) floor(random(0,5));
+    boolean hasSecond = true;
+    float secAmplitude = 0;
+    int delay = 0;
+    
+    switch ( count ) {
+      case 0:
+        hasSecond = false;
+        this.setAmplitude(1);
+        break;
+      case 1:
+        this.setAmplitude(0.5);
+        secAmplitude = 0.5;
+        delay = 45;
+        break;
+      case 2:
+        this.setAmplitude(0.75);
+        secAmplitude = 0.3;
+        delay = 60;
+        break;
+      case 3:
+        this.setAmplitude(0.60);
+        secAmplitude = 0.4;
+        delay = 100;
+        break;
+      case 4:
+        this.setAmplitude(0.5);
+        secAmplitude = 0.5;
+        // delay = 100;
+        break;
+    }
+    
+    if (hasSecond) {
+      
+      // nastavení druhého zvuku
+      int second;
+      if (first==117) { second = 118; } else { second = 117; }
+      Phrase sec = new Phrase(p_, second);
+      sec.pan.x = this.pan.x * (-1);
+      sec.setAmplitude(secAmplitude);
+      sec.setBlockingDuration(3);
+
+      // výstup
+      s.soundscape.playlist.enqueue(sec,delay);
+    }
+    
+  }
+}
+
+
+class Ucord extends Phrase {
+
+  Ucord(PVector p_){
+    super(p_);
+    int[] bf = {115,116};
+    // int count = (int) floor(random(0,2));
+    int first = this.select(bf);
+    this.buf = first;
+    this.tone = this.buf;
+    this.pan.x = random(-0.9,0.7);
+    if ( flipACoin() ){
+      this.pan.x = this.pan.x * (-1);
+    }
+    this.setBlockingDuration(3);
+    
+    // volba průběhu
+    int count = (int) floor(random(0,5));
+    boolean hasSecond = true;
+    float secAmplitude = 0;
+    int delay = 0;
+    
+    switch ( count ) {
+      case 0:
+        hasSecond = false;
+        this.setAmplitude(1);
+        break;
+      case 1:
+        this.setAmplitude(0.5);
+        secAmplitude = 0.5;
+        delay = 45;
+        break;
+      case 2:
+        this.setAmplitude(0.75);
+        secAmplitude = 0.3;
+        delay = 60;
+        break;
+      case 3:
+        this.setAmplitude(0.60);
+        secAmplitude = 0.4;
+        delay = 100;
+        break;
+      case 4:
+        this.setAmplitude(0.5);
+        secAmplitude = 0.5;
+        // delay = 100;
+        break;
+    }
+    
+    if (hasSecond) {
+      
+      // nastavení druhého zvuku
+      int second;
+      if (first==117) { second = 118; } else { second = 117; }
+      Phrase sec = new Phrase(p_, second);
+      sec.pan.x = this.pan.x * (-1);
+      sec.setAmplitude(secAmplitude);
+      sec.setBlockingDuration(3);
+
+      // výstup
+      s.soundscape.playlist.enqueue(sec,delay);
+    }
+    
+  }
+}
+
+class Longcord extends Phrase {
+
+  Longcord(PVector p_){
+    super(p_);
+    int[] bf = {115,116};
+    // int count = (int) floor(random(0,2));
+    int first = this.select(bf);
+    this.buf = 115;
+    this.tone = this.buf;
+    this.pan.x = random(-0.9,0.7);
+    if ( flipACoin() ){
+      this.pan.x = this.pan.x * (-1);
+    }
+    this.setBlockingDuration(8);
+    this.setAmplitude(0.5);
+    
+    
+      
+    // nastavení druhého zvuku
+    Phrase sec = new Phrase(p_, 117);
+    sec.pan.x = this.pan.x * (-1);
+    sec.setAmplitude(1);
+    sec.setBlockingDuration(3);
+
+    // výstup
+    s.soundscape.playlist.enqueue(sec,0);
+    
+  }
 }

@@ -50,21 +50,21 @@ float collisionBlockAmount_ = 0.5; // aspect of the collision sound block in the
 float volumeAspect_ = 1;
 
 // nastavení kinectu
-float kinectDepthMin = 237.78;
-float kinectDepthMax = 1002.82; 
-float kinectResolution = 9;
-float kinectScale = 2.53;
+float kinectDepthMin = 0;
+float kinectDepthMax = 1033.84; 
+float kinectResolution = 20;
+float kinectScale = 2.95;
 PVector kinectCropTL = new PVector(0,70);
 PVector kinectCropBR = new PVector(640,420);
-PVector kinectDeviation = new PVector(-169.3,230.24);
+PVector kinectDeviation = new PVector(-162.53,-22.47);
 
 KinectSignal k;
 
 void setup(){
   
   // size(1920,1080);
-  // fullScreen();
-  size(800,800);
+  fullScreen();
+  // size(800,800);
   
   // initialize global variables
   app = this;
@@ -81,17 +81,22 @@ void setup(){
 
 void draw(){
 
-  // regular updates
-  //currentVolume = 0;
+  // initial setups
+  if (frameCount == 1000) {
+    kinectResolution = 9;
+  }
   
-  //availableVolume = maxVolume;
   
   background(c.bg);
   
   
   // pravidelný zpožděný update
   if (frameCount % 5 == 0) {
-    k.update();
+    // kinect pouštět jedině když je vše načteno
+    if (frameCount >= 1000) {
+      k.update();
+    }
+    
     s.numFreeParticles = 1;
     s.numParticles = 0;
     int numPrisonners = 0;
@@ -106,10 +111,11 @@ void draw(){
       }
     }
     s.numFreeParticles = s.numPrisonnersInitial - numPrisonners;
-    // println( s.numFreeParticles );
-    fill(255);
-    text( String.valueOf(s.numFreeParticles), width - 40, height - 60 );
-    noFill();
+    if ( debug ) {
+      fill(255);
+      text( "numFreeParticles = " + String.valueOf(s.numFreeParticles), width - 40, height - 60 );
+      noFill();
+    }
   }
   
   s.update();
