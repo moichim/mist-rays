@@ -68,7 +68,7 @@ class Phrase extends LahodaScale {
   
   public int select(int[] options){
     int o = 0;
-    int index = int(random(0,floor(options.length)));
+    int index = int(random(0,options.length));
     int selected = options[index];
     // this.tone = selected;
     // this.buf = selected;
@@ -78,15 +78,13 @@ class Phrase extends LahodaScale {
   
   public int select(int[] options, int blocked){
     int o = 0;
-    int selected = options[int(random(0,floor(options.length)))];
-    if (selected == blocked) {
-      o = this.select(options,blocked);
-    } else {
-      o = selected;
+    ArrayList<Integer> optionsLimited = new ArrayList<Integer>();
+    for ( int i = 0; i < options.length; i++ ) {
+      if ( options[i] != blocked ) {
+        optionsLimited.add( options[i] );
+      }
     }
-    this.tone = selected;
-    this.buf = selected;
-    return o;
+    return optionsLimited.get( int( floor( random( 0, optionsLimited.size() - 0.1 ) ) ) );
   }
   
 }
@@ -149,24 +147,28 @@ class Polycord extends Phrase {
     this.bufs = bf;
     int count = (int) floor(random(0,4));
     int first = this.select(bf);
+    //println(first);
     this.buf = first;
     this.tone = this.buf;
     float ampl = 0.5;
-    this.pan.x = random(-0.9,0.7);
+    this.blocksVolume = false;
+    this.blocksTime = true;
+    this.pan.x = random(-0.9,-0.7);
+    this.setBlockingDuration(15);
     if ( flipACoin() ){
       this.pan.x = this.pan.x * (-1);
     }
     switch (count) {
       // jedna tretina má jen první disk a amplitudu 1
       case 0:
-        this.setAmplitude( 1 );
+        this.setAmplitude( 0.7 );
         break;
       // druha tretina má i druhý krok, tedy ¨ vcelkem varianty
       case 1:
         this.setAmplitude( 0.5 );
-        ampl = 0.5;
+        ampl = 0.3;
         int second = this.select(bf,first);
-        Acord sec = new Acord(p_,second-111);
+        Acord sec = new Acord(p_,second);
         sec.pan.x = 0;
         sec.setAmplitude(0.33);
         s.soundscape.playlist.enqueue(sec,0);
@@ -176,14 +178,14 @@ class Polycord extends Phrase {
         this.setAmplitude( 0.7 );
         Acord mono = new Acord(p_,111);
         mono.pan.x = this.pan.x * -1;
-        mono.setAmplitude(0.33);
+        mono.setAmplitude(0.2);
         s.soundscape.playlist.enqueue(mono,0);
         break;
       case 3:
         this.setAmplitude( 0.4 );
         Acord tri1 = new Acord(p_,111);
         tri1.pan.x = this.pan.x * -1;
-        tri1.setAmplitude(0.33);
+        tri1.setAmplitude(0.7);
         s.soundscape.playlist.enqueue(tri1,0);
         Acord tri2 = new Acord(p_,111);
         tri2.pan.x = 0;
@@ -206,11 +208,11 @@ class UIcord extends Phrase {
     int first = this.select(bf);
     this.buf = first;
     this.tone = this.buf;
-    this.pan.x = random(-0.9,0.7);
+    this.pan.x = random(-0.9,-0.7);
     if ( flipACoin() ){
       this.pan.x = this.pan.x * (-1);
     }
-    this.setBlockingDuration(3);
+    this.setBlockingDuration(8);
     
     // volba průběhu
     int count = (int) floor(random(0,5));
@@ -269,17 +271,17 @@ class Ucord extends Phrase {
     super(p_);
     int[] bf = {115,116};
     // int count = (int) floor(random(0,2));
-    int first = this.select(bf);
+    int first = 116;//this.select(bf);
     this.buf = first;
     this.tone = this.buf;
-    this.pan.x = random(-0.9,0.7);
+    this.pan.x = random(-0.9,-0.7);
     if ( flipACoin() ){
       this.pan.x = this.pan.x * (-1);
     }
-    this.setBlockingDuration(3);
+    this.setBlockingDuration(12);
     
     // volba průběhu
-    int count = (int) floor(random(0,5));
+    int count = (int) floor(random(0,3));
     boolean hasSecond = true;
     float secAmplitude = 0;
     int delay = 0;
@@ -287,27 +289,22 @@ class Ucord extends Phrase {
     switch ( count ) {
       case 0:
         hasSecond = false;
-        this.setAmplitude(1);
+        this.setAmplitude(0.9);
         break;
       case 1:
-        this.setAmplitude(0.5);
-        secAmplitude = 0.5;
-        delay = 45;
+        this.setAmplitude(0.75);
+        secAmplitude = 0.75;
+        delay = 20;
         break;
       case 2:
         this.setAmplitude(0.75);
         secAmplitude = 0.3;
-        delay = 60;
+        // delay = 20;
         break;
       case 3:
-        this.setAmplitude(0.60);
-        secAmplitude = 0.4;
-        delay = 100;
-        break;
-      case 4:
-        this.setAmplitude(0.5);
+        this.setAmplitude(0.80);
         secAmplitude = 0.5;
-        // delay = 100;
+        // delay = 20;
         break;
     }
     
@@ -316,7 +313,7 @@ class Ucord extends Phrase {
       // nastavení druhého zvuku
       int second;
       if (first==117) { second = 118; } else { second = 117; }
-      Phrase sec = new Phrase(p_, second);
+      Phrase sec = new Phrase(p_, 115);
       sec.pan.x = this.pan.x * (-1);
       sec.setAmplitude(secAmplitude);
       sec.setBlockingDuration(3);
@@ -337,11 +334,11 @@ class Longcord extends Phrase {
     int first = this.select(bf);
     this.buf = 115;
     this.tone = this.buf;
-    this.pan.x = random(-0.9,0.7);
+    this.pan.x = random(-0.9,-0.7);
     if ( flipACoin() ){
       this.pan.x = this.pan.x * (-1);
     }
-    this.setBlockingDuration(8);
+    this.setBlockingDuration(15);
     this.setAmplitude(0.5);
     
     
@@ -349,7 +346,7 @@ class Longcord extends Phrase {
     // nastavení druhého zvuku
     Phrase sec = new Phrase(p_, 117);
     sec.pan.x = this.pan.x * (-1);
-    sec.setAmplitude(1);
+    sec.setAmplitude(0.5);
     sec.setBlockingDuration(3);
 
     // výstup

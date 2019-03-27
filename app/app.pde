@@ -16,6 +16,7 @@ PApplet app; // link to this app
 OscP5 oscP5;
 NetAddress superCollider;
 SoundRouter router; // rozbočovač zvuků
+CompositionRouter cr;
 
 // visual output for debugging
 boolean debug = false;
@@ -32,8 +33,8 @@ float circularGridBoxSize = 113;// 113 JE ŠIROKOÚHLÝ PROJEKTOR
 float circularGridRayRadius = 20.36;// 20.36
 
 // settings for circular sound
-float bellAmplitude_ = 1;
-float bellFrequency_ = 52;
+float bellAmplitude_ = 0.6;
+float bellFrequency_ = 60;
 float bellAtk_ = 0.01;
 float bellRelease_ = 2;
 float bellAmpCurrent_ = bellAmplitude_;
@@ -51,12 +52,12 @@ float volumeAspect_ = 1;
 
 // nastavení kinectu
 float kinectDepthMin = 0;
-float kinectDepthMax = 1033.84; 
-float kinectResolution = 20;
-float kinectScale = 2.95;
+float kinectDepthMax = 1013.16; 
+float kinectResolution = 6.99;
+float kinectScale = 2.83;
 PVector kinectCropTL = new PVector(0,70);
 PVector kinectCropBR = new PVector(640,420);
-PVector kinectDeviation = new PVector(-162.53,-22.47);
+PVector kinectDeviation = new PVector(-169.3,-33.71);
 
 KinectSignal k;
 
@@ -73,6 +74,7 @@ void setup(){
   superCollider = new NetAddress("127.0.0.1",12000);
   k = new KinectSignal();
   router = new SoundRouter();
+  cr = new CompositionRouter();
   
   // the system itself
   s = new SoundSystem();

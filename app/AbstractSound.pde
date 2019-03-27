@@ -364,7 +364,9 @@ class SoundScape {
     }
     
     // zkontroluje podmínky
-    this.composition.resolveConditions();
+    if (this.composition.conditions.size() > 0) {
+      this.composition.resolveConditions();
+    }
     
     // zkontroluje playlist
     if (frameCount % this.playlist.rate == 0) {

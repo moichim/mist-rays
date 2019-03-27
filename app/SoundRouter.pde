@@ -5,7 +5,7 @@ class SoundRouter {
   SoundRouter(){
     
     // zde se musí definovat počet dostupných zvuků
-    this.available = new SoundRouterOption[14];
+    this.available = new SoundRouterOption[17];
     
     // Nyní následují syntetické zvuky
     this.available[0] = new SoundRouterOption("Sine", new String[] {"sine", "default"} );
@@ -28,6 +28,9 @@ class SoundRouter {
     // Akord
     this.available[12] = new SoundRouterOption("Acord", new String[] {"akord"});
     this.available[13] = new SoundRouterOption("Polycord", new String[] {"polycord"});
+    this.available[14] = new SoundRouterOption("UIcord", new String[] {"uicord"});
+    this.available[15] = new SoundRouterOption("Ucord", new String[] {"ucord"});
+    this.available[16] = new SoundRouterOption("Longcord", new String[] {"longcord"});
     
   }
   
@@ -148,6 +151,11 @@ class SoundRouter {
          break;
        case "Cin":
          output = new Cin(pos_);
+       case "CinLong":
+         output = new CinLong(pos_);
+         break;
+       case "La":
+         output = new La(pos_);
          break;
        case "Lam":
          output = new Lam(pos_);
@@ -164,8 +172,14 @@ class SoundRouter {
        case "Polycord":
          output = new Polycord(pos_);
          break;
-       case "CinLong":
-         output = new CinLong(pos_);
+       case "UIcord":
+         output = new UIcord(pos_);
+         break;
+       case "Ucord":
+         output = new Ucord(pos_);
+         break;
+       case "Longcord":
+         output = new Longcord(pos_);
          break;
     }
     return output;

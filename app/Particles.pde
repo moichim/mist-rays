@@ -86,7 +86,7 @@ class Prisonner extends Particle {
     super();
     
     this.vel = 1;
-    this.col = color(100);
+    this.col = color(255);
     this.radius = 1; // circularGridRayRadius;
     this.box = box_;
     
